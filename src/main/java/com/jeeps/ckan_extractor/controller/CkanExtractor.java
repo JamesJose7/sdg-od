@@ -44,7 +44,5 @@ public class CkanExtractor {
                 }, (listPackageDetailsUrl + dataset));
             });
         }, listPackagesUrl);
-
-        System.out.println("Finished......");
     }
 }
