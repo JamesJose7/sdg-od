@@ -2,6 +2,7 @@ package com.jeeps.ckan_extractor.controller;
 
 import com.google.gson.Gson;
 import com.jeeps.ckan_extractor.model.CkanContent;
+import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.service.HttpService;
 import org.json.JSONObject;
 
@@ -30,8 +31,8 @@ public class CkanExtractor {
                 httpService.sendRequest(result -> {
                     JSONObject body = new JSONObject(result);
                     JSONObject resultJson = body.getJSONObject("result");
-                    Package aPackage = mGson.fromJson(resultJson.toString(), Package.class);
-                    System.out.println(resultJson.toString());
+                    CkanPackage aPackage = mGson.fromJson(resultJson.toString(), CkanPackage.class);
+                    System.out.println(aPackage);
                 }, (listPackageDetailsUrl + dataset));
             });
         }, listPackagesUrl);

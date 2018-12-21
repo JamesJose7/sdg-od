@@ -1,6 +1,6 @@
 package com.jeeps.ckan_extractor.model;
 
-public class Package {
+public class CkanPackage {
     private String name;
     private String title;
     private String license_title;
