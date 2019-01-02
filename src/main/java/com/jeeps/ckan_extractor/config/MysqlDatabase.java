@@ -31,6 +31,9 @@ public class MysqlDatabase {
                     " metadata_created VARCHAR(255)," +
                     " metadata_modified VARCHAR(255)," +
                     " author VARCHAR(255)," +
+                    " notes VARCHAR(255)," +
+                    " 'type' VARCHAR(255)," +
+                    " origin_url VARCHAR(255)," +
                     " PRIMARY KEY ( id ))";
 
             stmt.executeUpdate(sql);
@@ -66,11 +69,11 @@ public class MysqlDatabase {
             //STEP 4: Execute a query
             stmt = conn.createStatement();
 
-            String sql = "INSERT INTO package(author, license_title, name, metadata_created, metadata_modified, title) " +
+            String sql = "INSERT INTO package(author, license_title, name, metadata_created, metadata_modified, title, 'type', notes, origin_url) " +
                     "VALUES (" +
-                    String.format("'%s', '%s', '%s', '%s', '%s', '%s'",
+                    String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
                             aPackage.getAuthor(), aPackage.getLicense_title(), aPackage.getName(), aPackage.getMetadata_created(),
-                            aPackage.getMetadata_modified(), aPackage.getTitle()) +
+                            aPackage.getMetadata_modified(), aPackage.getTitle(), aPackage.getType(), aPackage.getNotes(), aPackage.getOriginUrl()) +
                     ")";
             stmt.executeUpdate(sql);
 

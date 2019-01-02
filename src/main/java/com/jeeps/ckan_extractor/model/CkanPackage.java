@@ -7,6 +7,9 @@ public class CkanPackage {
     private String metadata_created;
     private String metadata_modified;
     private String author;
+    private String notes;
+    private String type;
+    private String originUrl;
 
     public String getName() {
         return name;
@@ -54,6 +57,30 @@ public class CkanPackage {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getOriginUrl() {
+        return originUrl;
+    }
+
+    public void setOriginUrl(String originUrl) {
+        this.originUrl = originUrl;
     }
 
     @Override

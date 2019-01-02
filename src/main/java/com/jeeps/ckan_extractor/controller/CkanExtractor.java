@@ -32,11 +32,13 @@ public class CkanExtractor {
 
             List<String> ckanDatasets = Arrays.asList(ckanContent.getResult());
             ckanDatasets.forEach(dataset -> {
-                //Get details from dataset
+                // Get details from dataset
                 httpService.sendRequest(result -> {
                     JSONObject body = new JSONObject(result);
                     JSONObject resultJson = body.getJSONObject("result");
                     CkanPackage aPackage = mGson.fromJson(resultJson.toString(), CkanPackage.class);
+                    // Set origin URL
+                    aPackage.setOriginUrl(baseUrl);
                     if (aPackage != null) {
                         System.out.println(aPackage);
                         mDatabase.savePackage(aPackage);
