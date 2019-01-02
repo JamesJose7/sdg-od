@@ -1,8 +1,11 @@
 package com.jeeps.ckan_extractor.config;
 
 import com.jeeps.ckan_extractor.model.CkanPackage;
+import com.jeeps.ckan_extractor.model.CkanResource;
 
 import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class MysqlDatabase {
     // JDBC driver name and database URL
@@ -25,16 +28,31 @@ public class MysqlDatabase {
 
             String sql = "CREATE TABLE IF NOT EXISTS PACKAGE " +
                     "(id INTEGER not NULL AUTO_INCREMENT, " +
+                    " package_id VARCHAR(255), " +
                     " name VARCHAR(255), " +
                     " title VARCHAR(255), " +
                     " license_title VARCHAR(255), " +
                     " metadata_created VARCHAR(255)," +
                     " metadata_modified VARCHAR(255)," +
                     " author VARCHAR(255)," +
-                    " notes VARCHAR(255)," +
-                    " 'type' VARCHAR(255)," +
+                    " notes TEXT," +
+                    " type VARCHAR(255)," +
                     " origin_url VARCHAR(255)," +
-                    " PRIMARY KEY ( id ))";
+                    " PRIMARY KEY ( id ));";
+
+            stmt.executeUpdate(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS RESOURCE " +
+                    "(id INTEGER not NULL AUTO_INCREMENT, " +
+                    " resource_id VARCHAR(255), " +
+                    " package_id VARCHAR(255), " +
+                    " description TEXT, " +
+                    " format VARCHAR(255), " +
+                    " name VARCHAR(255)," +
+                    " created VARCHAR(255)," +
+                    " last_modified VARCHAR(255)," +
+                    " url VARCHAR(255)," +
+                    " PRIMARY KEY ( id ));";
 
             stmt.executeUpdate(sql);
         } catch (Exception se) {
@@ -56,46 +74,49 @@ public class MysqlDatabase {
         }
     }
 
-    public void savePackage(CkanPackage aPackage) {
+    public void savePackage(CkanPackage aPackage, CkanResource[] resources) {
         Connection conn = null;
         Statement stmt = null;
         try{
-            //STEP 2: Register JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
-
-            //STEP 3: Open a connection
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            //STEP 4: Execute a query
             stmt = conn.createStatement();
 
-            String sql = "INSERT INTO package(author, license_title, name, metadata_created, metadata_modified, title, 'type', notes, origin_url) " +
+            String sql = "INSERT INTO package(package_id, author, license_title, name, metadata_created, metadata_modified, title, type, notes, origin_url) " +
                     "VALUES (" +
-                    String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
-                            aPackage.getAuthor(), aPackage.getLicense_title(), aPackage.getName(), aPackage.getMetadata_created(),
+                    String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
+                            aPackage.getId(), aPackage.getAuthor(), aPackage.getLicense_title(), aPackage.getName(), aPackage.getMetadata_created(),
                             aPackage.getMetadata_modified(), aPackage.getTitle(), aPackage.getType(), aPackage.getNotes(), aPackage.getOriginUrl()) +
                     ")";
             stmt.executeUpdate(sql);
 
-        }catch(SQLException se){
-            //Handle errors for JDBC
+            List<CkanResource> resourceList = Arrays.asList(resources);
+            for (CkanResource resource : resourceList) {
+                //Statement resourceStatement = conn.createStatement();
+                sql = "INSERT INTO resource(resource_id, package_id, description, format, name, created, last_modified, url) " +
+                        "VALUES (" +
+                        String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
+                                resource.getId(), resource.getPackage_id(), resource.getDescription(), resource.getFormat(),
+                                resource.getName(), resource.getCreated(), resource.getLast_modified(), resource.getUrl()) +
+                        ")";
+                stmt.executeUpdate(sql);
+            }
+
+        } catch(Exception se){
             se.printStackTrace();
-        }catch(Exception e){
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }finally{
-            //finally block used to close resources
+        }
+        finally{
             try{
                 if(stmt!=null)
                     conn.close();
             }catch(SQLException se){
-            }// do nothing
+            }
             try{
                 if(conn!=null)
                     conn.close();
             }catch(SQLException se){
                 se.printStackTrace();
-            }//end finally try
+            }
         }
     }
 }
