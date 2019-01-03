@@ -85,8 +85,9 @@ public class MysqlDatabase {
             String sql = "INSERT INTO package(package_id, author, license_title, name, metadata_created, metadata_modified, title, type, notes, origin_url) " +
                     "VALUES (" +
                     String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
-                            aPackage.getId(), aPackage.getAuthor(), aPackage.getLicense_title(), aPackage.getName(), aPackage.getMetadata_created(),
-                            aPackage.getMetadata_modified(), aPackage.getTitle(), aPackage.getType(), aPackage.getNotes(), aPackage.getOriginUrl()) +
+                            dQts(aPackage.getId()), dQts(aPackage.getAuthor()), dQts(aPackage.getLicense_title()),
+                            dQts(aPackage.getName()), dQts(aPackage.getMetadata_created()), dQts(aPackage.getMetadata_modified()),
+                            dQts(aPackage.getTitle()), dQts(aPackage.getType()), dQts(aPackage.getNotes()), dQts(aPackage.getOriginUrl())) +
                     ")";
             stmt.executeUpdate(sql);
 
@@ -96,8 +97,8 @@ public class MysqlDatabase {
                 sql = "INSERT INTO resource(resource_id, package_id, description, format, name, created, last_modified, url) " +
                         "VALUES (" +
                         String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
-                                resource.getId(), resource.getPackage_id(), resource.getDescription(), resource.getFormat(),
-                                resource.getName(), resource.getCreated(), resource.getLast_modified(), resource.getUrl()) +
+                                dQts(resource.getId()), dQts(resource.getPackage_id()), dQts(resource.getDescription()), dQts(resource.getFormat()),
+                                dQts(resource.getName()), dQts(resource.getCreated()), dQts(resource.getLast_modified()), dQts(resource.getUrl())) +
                         ")";
                 stmt.executeUpdate(sql);
             }
@@ -118,5 +119,12 @@ public class MysqlDatabase {
                 se.printStackTrace();
             }
         }
+    }
+
+    private String dQts(String value) {
+        if (value != null)
+            if (value.contains("'"))
+                return value.replaceAll("'", "''");
+        return value;
     }
 }
