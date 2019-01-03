@@ -12,6 +12,19 @@ public class CkanPackage {
     private String type;
     private String originUrl;
 
+    public CkanPackage(CkanPackageBuilder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.title = builder.title;
+        this.license_title = builder.license_title;
+        this.metadata_created = builder.metadata_created;
+        this.metadata_modified = builder.metadata_modified;
+        this.author = builder.author;
+        this.notes = builder.notes;
+        this.type = builder.type;
+        this.originUrl = builder.originUrl;
+    }
+
     public String getId() {
         return id;
     }
@@ -98,5 +111,71 @@ public class CkanPackage {
                 "Created: %s\n" +
                 "Modified: %s\n" +
                 "Author: %s", license_title, metadata_created, metadata_modified, author);
+    }
+
+    public static class CkanPackageBuilder {
+        private String id;
+        private String name;
+        private String title;
+        private String license_title;
+        private String metadata_created;
+        private String metadata_modified;
+        private String author;
+        private String notes;
+        private String type;
+        private String originUrl;
+
+        public CkanPackageBuilder(String id) {
+            this.id = id;
+        }
+
+        public CkanPackageBuilder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CkanPackageBuilder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public CkanPackageBuilder withLicense(String license) {
+            this.license_title = license;
+            return this;
+        }
+
+        public CkanPackageBuilder withMetadataCreated(String created) {
+            this.metadata_created = created;
+            return this;
+        }
+
+        public CkanPackageBuilder withMetadataModified(String modified) {
+            this.metadata_modified = modified;
+            return this;
+        }
+
+        public CkanPackageBuilder withAuthor(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public CkanPackageBuilder withNotes(String notes) {
+            this.notes = notes;
+            return this;
+        }
+
+        public CkanPackageBuilder withType(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public CkanPackageBuilder withOriginUrl(String url) {
+            this.originUrl = url;
+            return this;
+        }
+
+        public CkanPackage build() {
+            return new CkanPackage(this);
+        }
     }
 }
