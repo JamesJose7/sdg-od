@@ -62,16 +62,15 @@ public class MysqlDatabase {
         executeSql(sql);
 
         List<CkanResource> resourceList = Arrays.asList(resources);
-        for (CkanResource resource : resourceList) {
-            //Statement resourceStatement = conn.createStatement();
-            sql = "INSERT INTO resource(resource_id, package_id, description, format, name, created, last_modified, url) " +
+        resourceList.parallelStream().forEach(resource -> {
+            String resourceSql = "INSERT INTO resource(resource_id, package_id, description, format, name, created, last_modified, url) " +
                     "VALUES (" +
                     String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
                             dQts(resource.getId()), dQts(resource.getPackage_id()), dQts(resource.getDescription()), dQts(resource.getFormat()),
                             dQts(resource.getName()), dQts(resource.getCreated()), dQts(resource.getLast_modified()), dQts(resource.getUrl())) +
                     ")";
-            executeSql(sql);
-        }
+            executeSql(resourceSql);
+        });
     }
 
     private void executeSql(String sql) {
