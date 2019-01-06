@@ -43,7 +43,7 @@ public class CkanExtractor {
         System.out.println(ckanContent.getResult().length);
 
         List<String> ckanDatasets = Arrays.asList(ckanContent.getResult());
-        ckanDatasets.forEach(dataset -> mHttpService.
+        ckanDatasets.parallelStream().forEach(dataset -> mHttpService.
                         sendRequest(this::extractDatasetDetails, (mListPackageDetailsUrl + dataset)));
     }
 

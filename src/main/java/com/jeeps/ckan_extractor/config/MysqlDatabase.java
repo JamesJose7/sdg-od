@@ -37,7 +37,7 @@ public class MysqlDatabase {
                     " author VARCHAR(255)," +
                     " notes TEXT," +
                     " type VARCHAR(255)," +
-                    " origin_url VARCHAR(255)," +
+                    " origin_url text," +
                     " PRIMARY KEY ( id ));";
 
             stmt.executeUpdate(sql);
@@ -51,7 +51,7 @@ public class MysqlDatabase {
                     " name VARCHAR(255)," +
                     " created VARCHAR(255)," +
                     " last_modified VARCHAR(255)," +
-                    " url VARCHAR(255)," +
+                    " url text," +
                     " PRIMARY KEY ( id ));";
 
             stmt.executeUpdate(sql);
