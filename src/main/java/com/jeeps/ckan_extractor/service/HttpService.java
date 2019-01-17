@@ -31,4 +31,17 @@ public class HttpService {
                 .thenAccept(onSuccess)
                 .join();
     }
+
+    public void sendPostRequest(Consumer<String> onSuccess, String url, String body) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(onSuccess)
+                .join();
+    }
 }

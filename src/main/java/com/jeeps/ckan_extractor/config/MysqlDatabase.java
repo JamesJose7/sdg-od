@@ -13,7 +13,7 @@ import java.util.List;
 public class MysqlDatabase {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/ckan";
+    static final String DB_URL = "jdbc:mysql://localhost/ckan?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     //  Database credentials
     static final String USER = "root";
@@ -21,11 +21,12 @@ public class MysqlDatabase {
 
     public MysqlDatabase() {
         // Create package table
+        //language=SQL
         String sql = "CREATE TABLE IF NOT EXISTS PACKAGE " +
                 "(id INTEGER not NULL AUTO_INCREMENT, " +
                 " package_id VARCHAR(255), " +
                 " name VARCHAR(255), " +
-                " title VARCHAR(255), " +
+                " title TEXT, " +
                 " license_title VARCHAR(255), " +
                 " metadata_created VARCHAR(255)," +
                 " metadata_modified VARCHAR(255)," +
@@ -52,7 +53,8 @@ public class MysqlDatabase {
     }
 
     public void savePackage(CkanPackage aPackage, CkanResource[] resources) {
-        String sql = "INSERT INTO package(package_id, author, license_title, name, metadata_created, metadata_modified, title, type, notes, origin_url) " +
+        //language=SQL
+        String sql = "INSERT INTO PACKAGE(package_id, author, license_title, name, metadata_created, metadata_modified, title, type, notes, origin_url) " +
                 "VALUES (" +
                 String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
                         dQts(aPackage.getId()), dQts(aPackage.getAuthor()), dQts(aPackage.getLicense_title()),
@@ -63,7 +65,8 @@ public class MysqlDatabase {
 
         List<CkanResource> resourceList = Arrays.asList(resources);
         resourceList.parallelStream().forEach(resource -> {
-            String resourceSql = "INSERT INTO resource(resource_id, package_id, description, format, name, created, last_modified, url) " +
+            //language=SQL
+            String resourceSql = "INSERT INTO RESOURCE(resource_id, package_id, description, format, name, created, last_modified, url) " +
                     "VALUES (" +
                     String.format("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'",
                             dQts(resource.getId()), dQts(resource.getPackage_id()), dQts(resource.getDescription()), dQts(resource.getFormat()),

@@ -8,6 +8,7 @@ import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.CkanResource;
 import com.jeeps.ckan_extractor.service.HttpService;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class CkanExtractor {
 
     public CkanExtractor() {
         mDatabase = new MysqlDatabase();
+        mGson = new Gson();
+        mHttpService = new HttpService();
     }
 
     public void extract(String baseUrl) {
@@ -32,45 +35,63 @@ public class CkanExtractor {
         mListPackageDetailsUrl = baseUrl + "package_show?id=";
         String listPackagesUrl = baseUrl + "package_list";
 
-        mGson = new Gson();
-        mHttpService = new HttpService();
         mHttpService.sendRequest(this::extractDatasets, listPackagesUrl);
     }
 
-    private void extractDatasets(String json) {
-        System.out.println(json);
-        CkanContent ckanContent = mGson.fromJson(json, CkanContent.class);
-        System.out.println(ckanContent.getResult().length);
+    public void extractByPost(String baseUrl) {
+        mBaseUrl = baseUrl;
+        mListPackageDetailsUrl = baseUrl + "package_show";
+        String listPackagesUrl = baseUrl + "package_list";
 
-        List<String> ckanDatasets = Arrays.asList(ckanContent.getResult());
+        mHttpService.sendRequest(this::extractDataSetsByPost, listPackagesUrl);
+    }
+
+    private void extractDatasets(String json) {
+        List<String> ckanDatasets = parseCkanContent(json);
         ckanDatasets.parallelStream().forEach(dataset -> mHttpService.
                         sendRequest(this::extractDatasetDetails, (mListPackageDetailsUrl + dataset)));
     }
 
+    private void extractDataSetsByPost(String json) {
+        List<String> ckanDatasets = parseCkanContent(json);
+        ckanDatasets.parallelStream().forEach(dataset -> mHttpService.
+                sendPostRequest(this::extractDatasetDetails, (mListPackageDetailsUrl), String.format("{\"id\": \"%s\"}", dataset)));
+    }
+
+    private List<String> parseCkanContent(String json) {
+        System.out.println(json);
+        CkanContent ckanContent = mGson.fromJson(json, CkanContent.class);
+        System.out.println(ckanContent.getResult().length);
+        return Arrays.asList(ckanContent.getResult());
+    }
+
     private void extractDatasetDetails(String result) {
         // Get details from dataset
-        JSONObject body = new JSONObject(result);
-        // Dataset info
-        JSONObject resultJson = body.getJSONObject("result");
-        CkanPackage aPackage = null;
         try {
-            aPackage = mGson.fromJson(resultJson.toString(), CkanPackage.class);
-        } catch (JsonSyntaxException e) {
-            System.out.println("-->Complex json");
-            aPackage = buildComplexPackage(resultJson);
-        }
-        // Resource info
-        JSONArray packageResource = resultJson.getJSONArray("resources");
-        CkanResource[] resourcesCkan = null;
-        try {
-            resourcesCkan = mGson.fromJson(packageResource.toString(), CkanResource[].class);
-        } catch (JsonSyntaxException e) {
-            resourcesCkan = buildComplexResources(packageResource);
-        }
-        // Set origin URL
-        aPackage.setOriginUrl(mBaseUrl);
-        System.out.println(aPackage);
-        mDatabase.savePackage(aPackage, resourcesCkan);
+            JSONObject body = new JSONObject(result);
+
+            // Dataset info
+            JSONObject resultJson = body.getJSONObject("result");
+            CkanPackage aPackage = null;
+            try {
+                aPackage = mGson.fromJson(resultJson.toString(), CkanPackage.class);
+            } catch (JsonSyntaxException e) {
+                System.out.println("-->Complex json");
+                aPackage = buildComplexPackage(resultJson);
+            }
+            // Resource info
+            JSONArray packageResource = resultJson.getJSONArray("resources");
+            CkanResource[] resourcesCkan = null;
+            try {
+                resourcesCkan = mGson.fromJson(packageResource.toString(), CkanResource[].class);
+            } catch (JsonSyntaxException e) {
+                resourcesCkan = buildComplexResources(packageResource);
+            }
+            // Set origin URL
+            aPackage.setOriginUrl(mBaseUrl);
+            System.out.println(aPackage);
+            mDatabase.savePackage(aPackage, resourcesCkan);
+        } catch (JSONException e) {}
     }
 
     private CkanPackage buildComplexPackage(JSONObject resultJson) {
