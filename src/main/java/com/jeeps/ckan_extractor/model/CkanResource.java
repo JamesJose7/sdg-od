@@ -38,7 +38,7 @@ public class CkanResource {
     }
 
     public String getDescription() {
-        return description;
+        return description != null ? description : "";
     }
 
     public void setDescription(String description) {
@@ -46,7 +46,7 @@ public class CkanResource {
     }
 
     public String getFormat() {
-        return format;
+        return format != null ? format : "";
     }
 
     public void setFormat(String format) {
