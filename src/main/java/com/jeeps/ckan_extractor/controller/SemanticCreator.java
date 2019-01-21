@@ -32,7 +32,7 @@ public class SemanticCreator {
 
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream("dcat-representation.ttl"), "utf-8"))) {
-            writer.write(completeDcat.orElse(""));
+            writer.write(Dcat.NAMESPACES + completeDcat.orElse(""));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
