@@ -1,5 +1,9 @@
 package com.jeeps.ckan_extractor.model;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
+
 public class CkanPackage {
     private String id;
     private String name;
@@ -12,6 +16,20 @@ public class CkanPackage {
     private String type;
     private String originUrl;
 
+    private String issued;
+    private String version;
+    private String description;
+    @SerializedName("private")
+    private boolean isPrivate;
+    private String state;
+    private String modified;
+
+    // complex
+    private JsonArray groups;
+    private JsonArray tags;
+    private JsonObject organization;
+
+
     public CkanPackage(CkanPackageBuilder builder) {
         this.id = builder.id;
         this.name = builder.name;
@@ -23,6 +41,15 @@ public class CkanPackage {
         this.notes = builder.notes;
         this.type = builder.type;
         this.originUrl = builder.originUrl;
+        this.issued = builder.issued;
+        this.version = builder.version;
+        this.description = builder.description;
+        this.isPrivate = builder.isPrivate;
+        this.state = builder.state;
+        this.modified = builder.modified;
+        this.groups = builder.groups;
+        this.tags = builder.tags;
+        this.organization = builder.organization;
     }
 
     public String getId() {
@@ -105,6 +132,78 @@ public class CkanPackage {
         this.originUrl = originUrl;
     }
 
+    public String getIssued() {
+        return issued;
+    }
+
+    public void setIssued(String issued) {
+        this.issued = issued;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getModified() {
+        return modified;
+    }
+
+    public void setModified(String modified) {
+        this.modified = modified;
+    }
+
+    public JsonArray getGroups() {
+        return groups;
+    }
+
+    public void setGroups(JsonArray groups) {
+        this.groups = groups;
+    }
+
+    public JsonArray getTags() {
+        return tags;
+    }
+
+    public void setTags(JsonArray tags) {
+        this.tags = tags;
+    }
+
+    public JsonObject getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(JsonObject organization) {
+        this.organization = organization;
+    }
+
     @Override
     public String toString() {
         return String.format("License: %s\n" +
@@ -124,6 +223,16 @@ public class CkanPackage {
         private String notes;
         private String type;
         private String originUrl;
+
+        private String issued;
+        private String version;
+        private String description;
+        private boolean isPrivate;
+        private String state;
+        private String modified;
+        private JsonArray groups;
+        private JsonArray tags;
+        private JsonObject organization;
 
         public CkanPackageBuilder(String id) {
             this.id = id;
@@ -171,6 +280,51 @@ public class CkanPackage {
 
         public CkanPackageBuilder withOriginUrl(String url) {
             this.originUrl = url;
+            return this;
+        }
+
+        public CkanPackageBuilder withIssued(String issued) {
+            this.issued = issued;
+            return this;
+        }
+
+        public CkanPackageBuilder withVersion(String version) {
+            this.version = version;
+            return this;
+        }
+
+        public CkanPackageBuilder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public CkanPackageBuilder isPrivate(boolean isPrivate) {
+            this.isPrivate = isPrivate;
+            return this;
+        }
+
+        public CkanPackageBuilder withState(String state) {
+            this.state = state;
+            return this;
+        }
+
+        public CkanPackageBuilder withModified(String modified) {
+            this.modified = modified;
+            return this;
+        }
+
+        public CkanPackageBuilder withGropus(JsonArray groups) {
+            this.groups = groups;
+            return this;
+        }
+
+        public CkanPackageBuilder withTags(JsonArray tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public CkanPackageBuilder withOrganization(JsonObject organization) {
+            this.organization = organization;
             return this;
         }
 

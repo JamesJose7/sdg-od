@@ -10,6 +10,11 @@ public class CkanResource {
     private String last_modified;
     private String url;
 
+    private String license;
+    private String modified;
+    private String state;
+    private String byteSize;
+
     public CkanResource(CkanResourceBuilder builder) {
         this.id = builder.id;
         this.package_id = builder.package_id;
@@ -19,6 +24,10 @@ public class CkanResource {
         this.created = builder.created;
         this.last_modified = builder.last_modified;
         this.url = builder.url;
+        this.license = builder.license;
+        this.modified = builder.modified;
+        this.state = builder.state;
+        this.byteSize = builder.byteSize;
     }
 
     public String getId() {
@@ -85,6 +94,38 @@ public class CkanResource {
         this.url = url;
     }
 
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public String getModified() {
+        return modified;
+    }
+
+    public void setModified(String modified) {
+        this.modified = modified;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getByteSize() {
+        return byteSize;
+    }
+
+    public void setByteSize(String byteSize) {
+        this.byteSize = byteSize;
+    }
+
     public static class CkanResourceBuilder {
         private String id;
         private String package_id;
@@ -94,6 +135,11 @@ public class CkanResource {
         private String created;
         private String last_modified;
         private String url;
+
+        private String license;
+        private String modified;
+        private String state;
+        private String byteSize;
 
         public CkanResourceBuilder(String id, String package_id) {
             this.id = id;
@@ -129,6 +175,26 @@ public class CkanResource {
             this.url = url;
             return this;
         }
+
+        public CkanResourceBuilder withLicense(String license) {
+            this.license = license;
+            return this;
+        }
+
+        public CkanResourceBuilder withModified(String modified) {
+            this.modified = modified;
+            return this;
+        }
+
+        public CkanResourceBuilder withState(String state) {
+            this.state = state;
+            return this;
+        }
+        public CkanResourceBuilder withByteSize(String byteSize) {
+            this.byteSize = byteSize;
+            return this;
+        }
+
 
         public CkanResource build() {
             return new CkanResource(this);
