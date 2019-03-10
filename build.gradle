@@ -35,4 +35,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.json:json:20180130'
     implementation 'mysql:mysql-connector-java:8.0.13'
+    implementation 'org.apache.jena:apache-jena-libs:3.10.0'
+    implementation 'org.slf4j:slf4j-simple:1.6.2'
 }
