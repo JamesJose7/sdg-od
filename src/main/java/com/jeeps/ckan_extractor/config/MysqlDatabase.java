@@ -8,7 +8,7 @@ import java.util.*;
 
 public class MysqlDatabase {
     // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://localhost/ckan?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     //  Database credentials
@@ -83,7 +83,7 @@ public class MysqlDatabase {
         Statement stmt = null;
         try{
             //STEP 2: Register JDBC driver
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             //STEP 3: Open a connection
             System.out.println("Connecting to a selected database...");
@@ -180,7 +180,7 @@ public class MysqlDatabase {
         Connection conn = null;
         Statement stmt = null;
         try{
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
 
