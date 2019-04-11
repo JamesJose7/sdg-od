@@ -1,6 +1,7 @@
 package com.jeeps.ckan_extractor;
 
 import com.jeeps.ckan_extractor.controller.CkanExtractor;
+import com.jeeps.ckan_extractor.controller.SdgExtractor;
 
 import java.io.FileNotFoundException;
 import java.time.Duration;
@@ -12,6 +13,24 @@ import static com.jeeps.ckan_extractor.controller.SemanticCreator.CURRENT_PLATFO
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Instant start = Instant.now();
+
+        //extractCkanData();
+        extractSDGData();
+
+        Instant finish = Instant.now();
+        long timeElapsed = Duration.between(start, finish).toMillis();
+        System.out.printf("Elapsed time:\n" +
+                "millis: %d\n" +
+                "seconds: %d\n", timeElapsed, (timeElapsed / 1000));
+    }
+
+    private static void extractSDGData() {
+        SdgExtractor sdgExtractor = new SdgExtractor();
+
+        sdgExtractor.extract();
+    }
+
+    private static void extractCkanData() throws FileNotFoundException {
         CkanExtractor ckanExtractor = new CkanExtractor();
 
 //        CURRENT_COUNTRY = "Ecuador";
@@ -34,12 +53,6 @@ public class Main {
 //        CURRENT_PLATFORM = "Australian government";
         ckanExtractor.extract("https://data.gov.au/api/3/action/");
 
-
         ckanExtractor.writeFile();
-        Instant finish = Instant.now();
-        long timeElapsed = Duration.between(start, finish).toMillis();
-        System.out.printf("Elapsed time:\n" +
-                "millis: %d\n" +
-                "seconds: %d\n", timeElapsed, (timeElapsed / 1000));
     }
 }
