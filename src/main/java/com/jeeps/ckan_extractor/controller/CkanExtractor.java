@@ -55,7 +55,7 @@ public class CkanExtractor {
     private void extractDatasets(String json) {
         List<String> ckanDatasets = parseCkanContent(json);
         ckanDatasets.parallelStream()
-                .limit(MAX_SIZE)
+//                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendRequest(this::extractDatasetDetails, (mListPackageDetailsUrl + dataset)));
 //        mSemanticCreator.writeRdfFile();
@@ -64,13 +64,13 @@ public class CkanExtractor {
     private void extractDataSetsByPost(String json) {
         List<String> ckanDatasets = parseCkanContent(json);
         ckanDatasets.parallelStream()
-                .limit(MAX_SIZE)
+//                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendPostRequest(this::extractDatasetDetails, (mListPackageDetailsUrl), String.format("{\"id\": \"%s\"}", dataset)));
 //        mSemanticCreator.writeRdfFile();
     }
 
-    public void writeRdfFile() {
+    public void writeFile() {
         mSemanticCreator.writeRdfFile();
     }
 

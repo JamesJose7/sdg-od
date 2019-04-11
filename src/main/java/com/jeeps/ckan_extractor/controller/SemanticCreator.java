@@ -14,12 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.jeeps.ckan_extractor.util.StringUtils.upperCaseFirst;
-import static com.jeeps.ckan_extractor.util.StringUtils.urlify;
+import static com.jeeps.ckan_extractor.util.StringUtils.*;
 
 public class SemanticCreator {
     private Model mModel;
-    private final FileOutputStream os;
     public static final String DATA_PREFIX = "http://example.org/data/";
 
     public static String CURRENT_PLATFORM;
@@ -29,12 +27,12 @@ public class SemanticCreator {
     private String dbo;
     private String dbr;
     private final Random random;
+    private FileOutputStream os;
 
     public SemanticCreator() throws FileNotFoundException {
         random = new Random();
         // Create model
         mModel = ModelFactory.createDefaultModel();
-        // File dump
         File fos = new File("triples.rdf");
         os = new FileOutputStream(fos);
         initializeVocabs();
@@ -189,6 +187,7 @@ public class SemanticCreator {
     }
 
     public void writeRdfFile() {
+        // File dump
         // Write model to file
         RDFWriter writer = mModel.getWriter("RDF/XML");
         writer.write(mModel, os,  "");

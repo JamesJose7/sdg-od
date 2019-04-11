@@ -15,6 +15,8 @@ public class StringUtils {
                 .replaceAll("\"", "")
                 .replaceAll("\\.", "_")
                 .replaceAll("\n", "_")
+                .replaceAll("\t", "_")
+                .replaceAll("\\t", "_")
                 .replaceAll("\\n", "_")
                 .replaceAll("\\r", "_")
                 .replaceAll(":", "_")
@@ -25,6 +27,10 @@ public class StringUtils {
                 .replaceAll("%", "_")
                 .replaceAll("\\^", "_")
                 .replaceAll(",", "_")
+                .replaceAll("'", "_")
+                .replaceAll("&", "_")
+                .replaceAll("\\*", "_")
+                .replaceAll("[^\\w\\s]", "_")
                 .replaceAll("_+", "_");
     }
 }

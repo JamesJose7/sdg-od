@@ -35,7 +35,7 @@ public class Main {
         ckanExtractor.extract("https://data.gov.au/api/3/action/");
 
 
-        ckanExtractor.writeRdfFile();
+        ckanExtractor.writeFile();
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toMillis();
         System.out.printf("Elapsed time:\n" +
