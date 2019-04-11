@@ -4,15 +4,14 @@ import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.CkanResource;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.vocabulary.FOAF;
-import org.apache.jena.vocabulary.DCAT;
-import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.SKOS;
+import org.apache.jena.vocabulary.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static com.jeeps.ckan_extractor.util.StringUtils.upperCaseFirst;
@@ -70,7 +69,7 @@ public class SemanticCreator {
         dboCountryC = ResourceFactory.createResource(dbo + "Country");
     }
 
-    public void generateTriples(CkanPackage aPackage, CkanResource[] resourcesCkan) {
+    public synchronized void generateTriples(CkanPackage aPackage, CkanResource[] resourcesCkan) {
         // Create package as Catalog
         Resource catalog = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(aPackage.getTitle())))
                 .addProperty(RDF.type, DCAT.Catalog)
@@ -81,8 +80,10 @@ public class SemanticCreator {
             catalog.addProperty(DCTerms.publisher, mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(aPackage.getAuthor())))
                     .addProperty(RDF.type, FOAF.Agent)
                     .addProperty(FOAF.name, aPackage.getAuthor()));
-        if (exists(aPackage.getTitle()))
+        if (exists(aPackage.getTitle())) {
             catalog.addProperty(DCTerms.title, aPackage.getTitle());
+            catalog.addProperty(RDFS.label, aPackage.getTitle());
+        }
         if (exists(aPackage.getDescription()))
             catalog.addProperty(DCTerms.description, aPackage.getDescription());
         if (exists(aPackage.getIssued()))
@@ -96,20 +97,43 @@ public class SemanticCreator {
 
 
         // Add Groups
-        /*aPackage.getGroups().forEach(tag -> {
-            String groupName = tag.getAsJsonObject().get("display_name").getAsString();
-            catalog.addProperty(CKAN.group, mModel.createResource(DATA_PREFIX + urlify(groupName))
-                    .addProperty(RDF.type, CKAN.Group)
-                    .addProperty(CKAN.title, groupName));
-        });*/
+        List<Resource> groupList = new ArrayList<>();
+        if (aPackage.getGroups() != null) {
+            Resource groupConceptScheme = mModel.createResource(DATA_PREFIX + "Groups_from_" + urlify(aPackage.getTitle()))
+                    .addProperty(RDF.type, SKOS.ConceptScheme)
+                    .addProperty(RDFS.label, "Groups from " + aPackage.getTitle())
+                    .addProperty(DCTerms.title, "Groups from " + aPackage.getTitle());
+            aPackage.getGroups().forEach(tag -> {
+                if (tag.getAsJsonObject().get("display_name") != null) {
+                    String groupName = tag.getAsJsonObject().get("display_name").getAsString();
+                    Resource groupRes = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(groupName)))
+                            .addProperty(RDF.type, SKOS.Concept)
+                            .addProperty(SKOS.prefLabel, groupName)
+                            .addProperty(SKOS.inScheme, groupConceptScheme);
+                    groupList.add(groupRes);
+                }
+            });
+            catalog.addProperty(DCAT.themeTaxonomy, groupConceptScheme);
+        }
 
         // Add Tags
-        /*aPackage.getTags().forEach(tag -> {
-            String tagName = tag.getAsJsonObject().get("display_name").getAsString();
-            catalog.addProperty(CKAN.tag, mModel.createResource(DATA_PREFIX + urlify(tagName))
-                    .addProperty(RDF.type, CKAN.Tag)
-                    .addProperty(SKOS.prefLabel, tagName));
-        });*/
+        // Create concept scheme for catalog
+        List<Resource> tagList = new ArrayList<>();
+        if (aPackage.getTags() != null) {
+            Resource tagConceptScheme = mModel.createResource(DATA_PREFIX + "Tags_from_" + urlify(aPackage.getTitle()))
+                    .addProperty(RDF.type, SKOS.ConceptScheme)
+                    .addProperty(RDFS.label, "Tags from " + aPackage.getTitle())
+                    .addProperty(DCTerms.title, "Tags from " + aPackage.getTitle());
+            aPackage.getTags().forEach(tag -> {
+                String tagName = tag.getAsJsonObject().get("display_name").getAsString();
+                Resource tagRes = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(tagName)))
+                        .addProperty(RDF.type, SKOS.Concept)
+                        .addProperty(SKOS.prefLabel, tagName)
+                        .addProperty(SKOS.inScheme, tagConceptScheme);
+                tagList.add(tagRes);
+            });
+            catalog.addProperty(DCAT.themeTaxonomy, tagConceptScheme);
+        }
 
         // Add Organization
         /*String orgName = aPackage.getOrganization().has("title") ? aPackage.getOrganization().get("title").getAsString() : "org_" + urlify(aPackage.getName());
@@ -132,6 +156,7 @@ public class SemanticCreator {
                     // Dataset
                     Resource dataset = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(resource.getName())) + randomId)
                             .addProperty(RDF.type, DCAT.Dataset)
+                            .addProperty(RDFS.label, resource.getName())
                             .addProperty(DCTerms.title, resource.getName());
                     if (exists(resource.getDescription()))
                         dataset.addProperty(DCTerms.description, resource.getDescription());
@@ -139,10 +164,14 @@ public class SemanticCreator {
                         dataset.addProperty(DCTerms.issued, resource.getCreated());
                     if (exists(resource.getModified()))
                         dataset.addProperty(DCTerms.modified, resource.getModified());
+                    tagList.forEach(tag -> dataset.addProperty(DCAT.theme, tag));
+                    groupList.forEach(tag -> dataset.addProperty(DCAT.theme, tag));
 
                     // Distribution
                     Resource distribution = mModel.createResource(DATA_PREFIX + "dist_" + upperCaseFirst(urlify(resource.getName())) + randomId)
                             .addProperty(RDF.type, DCAT.Distribution)
+                            .addProperty(RDFS.label, "Distribution of: " + resource.getName())
+                            .addProperty(DCTerms.title, "Distribution of: " + resource.getName())
                             .addProperty(DCAT.downloadURL, resource.getUrl());
                     if (exists(resource.getByteSize()))
                         distribution.addProperty(DCAT.byteSize, resource.getByteSize());
