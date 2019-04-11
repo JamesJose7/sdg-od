@@ -3,7 +3,9 @@ package com.jeeps.ckan_extractor.util;
 public class StringUtils {
 
    public static String upperCaseFirst(String string) {
+       if (string.length() > 1)
         return string.substring(0,1).toUpperCase() + string.substring(1);
+       return string;
    }
 
     public static String urlify(String string) {
@@ -18,6 +20,11 @@ public class StringUtils {
                 .replaceAll(":", "_")
                 .replaceAll("\\[", "_")
                 .replaceAll("]", "_")
+                .replaceAll("\\(", "_")
+                .replaceAll("\\)", "_")
+                .replaceAll("%", "_")
+                .replaceAll("\\^", "_")
+                .replaceAll(",", "_")
                 .replaceAll("_+", "_");
     }
 }

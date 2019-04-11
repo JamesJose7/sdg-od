@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.Random;
 
 import static com.jeeps.ckan_extractor.util.StringUtils.upperCaseFirst;
 import static com.jeeps.ckan_extractor.util.StringUtils.urlify;
@@ -24,12 +25,14 @@ public class SemanticCreator {
 
     public static String CURRENT_PLATFORM;
     public static String CURRENT_COUNTRY;
-    private Property mDboCountryP;
-    private Resource mDboCountryC;
-    private String mDbo;
-    private String mDbr;
+    private Property dboCountryP;
+    private Resource dboCountryC;
+    private String dbo;
+    private String dbr;
+    private final Random random;
 
     public SemanticCreator() throws FileNotFoundException {
+        random = new Random();
         // Create model
         mModel = ModelFactory.createDefaultModel();
         // File dump
@@ -59,21 +62,17 @@ public class SemanticCreator {
         mModel.setNsPrefix("skos", skos);
 
         // DBO prefix
-        mDbo = "http://dbpedia.org/ontology/";
-        mDbr = "http://dbpedia.org/resource/";
-        mModel.setNsPrefix("dbo", mDbo);
-        mModel.setNsPrefix("dbr", mDbr);
-        mDboCountryP = ResourceFactory.createProperty(mDbo + "country");
-        mDboCountryC = ResourceFactory.createResource(mDbo + "Country");
-
-        // Our Ontology prefix
-//        String vocabPrefix = CKAN.getURI();
-//        mModel.setNsPrefix("ckan",vocabPrefix);
+        dbo = "http://dbpedia.org/ontology/";
+        dbr = "http://dbpedia.org/resource/";
+        mModel.setNsPrefix("dbo", dbo);
+        mModel.setNsPrefix("dbr", dbr);
+        dboCountryP = ResourceFactory.createProperty(dbo + "country");
+        dboCountryC = ResourceFactory.createResource(dbo + "Country");
     }
 
     public void generateTriples(CkanPackage aPackage, CkanResource[] resourcesCkan) {
         // Create package as Catalog
-        Resource catalog = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(aPackage.getName())))
+        Resource catalog = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(aPackage.getTitle())))
                 .addProperty(RDF.type, DCAT.Catalog)
                 .addProperty(FOAF.homepage, mModel.createResource(aPackage.getOriginUrl()));
 
@@ -128,8 +127,10 @@ public class SemanticCreator {
         // Add resources
         Arrays.stream(resourcesCkan)
                 .forEach(resource -> {
+                    // Generate a random number to differentiate datasets and distributions with the same name
+                    String randomId = String.format("_%03d", random.nextInt(1000));
                     // Dataset
-                    Resource dataset = mModel.createResource(DATA_PREFIX + urlify(resource.getName()))
+                    Resource dataset = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(resource.getName())) + randomId)
                             .addProperty(RDF.type, DCAT.Dataset)
                             .addProperty(DCTerms.title, resource.getName());
                     if (exists(resource.getDescription()))
@@ -140,7 +141,7 @@ public class SemanticCreator {
                         dataset.addProperty(DCTerms.modified, resource.getModified());
 
                     // Distribution
-                    Resource distribution = mModel.createResource(DATA_PREFIX + "dist_" + urlify(resource.getName()))
+                    Resource distribution = mModel.createResource(DATA_PREFIX + "dist_" + upperCaseFirst(urlify(resource.getName())) + randomId)
                             .addProperty(RDF.type, DCAT.Distribution)
                             .addProperty(DCAT.downloadURL, resource.getUrl());
                     if (exists(resource.getByteSize()))
