@@ -16,15 +16,15 @@ public class Main {
 
 //        CURRENT_COUNTRY = "Ecuador";
 //        CURRENT_PLATFORM = "Ambar UTPL";
-//        ckanExtractor.extract("http://ambar.utpl.edu.ec/api/action/");
+        ckanExtractor.extract("http://ambar.utpl.edu.ec/api/action/");
 
 //        CURRENT_COUNTRY = "";
 //        CURRENT_PLATFORM = "EU Open Data Portal";
-//        ckanExtractor.extractByPost("http://data.europa.eu/euodp/data/api/3/action/");
+        ckanExtractor.extractByPost("http://data.europa.eu/euodp/data/api/3/action/");
 
-        /*CURRENT_COUNTRY = "Netherlands";
-        CURRENT_PLATFORM = "The Humanitarian Data Exchange";
-        ckanExtractor.extract("https://data.humdata.org/api/3/action/");*/
+//        CURRENT_COUNTRY = "Netherlands";
+//        CURRENT_PLATFORM = "The Humanitarian Data Exchange";
+        ckanExtractor.extract("https://data.humdata.org/api/3/action/");
 
         CURRENT_COUNTRY = "Switzerland";
         CURRENT_PLATFORM = "Switzerland government";
@@ -32,15 +32,14 @@ public class Main {
 
 //        CURRENT_COUNTRY = "Australia";
 //        CURRENT_PLATFORM = "Australian government";
-//        ckanExtractor.extract("https://data.gov.au/api/3/action/");
+        ckanExtractor.extract("https://data.gov.au/api/3/action/");
 
+
+        ckanExtractor.writeRdfFile();
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toMillis();
         System.out.printf("Elapsed time:\n" +
                 "millis: %d\n" +
                 "seconds: %d\n", timeElapsed, (timeElapsed / 1000));
-
-//        SemanticCreator semanticCreator = new SemanticCreator();
-//        semanticCreator.convertToDcat();
     }
 }

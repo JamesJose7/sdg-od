@@ -30,7 +30,7 @@ public class CkanExtractor {
     private String mListPackageDetailsUrl;
 
     public CkanExtractor() throws FileNotFoundException {
-        mDatabase = new MysqlDatabase();
+//        mDatabase = new MysqlDatabase();
         mSemanticCreator = new SemanticCreator();
         mGson = new Gson();
         mHttpService = new HttpService();
@@ -58,7 +58,7 @@ public class CkanExtractor {
                 .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendRequest(this::extractDatasetDetails, (mListPackageDetailsUrl + dataset)));
-        mSemanticCreator.writeRdfFile();
+//        mSemanticCreator.writeRdfFile();
     }
 
     private void extractDataSetsByPost(String json) {
@@ -67,6 +67,10 @@ public class CkanExtractor {
                 .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendPostRequest(this::extractDatasetDetails, (mListPackageDetailsUrl), String.format("{\"id\": \"%s\"}", dataset)));
+//        mSemanticCreator.writeRdfFile();
+    }
+
+    public void writeRdfFile() {
         mSemanticCreator.writeRdfFile();
     }
 
@@ -100,10 +104,10 @@ public class CkanExtractor {
                 resourcesCkan = buildComplexResources(packageResource);
             }
             // Set origin URL
-            aPackage.setOriginUrl(mBaseUrl);
+            aPackage.setOriginUrl(mBaseUrl.split("api")[0]);
             System.out.println(aPackage);
             mSemanticCreator.generateTriples(aPackage, resourcesCkan);
-            mDatabase.savePackage(aPackage, resourcesCkan);
+//            mDatabase.savePackage(aPackage, resourcesCkan);
         } catch (JSONException e) {}
     }
 
