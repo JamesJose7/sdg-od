@@ -1,4 +1,4 @@
-package com.jeeps.ckan_extractor.controller;
+package com.jeeps.ckan_extractor.core;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

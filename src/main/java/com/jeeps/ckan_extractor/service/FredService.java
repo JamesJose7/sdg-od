@@ -1,6 +1,6 @@
 package com.jeeps.ckan_extractor.service;
 
-import com.jeeps.ckan_extractor.util.FileUtils;
+import com.jeeps.ckan_extractor.utils.FileUtils;
 
 import java.io.IOException;
 import java.net.URLEncoder;

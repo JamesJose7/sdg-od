@@ -1,4 +1,4 @@
-package com.jeeps.ckan_extractor.util;
+package com.jeeps.ckan_extractor.utils;
 
 public class StringUtils {
 

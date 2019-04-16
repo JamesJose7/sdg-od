@@ -1,4 +1,4 @@
-package com.jeeps.ckan_extractor.util;
+package com.jeeps.ckan_extractor.utils;
 
 import java.io.IOException;
 import java.nio.file.Files;

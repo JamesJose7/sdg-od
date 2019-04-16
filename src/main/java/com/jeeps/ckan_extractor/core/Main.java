@@ -1,17 +1,15 @@
-package com.jeeps.ckan_extractor;
-
-import com.jeeps.ckan_extractor.controller.CkanExtractor;
-import com.jeeps.ckan_extractor.controller.SdgExtractor;
+package com.jeeps.ckan_extractor.core;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
-import static com.jeeps.ckan_extractor.controller.SemanticCreator.CURRENT_COUNTRY;
-import static com.jeeps.ckan_extractor.controller.SemanticCreator.CURRENT_PLATFORM;
+import static com.jeeps.ckan_extractor.core.SemanticCreator.CURRENT_COUNTRY;
+import static com.jeeps.ckan_extractor.core.SemanticCreator.CURRENT_PLATFORM;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void initialize() throws IOException {
         Instant start = Instant.now();
 
         //extractCkanData();

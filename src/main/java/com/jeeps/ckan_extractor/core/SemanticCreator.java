@@ -1,4 +1,4 @@
-package com.jeeps.ckan_extractor.controller;
+package com.jeeps.ckan_extractor.core;
 
 import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.CkanResource;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.jeeps.ckan_extractor.util.StringUtils.*;
+import static com.jeeps.ckan_extractor.utils.StringUtils.*;
 
 public class SemanticCreator {
     private Model mModel;
