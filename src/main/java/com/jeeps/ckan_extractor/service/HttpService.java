@@ -36,7 +36,20 @@ public class HttpService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
+                .headers()
                 .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(onSuccess)
+                .join();
+    }
+
+    public void sendRequestWithHeaders(Consumer<String> onSuccess, String url, String... headers) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .headers(headers)
                 .build();
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
