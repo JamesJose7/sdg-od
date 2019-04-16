@@ -33,12 +33,18 @@ public class SdgExtractor {
         sustainableGoals = gson.fromJson(json, SustainableGoal[].class);
         Arrays.asList(sustainableGoals).forEach(goal ->
             httpService.sendRequest(this::extractGoalDetails, BASE_URL + goal.getCode() + goalDetailsUrl));
+
+        // Analyze with FRED
+        /*FredService fredService = new FredService();
+        Arrays.asList(sustainableGoals).forEach(goal -> {
+            fredService.fredActivate(goal.getTitle());
+        });*/
     }
 
     private void extractGoalDetails(String json) {
         JSONObject goalJson = (new JSONArray(json)).getJSONObject(0);
         JSONArray targetsJson = goalJson.getJSONArray("targets");
-        // Build indicator array
+        // Build targets array
         SdgTarget[] sdgTargets = gson.fromJson(targetsJson.toString(), SdgTarget[].class);
         sustainableGoals[counter].setTargets(Arrays.asList(sdgTargets));
         Arrays.asList(sdgTargets).forEach(target -> System.out.println("Extracted target: " + target.getCode()));
