@@ -3,6 +3,7 @@ package com.jeeps.ckan_extractor.core;
 import com.google.gson.Gson;
 import com.jeeps.ckan_extractor.model.SdgTarget;
 import com.jeeps.ckan_extractor.model.SustainableGoal;
+import com.jeeps.ckan_extractor.service.FredService;
 import com.jeeps.ckan_extractor.service.HttpService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,10 +36,23 @@ public class SdgExtractor {
             httpService.sendRequest(this::extractGoalDetails, BASE_URL + goal.getCode() + goalDetailsUrl));
 
         // Analyze with FRED
-        /*FredService fredService = new FredService();
-        Arrays.asList(sustainableGoals).forEach(goal -> {
-            fredService.fredActivate(goal.getTitle());
-        });*/
+        Arrays.stream(sustainableGoals)
+//                .limit(1)
+                .forEach(goal -> {
+            FredService fredService = new FredService("fred\\" + goal.getCode());
+            // Analyze goal
+            fredService.fredActivate(goal.getTitle(), goal.getCode());
+            fredService.fredActivate(goal.getDescription(), goal.getCode() + "_description");
+            // Analyze goal targets
+            goal.getTargets().forEach(target -> {
+                fredService.fredActivate(target.getTitle(), target.getCode());
+                fredService.fredActivate(target.getDescription(), target.getCode() + "_description");
+                // Analyze target indicators
+                target.getIndicators().forEach(indicator -> {
+                    fredService.fredActivate(indicator.getDescription(), indicator.getCode());
+                });
+            });
+        });
     }
 
     private void extractGoalDetails(String json) {

@@ -9,7 +9,7 @@ import static com.jeeps.ckan_extractor.core.SemanticCreator.CURRENT_COUNTRY;
 import static com.jeeps.ckan_extractor.core.SemanticCreator.CURRENT_PLATFORM;
 
 public class Main {
-    public static void initialize() throws IOException {
+    public static void main(String[] args) throws IOException {
         Instant start = Instant.now();
 
         //extractCkanData();
