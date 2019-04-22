@@ -24,14 +24,14 @@ public class CkanExtractor {
     public static final int MAX_SIZE = 100;
     private Gson mGson;
     private MysqlDatabase mDatabase;
-    private SemanticCreator mSemanticCreator;
+    private CkanSemanticCreator mCkanSemanticCreator;
     private HttpService mHttpService;
     private String mBaseUrl;
     private String mListPackageDetailsUrl;
 
     public CkanExtractor() throws FileNotFoundException {
 //        mDatabase = new MysqlDatabase();
-        mSemanticCreator = new SemanticCreator();
+        mCkanSemanticCreator = new CkanSemanticCreator();
         mGson = new Gson();
         mHttpService = new HttpService();
     }
@@ -58,7 +58,7 @@ public class CkanExtractor {
 //                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendRequest(this::extractDatasetDetails, (mListPackageDetailsUrl + dataset)));
-//        mSemanticCreator.writeRdfFile();
+//        mCkanSemanticCreator.writeRdfFile();
     }
 
     private void extractDataSetsByPost(String json) {
@@ -67,11 +67,11 @@ public class CkanExtractor {
 //                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendPostRequest(this::extractDatasetDetails, (mListPackageDetailsUrl), String.format("{\"id\": \"%s\"}", dataset)));
-//        mSemanticCreator.writeRdfFile();
+//        mCkanSemanticCreator.writeRdfFile();
     }
 
     public void writeFile() {
-        mSemanticCreator.writeRdfFile();
+        mCkanSemanticCreator.writeRdfFile();
     }
 
     private List<String> parseCkanContent(String json) {
@@ -106,7 +106,7 @@ public class CkanExtractor {
             // Set origin URL
             aPackage.setOriginUrl(mBaseUrl.split("api")[0]);
             System.out.println(aPackage);
-            mSemanticCreator.generateTriples(aPackage, resourcesCkan);
+            mCkanSemanticCreator.generateTriples(aPackage, resourcesCkan);
 //            mDatabase.savePackage(aPackage, resourcesCkan);
         } catch (JSONException e) {}
     }

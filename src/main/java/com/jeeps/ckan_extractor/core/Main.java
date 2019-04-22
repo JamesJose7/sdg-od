@@ -5,15 +5,18 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
-import static com.jeeps.ckan_extractor.core.SemanticCreator.CURRENT_COUNTRY;
-import static com.jeeps.ckan_extractor.core.SemanticCreator.CURRENT_PLATFORM;
+import static com.jeeps.ckan_extractor.core.CkanSemanticCreator.CURRENT_COUNTRY;
+import static com.jeeps.ckan_extractor.core.CkanSemanticCreator.CURRENT_PLATFORM;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         Instant start = Instant.now();
 
         //extractCkanData();
-        extractSDGData();
+//        extractSDGData();
+        SdgSemanticCreator sdgSemanticCreator = new SdgSemanticCreator();
+        sdgSemanticCreator.generateTriples();
+        sdgSemanticCreator.writeRdfFile();
 
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toMillis();

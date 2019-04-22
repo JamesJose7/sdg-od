@@ -16,7 +16,7 @@ import java.util.Random;
 
 import static com.jeeps.ckan_extractor.utils.StringUtils.*;
 
-public class SemanticCreator {
+public class CkanSemanticCreator {
     private Model mModel;
     public static final String DATA_PREFIX = "http://example.org/data/";
 
@@ -29,7 +29,7 @@ public class SemanticCreator {
     private final Random random;
     private FileOutputStream os;
 
-    public SemanticCreator() throws FileNotFoundException {
+    public CkanSemanticCreator() throws FileNotFoundException {
         random = new Random();
         // Create model
         mModel = ModelFactory.createDefaultModel();
