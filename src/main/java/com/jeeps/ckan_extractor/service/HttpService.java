@@ -36,7 +36,7 @@ public class HttpService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .headers()
+//                .headers()
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 

@@ -1,22 +1,42 @@
 package com.jeeps.ckan_extractor.model;
 
+import com.google.gson.annotations.SerializedName;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+
+@Entity
 public class CkanResource {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idDB;
+
+    @SerializedName("id")
+    private String resourceId;
     private String package_id;
+    @Lob
     private String description;
     private String format;
+    @Lob
     private String name;
     private String created;
     private String last_modified;
+    @Lob
     private String url;
 
+    @Lob
     private String license;
     private String modified;
     private String state;
     private String byteSize;
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private CkanPackage ckanPackage;
+
     public CkanResource(CkanResourceBuilder builder) {
-        this.id = builder.id;
+        this.resourceId = builder.id;
         this.package_id = builder.package_id;
         this.description = builder.description;
         this.format = builder.format;
@@ -30,12 +50,20 @@ public class CkanResource {
         this.byteSize = builder.byteSize;
     }
 
-    public String getId() {
-        return id;
+    public Long getIdDB() {
+        return idDB;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdDB(Long idDB) {
+        this.idDB = idDB;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
     public String getPackage_id() {
@@ -124,6 +152,14 @@ public class CkanResource {
 
     public void setByteSize(String byteSize) {
         this.byteSize = byteSize;
+    }
+
+    public CkanPackage getCkanPackage() {
+        return ckanPackage;
+    }
+
+    public void setCkanPackage(CkanPackage ckanPackage) {
+        this.ckanPackage = ckanPackage;
     }
 
     public static class CkanResourceBuilder {

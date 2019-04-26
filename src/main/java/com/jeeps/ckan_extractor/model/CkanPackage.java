@@ -4,20 +4,33 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class CkanPackage {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idDB;
+
+    @SerializedName("id")
+    private String packageId;
+    @Lob
     private String name;
+    @Lob
     private String title;
+    @Lob
     private String license_title;
     private String metadata_created;
     private String metadata_modified;
     private String author;
-    private String notes;
+//    private String notes;
     private String type;
     private String originUrl;
 
     private String issued;
     private String version;
+    @Lob
     private String description;
     @SerializedName("private")
     private boolean isPrivate;
@@ -25,20 +38,26 @@ public class CkanPackage {
     private String modified;
 
     // complex
+    @Transient
     private JsonArray groups;
+    @Transient
     private JsonArray tags;
+    @Transient
     private JsonObject organization;
+
+    @OneToMany(mappedBy = "ckanPackage", cascade = CascadeType.ALL)
+    private List<CkanResource> resources;
 
 
     public CkanPackage(CkanPackageBuilder builder) {
-        this.id = builder.id;
+        this.packageId = builder.id;
         this.name = builder.name;
         this.title = builder.title;
         this.license_title = builder.license_title;
         this.metadata_created = builder.metadata_created;
         this.metadata_modified = builder.metadata_modified;
         this.author = builder.author;
-        this.notes = builder.notes;
+//        this.notes = builder.notes;
         this.type = builder.type;
         this.originUrl = builder.originUrl;
         this.issued = builder.issued;
@@ -52,12 +71,20 @@ public class CkanPackage {
         this.organization = builder.organization;
     }
 
-    public String getId() {
-        return id;
+    public Long getIdDB() {
+        return idDB;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdDB(Long idDB) {
+        this.idDB = idDB;
+    }
+
+    public String getPackageId() {
+        return packageId;
+    }
+
+    public void setPackageId(String packageId) {
+        this.packageId = packageId;
     }
 
     public String getName() {
@@ -108,13 +135,13 @@ public class CkanPackage {
         this.author = author;
     }
 
-    public String getNotes() {
+    /*public String getNotes() {
         return notes;
     }
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
+    }*/
 
     public String getType() {
         return type;
@@ -202,6 +229,14 @@ public class CkanPackage {
 
     public void setOrganization(JsonObject organization) {
         this.organization = organization;
+    }
+
+    public List<CkanResource> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<CkanResource> resources) {
+        this.resources = resources;
     }
 
     @Override

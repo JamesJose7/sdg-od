@@ -1,13 +1,10 @@
 package com.jeeps.ckan_extractor.core;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import com.jeeps.ckan_extractor.config.MysqlDatabase;
+import com.google.gson.*;
 import com.jeeps.ckan_extractor.model.CkanContent;
 import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.CkanResource;
+import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.HttpService;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,20 +17,41 @@ import java.util.List;
 import java.util.Optional;
 
 public class CkanExtractor {
+    private final CkanPackageService ckanPackageService;
+/*
+    @Autowired
+    private CkanResourceService ckanResourceService;
+*/
 
     public static final int MAX_SIZE = 100;
     private Gson mGson;
-    private MysqlDatabase mDatabase;
     private CkanSemanticCreator mCkanSemanticCreator;
     private HttpService mHttpService;
     private String mBaseUrl;
     private String mListPackageDetailsUrl;
 
-    public CkanExtractor() throws FileNotFoundException {
-//        mDatabase = new MysqlDatabase();
+    public CkanExtractor(CkanPackageService ckanPackageService) throws FileNotFoundException {
         mCkanSemanticCreator = new CkanSemanticCreator();
-        mGson = new Gson();
+        mGson = new GsonBuilder()
+                .addSerializationExclusionStrategy(getGsonStrategy())
+                .create();
         mHttpService = new HttpService();
+        this.ckanPackageService = ckanPackageService;
+    }
+
+    private ExclusionStrategy getGsonStrategy() {
+        // Ignore database ID fields on JSON deserialization
+        return new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return f.getName().equals("idDB");
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        };
     }
 
     public void extract(String baseUrl) {
@@ -106,9 +124,19 @@ public class CkanExtractor {
             // Set origin URL
             aPackage.setOriginUrl(mBaseUrl.split("api")[0]);
             System.out.println(aPackage);
-            mCkanSemanticCreator.generateTriples(aPackage, resourcesCkan);
-//            mDatabase.savePackage(aPackage, resourcesCkan);
-        } catch (JSONException e) {}
+
+            // Set resources parent to store on DB
+            List<CkanResource> resources = Arrays.asList(resourcesCkan);
+            CkanPackage finalAPackage = aPackage;
+            resources.forEach(resource -> resource.setCkanPackage(finalAPackage));
+            aPackage.setResources(resources);
+
+//            mCkanSemanticCreator.generateTriples(aPackage, resourcesCkan);
+//            mDatabase.savePcackage(aPackage, resourcesCkan);
+            ckanPackageService.save(aPackage);
+        } catch (JSONException e) {
+//            e.printStackTrace();
+        }
     }
 
     private CkanPackage buildComplexPackage(JSONObject resultJson) {
