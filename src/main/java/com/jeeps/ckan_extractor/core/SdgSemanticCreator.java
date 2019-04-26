@@ -5,6 +5,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFWriter;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.RiotException;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
@@ -13,6 +14,7 @@ import org.apache.jena.vocabulary.SKOS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -59,10 +61,35 @@ public class SdgSemanticCreator {
     }
 
     public synchronized void generateTriples() {
-        Model fredModel = FileManager.get().loadModel("fred/1/1.1.1.rdf", null, "RDF/XML");
+        // Get SDGs directories
+        File fredFolder = new File("fred");
+        File[] fredFolderFiles = fredFolder.listFiles();
+
+        Arrays.stream(fredFolderFiles)
+//                .limit(1)
+                .forEach(folder -> {
+                    // Get SDG RDF files
+                    File sdgFolder = new File("fred/" + folder.getName());
+                    File[] sdgFolderFiles = sdgFolder.listFiles();
+                    Arrays.stream(sdgFolderFiles)
+                            .map(File::getName)
+                            .map(file -> String.format("%s/%s", folder.getName(), file))
+                            .forEach(this::transformFredIntoSkos);
+                });
+    }
+
+    private void transformFredIntoSkos(String fileName) {
+        // Get the name for the ConceptScheme based on the structure
+        String sdgElement = getConceptSchemeName(fileName);
+        Model fredModel;
+        try { // Some results of FRED failed
+            fredModel = FileManager.get().loadModel("fred/" + fileName, null, "RDF/XML");
+        } catch (RiotException e) {
+            return;
+        }
 
         // Create concept scheme
-        Resource conceptScheme = model.createResource(DATA_PREFIX + "SDG_Indicator_1.1.1")
+        Resource conceptScheme = model.createResource(DATA_PREFIX + sdgElement)
                 .addProperty(RDF.type, SKOS.ConceptScheme);
         // Get all owl:Class
         List<List<String>> resultStatements = SparqlService.queryModel(fredModel, queryClasses, "s");
@@ -123,6 +150,19 @@ public class SdgSemanticCreator {
                 }
             }
         });
+    }
+
+    private String getConceptSchemeName(String fileName) {
+        String sdgElement = fileName.replace(".rdf", "")
+                .replace("_description", "");
+        // Remove folder
+        sdgElement = sdgElement.split("/")[1];
+        int hierarchy = sdgElement.split("\\.").length;
+        if (hierarchy == 1)
+            return "SDG_Goal_" + sdgElement;
+        else if (hierarchy == 2)
+            return  "SDG_Target_" + sdgElement;
+        return "SDG_Indicator_" + sdgElement;
     }
 
     public void writeRdfFile() {
