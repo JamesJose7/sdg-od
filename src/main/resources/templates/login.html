@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Home')"></head>
+<body>
+<div th:replace="layout :: main-header"></div>
+<div th:replace="layout :: nav"></div>
+
+<section class="main-content">
+    <div class="container">
+        <div class="login-container">
+            <div th:replace="layout :: flash"></div>
+            <form th:action="@{/login}" th:object="${user}" method="post" class="clearfix settings">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <h1>Login</h1>
+                <input type="text" th:field="*{username}" placeholder="username" class="settings"/>
+                <input type="password" th:field="*{password}" placeholder="password" class="settings"/>
+                <button type="submit" class="btn inln default settings">Login</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div th:replace="layout :: footer"></div>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>
