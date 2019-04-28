@@ -48,6 +48,7 @@ public class CkanPackage {
     @OneToMany(mappedBy = "ckanPackage", cascade = CascadeType.ALL)
     private List<CkanResource> resources;
 
+    public CkanPackage() {}
 
     public CkanPackage(CkanPackageBuilder builder) {
         this.packageId = builder.id;

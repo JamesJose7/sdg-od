@@ -35,6 +35,8 @@ public class CkanResource {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private CkanPackage ckanPackage;
 
+    public CkanResource() {}
+
     public CkanResource(CkanResourceBuilder builder) {
         this.resourceId = builder.id;
         this.package_id = builder.package_id;
