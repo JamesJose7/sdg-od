@@ -9,13 +9,16 @@ import com.jeeps.ckan_extractor.service.HttpService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class CkanExtractor {
     private final CkanPackageService ckanPackageService;
 /*
@@ -88,8 +91,8 @@ public class CkanExtractor {
 //        mCkanSemanticCreator.writeRdfFile();
     }
 
-    public void writeFile() {
-        mCkanSemanticCreator.writeRdfFile();
+    public void writeFile() throws IOException {
+        mCkanSemanticCreator.writeRdfFile("triples");
     }
 
     private List<String> parseCkanContent(String json) {

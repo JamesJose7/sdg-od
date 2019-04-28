@@ -67,6 +67,11 @@
 
 </div>
 
+<div th:fragment="websocketScripts">
+    <script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+</div>
+
 <!--<div th:fragment="admin-nav">
     <div class="container">
         <form class="logout-form" th:action="@{/logout}" method="post">

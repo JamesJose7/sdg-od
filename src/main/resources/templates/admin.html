@@ -7,22 +7,46 @@
 
 
 <div class="container">
-    <form th:action="@{/extract}" method="post" class="mt-5">
+<!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
+    <form class="mt-5" id="extractorForm">
         <div class="row justify-content-center">
             <p class="form-check col-10 col-lg-5 font-weight-bolder border-bottom">CKAN Repository</p>
-            <p class="col-2 col-lg-1 text-center font-weight-bold border-bottom">Packages</p>
+            <p class="col-2 col-lg-1 text-center font-weight-bold border-bottom">Datasets</p>
         </div>
 
         <div class="row justify-content-center" th:each="i : ${#numbers.sequence(0, ckanUrls.size() - 1)}">
             <div class="form-check col-10 col-lg-5">
-                <input class="form-check-input pl-2" type="checkbox" th:value="${ckanUrls.get(i)}" th:id="|check${i}|">
+                <input class="form-check-input pl-2" name="ckanURL" type="checkbox" th:value="${ckanUrls.get(i)}" th:id="|check${i}|">
                 <label th:for="|check${i}|" class="form-check-label" th:text="${ckanUrls.get(i)}"></label>
             </div>
             <p th:text="${urlCount.get(i)}" class="col-2 col-lg-1 badge badge-primary badge-pill"></p>
         </div>
+
+        <div class="row justify-content-center">
+            <div th:replace="layout :: flash"></div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <button type="submit" class="btn btn-primary" id="extractButton">Extract</button>
+        </div>
     </form>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Greetings</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <div th:replace="layout :: scripts"></div>
+<div th:replace="layout :: websocketScripts"></div>
+<script th:src="@{/assets/app-web-sockets.js}"></script>
 </body>
 </html>

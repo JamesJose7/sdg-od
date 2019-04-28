@@ -45,7 +45,7 @@ public class CkanPackage {
     @Transient
     private JsonObject organization;
 
-    @OneToMany(mappedBy = "ckanPackage", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ckanPackage", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CkanResource> resources;
 
     public CkanPackage() {}

@@ -1,21 +1,23 @@
 package com.jeeps.ckan_extractor.core;
 
 import com.jeeps.ckan_extractor.model.CkanPackage;
-import com.jeeps.ckan_extractor.model.CkanResource;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.*;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.jeeps.ckan_extractor.utils.StringUtils.*;
+import static com.jeeps.ckan_extractor.utils.StringUtils.upperCaseFirst;
+import static com.jeeps.ckan_extractor.utils.StringUtils.urlify;
 
+@Component
 public class CkanSemanticCreator {
     private Model mModel;
     public static final String DATA_PREFIX = "http://example.org/data/";
@@ -29,12 +31,10 @@ public class CkanSemanticCreator {
     private final Random random;
     private FileOutputStream os;
 
-    public CkanSemanticCreator() throws FileNotFoundException {
+    public CkanSemanticCreator() {
         random = new Random();
         // Create model
         mModel = ModelFactory.createDefaultModel();
-        File fos = new File("triples.rdf");
-        os = new FileOutputStream(fos);
         initializeVocabs();
     }
 
@@ -67,7 +67,7 @@ public class CkanSemanticCreator {
         dboCountryC = ResourceFactory.createResource(dbo + "Country");
     }
 
-    public synchronized void generateTriples(CkanPackage aPackage, CkanResource[] resourcesCkan) {
+    public void generateTriples(CkanPackage aPackage) {
         // Create package as Catalog
         Resource catalog = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(aPackage.getTitle())))
                 .addProperty(RDF.type, DCAT.Catalog)
@@ -147,7 +147,7 @@ public class CkanSemanticCreator {
         catalog.addProperty(CKAN.organization, organization);*/
 
         // Add resources
-        Arrays.stream(resourcesCkan)
+        aPackage.getResources()
                 .forEach(resource -> {
                     // Generate a random number to differentiate datasets and distributions with the same name
                     String randomId = String.format("_%03d", random.nextInt(1000));
@@ -186,11 +186,17 @@ public class CkanSemanticCreator {
                 });
     }
 
-    public void writeRdfFile() {
+    public void writeRdfFile(String fileName) throws IOException {
         // File dump
+        File temp = new File("temp/");
+        if (!(temp.exists()))
+            Files.createDirectories(temp.toPath()); // Create temp directory if id doesn't exist
+        File fos = new File("temp/" + fileName + ".rdf");
+        os = new FileOutputStream(fos);
         // Write model to file
         RDFWriter writer = mModel.getWriter("RDF/XML");
         writer.write(mModel, os,  "");
+        os.close();
     }
 
     private boolean exists(String string) {

@@ -40,5 +40,12 @@ public class StartupConfig {
                     true, adminRole);
             userService.save(adminUser);
         }
+
+        // Delete temp files
+        /*try {
+            FileUtils.cleanDirectory(new File("temp/"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
     }
 }
