@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.1.4.RELEASE'
     id 'java'
-    id 'war'
+    /*id 'war'*/
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -43,7 +43,8 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     implementation 'org.postgresql:postgresql:9.4-1201-jdbc4'
     
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    // War deployment
+//    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat' 
     
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     
