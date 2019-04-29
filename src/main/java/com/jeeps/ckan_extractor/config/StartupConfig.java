@@ -4,11 +4,16 @@ import com.jeeps.ckan_extractor.model.Role;
 import com.jeeps.ckan_extractor.model.User;
 import com.jeeps.ckan_extractor.service.RoleService;
 import com.jeeps.ckan_extractor.service.UserService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 @Component
 public class StartupConfig {
@@ -41,11 +46,14 @@ public class StartupConfig {
             userService.save(adminUser);
         }
 
-        // Delete temp files
-        /*try {
+        // Delete temp files and create directory
+        File temp = new File("temp/");
+        try {
+            if (!(temp.exists()))
+                Files.createDirectories(temp.toPath()); // Create temp directory if it doesn't exis
             FileUtils.cleanDirectory(new File("temp/"));
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }
