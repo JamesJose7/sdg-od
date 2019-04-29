@@ -51,7 +51,7 @@ $(document).ready(function () {
 
         // Get selected urls
         var selectedUrls = [];
-        $('#extractorForm input:checked').each(function () {
+        $('.ckanUrlCheckbox input:checked').each(function () {
             selectedUrls.push($(this).attr('value'));
         });
         // Get selected format
