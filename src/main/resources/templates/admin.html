@@ -43,6 +43,14 @@
 
 <div th:replace="layout :: scripts"></div>
 <div th:replace="layout :: websocketScripts"></div>
-<script th:src="@{/assets/app-web-sockets.js}"></script>
+<!-- Define variables for web sockets-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var socketUri = /*[[${socketUri}]]*/ 'default';
+
+    /*]]>*/
+</script>
+<script th:src="@{/assets/app-web-sockets.js}" th:inline="javascript"></script>
 </body>
 </html>

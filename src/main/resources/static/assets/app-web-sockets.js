@@ -1,5 +1,8 @@
 var stompcCient = null
 
+var destination = '/topic/transform-ckan/' + socketUri;
+var data = "/app/sendCkanUrls/" + socketUri;
+
 function setConnected(connected) {
 
 }
@@ -10,14 +13,14 @@ function connect() {
     stompcCient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompcCient.subscribe('/topic/transform-ckan', function (greeting) {
+        stompcCient.subscribe(destination, function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
         })
     })
 }
 
 function sendName(urls) {
-    stompcCient.send("/app/sendCkanUrls", {}, JSON.stringify({'ckanUrls': urls}))
+    stompcCient.send(data, {}, JSON.stringify({'ckanUrls': urls}))
 }
 
 function showGreeting(message) {

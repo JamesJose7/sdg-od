@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 public class AdminController {
@@ -37,6 +38,11 @@ public class AdminController {
         });
         model.addAttribute("urlCount", ckanPackageCount);
         /*model.addAttribute("resourcesCount", resourcesCount);*/
+
+        // Create a random socket for each client
+        Random random = new Random();
+        String socketUri = "socket-" + random.nextInt(1000);
+        model.addAttribute("socketUri", socketUri);
         return "admin";
     }
 }
