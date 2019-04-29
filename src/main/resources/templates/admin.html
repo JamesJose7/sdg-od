@@ -22,25 +22,21 @@
             <p th:text="${urlCount.get(i)}" class="col-2 col-lg-1 badge badge-primary badge-pill"></p>
         </div>
 
-        <div class="row justify-content-center">
-            <div th:replace="layout :: flash"></div>
+        <div class="row justify-content-center mt-1 text-center invisible" id="failMessage">
+            <div class="flash col failure">Please select at least one repository</div>
         </div>
         <div class="row justify-content-center mt-3">
-            <button type="submit" class="btn btn-primary" id="extractButton">Extract</button>
+            <button type="submit" class="btn btn-primary ld-ext-right" id="extractButton">
+                Extract
+                <!--<div class="ld ld-ball ld-bounce"></div>-->
+                <div class="ld ld-ring ld-spin"></div>
+            </button>
         </div>
     </form>
 
-    <div class="row">
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Greetings</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
+    <div class="row mt-5">
+        <div class="col-md-12 text-center" id="conversation">
+            <div id="downloadLink"></div>
         </div>
     </div>
 </div>

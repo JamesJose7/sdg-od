@@ -26,15 +26,11 @@ public class WebSocketsController {
 
     @MessageMapping("/sendCkanUrls")
     @SendTo("/topic/transform-ckan")
-    public WebSocketResult transformCkanToRdf(CkanUrlsStomp ckanUrlsStomp) throws Exception {
-
-        /*if (ckanUrls == null) {
+    public WebSocketResult transformCkanToRdf(CkanUrlsStomp ckanUrlsStomp) {
+        if (ckanUrlsStomp.getCkanUrls().isEmpty()) {
             // At least one checkbox should be selected
-            redirectAttributes.addFlashAttribute("flash",
-                    new FlashMessage("Please select at least one repository", FlashMessage.Status.FAILURE));
-            return "redirect:/admin";
+            return new WebSocketResult("");
         }
-        Arrays.stream(ckanUrls).forEach(System.out::println);*/
 
         List<CkanPackage> ckanPackageList = new ArrayList<>();
         ckanUrlsStomp.getCkanUrls().forEach(url -> {
