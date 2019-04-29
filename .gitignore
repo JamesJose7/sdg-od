@@ -1,5 +1,7 @@
 extractions/
 triples.rdf
+temp/
+sdgTriples.rdf
 
 # Compiled class file
 *.class
