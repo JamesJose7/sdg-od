@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +20,15 @@ import static com.jeeps.ckan_extractor.utils.StringUtils.urlify;
 
 @Component
 public class CkanSemanticCreator {
+    public static final String TURTLE = "TURTLE|.ttl";
+    public static final String N_TRIPLES = "N-TRIPLES|.nq";
+    public static final String RDF_XML = "RDF/XML|.rdf";
+    public static final String JSON_LD = "JSON-LD|.json";
+
+    public static final List<String> SERIALIZATION_FORMATS = Arrays.asList(
+            TURTLE, N_TRIPLES, RDF_XML, JSON_LD
+    );
+
     private Model mModel;
     public static final String DATA_PREFIX = "http://example.org/data/";
 
@@ -186,15 +196,17 @@ public class CkanSemanticCreator {
                 });
     }
 
-    public void writeRdfFile(String fileName) throws IOException {
+    public void writeRdfFile(String fileName, String serializeFormat) throws IOException {
+        String format = serializeFormat.split("\\|")[0];
+        String extension = serializeFormat.split("\\|")[1];
         // File dump
         File temp = new File("temp/");
         if (!(temp.exists()))
             Files.createDirectories(temp.toPath()); // Create temp directory if id doesn't exist
-        File fos = new File("temp/" + fileName + ".rdf");
+        File fos = new File("temp/" + fileName + extension);
         os = new FileOutputStream(fos);
         // Write model to file
-        RDFWriter writer = mModel.getWriter("RDF/XML");
+        RDFWriter writer = mModel.getWriter(format);
         writer.write(mModel, os,  "");
         os.close();
     }

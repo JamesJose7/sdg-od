@@ -49,11 +49,12 @@ public class WebSocketsController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss-SSS");
         String fileName = dateFormat.format(new Date());
         try {
-            semanticCreatorService.writeFile(fileName);
+            semanticCreatorService.writeFile(fileName, ckanUrlsStomp.getFormat());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return new WebSocketResult("http://localhost:8080/files/" + fileName + ".rdf");
+        return new WebSocketResult("http://localhost:8080/files/" +
+                fileName + ckanUrlsStomp.getFormat().split("\\|")[1]);
     }
 }

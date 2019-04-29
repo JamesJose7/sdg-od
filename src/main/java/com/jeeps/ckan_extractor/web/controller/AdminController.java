@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.jeeps.ckan_extractor.core.CkanSemanticCreator.SERIALIZATION_FORMATS;
+
 @Controller
 public class AdminController {
     @Autowired
@@ -38,6 +40,9 @@ public class AdminController {
         });
         model.addAttribute("urlCount", ckanPackageCount);
         /*model.addAttribute("resourcesCount", resourcesCount);*/
+
+        // Serialization formats
+        model.addAttribute("formats", SERIALIZATION_FORMATS);
 
         // Create a random socket for each client
         Random random = new Random();

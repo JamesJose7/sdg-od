@@ -25,7 +25,7 @@ public class SemanticCreatorService {
         return Duration.between(start, finish).toMillis();
     }
 
-    public void writeFile(String fileName) throws IOException {
-        semanticCreator.writeRdfFile(fileName);
+    public void writeFile(String fileName, String serializeFormat) throws IOException {
+        semanticCreator.writeRdfFile(fileName, serializeFormat);
     }
 }

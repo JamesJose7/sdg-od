@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,10 +88,6 @@ public class CkanExtractor {
                 .forEach(dataset -> mHttpService.
                         sendPostRequest(this::extractDatasetDetails, (mListPackageDetailsUrl), String.format("{\"id\": \"%s\"}", dataset)));
 //        mCkanSemanticCreator.writeRdfFile();
-    }
-
-    public void writeFile() throws IOException {
-        mCkanSemanticCreator.writeRdfFile("triples");
     }
 
     private List<String> parseCkanContent(String json) {

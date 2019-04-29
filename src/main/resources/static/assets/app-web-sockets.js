@@ -19,8 +19,8 @@ function connect() {
     })
 }
 
-function sendName(urls) {
-    stompcCient.send(data, {}, JSON.stringify({'ckanUrls': urls}))
+function sendParameters(urls, format) {
+    stompcCient.send(data, {}, JSON.stringify({'ckanUrls': urls, 'format': format}))
 }
 
 function showGreeting(message) {
@@ -40,20 +40,27 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
+    // check first radio button by default
+    $("#radio0").prop("checked", true);
+
     connect();
 
     $('#extractButton').click(function () {
         // Remove failed message
         $('#failMessage').addClass("invisible");
 
-        var selected = [];
+        // Get selected urls
+        var selectedUrls = [];
         $('#extractorForm input:checked').each(function () {
-            selected.push($(this).attr('value'));
+            selectedUrls.push($(this).attr('value'));
         });
-        sendName(selected);
+        // Get selected format
+        var selectedFormat = $("#formatSelector input:checked").attr('value');
+
+        sendParameters(selectedUrls, selectedFormat);
 
         // Start loading
-        if (selected.length > 0) {
+        if (selectedUrls.length > 0) {
             $(this).addClass("running");
             $(this).attr("disabled", true);
         }
