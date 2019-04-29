@@ -14,7 +14,7 @@
             <p class="col-2 col-lg-1 text-center font-weight-bold border-bottom">Datasets</p>
         </div>
 
-        <div class="row justify-content-center" th:each="i : ${#numbers.sequence(0, ckanUrls.size() - 1)}">
+        <div class="row justify-content-center" th:if="${!ckanUrls.isEmpty()}" th:each="i : ${#numbers.sequence(0, ckanUrls.size() - 1)}">
             <div class="form-check col-10 col-lg-5">
                 <input class="form-check-input pl-2" name="ckanURL" type="checkbox" th:value="${ckanUrls.get(i)}" th:id="|check${i}|">
                 <label th:for="|check${i}|" class="form-check-label" th:text="${ckanUrls.get(i)}"></label>
