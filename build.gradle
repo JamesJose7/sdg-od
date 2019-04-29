@@ -36,6 +36,7 @@ dependencies {
     
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
+    implementation 'org.postgresql:postgresql:9.4-1201-jdbc4'
     
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     
@@ -46,4 +47,12 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.13'
     implementation 'org.apache.jena:apache-jena-libs:3.10.0'
 //    implementation 'org.slf4j:slf4j-simple:1.6.2'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = 4.10
+}
+
+task stage {
+    dependsOn build
 }

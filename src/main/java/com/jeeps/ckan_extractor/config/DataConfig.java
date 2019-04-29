@@ -4,6 +4,7 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -36,12 +37,24 @@ public class DataConfig {
     }
 
     @Bean
+    @Profile("dev")
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName(env.getProperty("ckan-extractor.db.driver"));
         ds.setUrl(env.getProperty("ckan-extractor.db.url"));
         ds.setUsername(env.getProperty("ckan-extractor.db.username"));
         ds.setPassword(env.getProperty("ckan-extractor.db.password"));
+        return ds;
+    }
+
+    @Bean(name = "dataSource")
+    @Profile("prod")
+    public DataSource prodDataSource() {
+        BasicDataSource ds = new BasicDataSource();
+        ds.setDriverClassName(env.getProperty("ckan-extractor.prod.db.driver"));
+        ds.setUrl(env.getProperty("ckan-extractor.prod.db.url"));
+        ds.setUsername(env.getProperty("ckan-extractor.prod.db.username"));
+        ds.setPassword(env.getProperty("ckan-extractor.prod.db.password"));
         return ds;
     }
 
