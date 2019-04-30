@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +31,7 @@ public class CkanExtractor {
     private String mBaseUrl;
     private String mListPackageDetailsUrl;
 
-    public CkanExtractor(CkanPackageService ckanPackageService) throws FileNotFoundException {
+    public CkanExtractor(CkanPackageService ckanPackageService) {
         mCkanSemanticCreator = new CkanSemanticCreator();
         mGson = new GsonBuilder()
                 .addSerializationExclusionStrategy(getGsonStrategy())
@@ -129,8 +128,6 @@ public class CkanExtractor {
             resources.forEach(resource -> resource.setCkanPackage(finalAPackage));
             aPackage.setResources(resources);
 
-//            mCkanSemanticCreator.generateTriples(aPackage, resourcesCkan);
-//            mDatabase.savePcackage(aPackage, resourcesCkan);
             ckanPackageService.save(aPackage);
         } catch (JSONException e) {
 //            e.printStackTrace();

@@ -54,15 +54,15 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping("/admin/transformer")
+    @RequestMapping("/admin/extractor")
     public String transformer(Model model) {
         List<String> ckanUrls = ckanExtractorService.getCkanUrls();
         List<Boolean> availableRepos = new ArrayList<>();
-        ckanUrls.forEach(url -> availableRepos.add(ckanPackageService.existsByOriginUrl(url.replace("api/3/action/", ""))));
+        ckanUrls.forEach(url -> availableRepos.add(ckanPackageService.existsByOriginUrl(url.split("api")[0])));
         model.addAttribute("ckanUrls", ckanUrls);
         model.addAttribute("availableRepos", availableRepos);
 
 
-        return "transfomer";
+        return "extractor";
     }
 }

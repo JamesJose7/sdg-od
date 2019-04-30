@@ -3,6 +3,7 @@ package com.jeeps.ckan_extractor.web.controller;
 import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.stomp.CkanUrlsStomp;
 import com.jeeps.ckan_extractor.model.stomp.WebSocketResult;
+import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.SemanticCreatorService;
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ public class WebSocketsController {
     private CkanPackageService ckanPackageService;
     @Autowired
     private SemanticCreatorService semanticCreatorService;
+    @Autowired
+    private CkanExtractorService ckanExtractorService;
 
     Logger logger = LoggerFactory.getLogger(WebSocketsController.class);
 
@@ -65,6 +68,10 @@ public class WebSocketsController {
             // At least one checkbox should be selected
             return new WebSocketResult("");
         }
+
+        // Extract Datasets from each endpoint
+        ckanUrlsStomp.getCkanUrls().forEach(url -> ckanExtractorService.beginExtraction(url));
+
 
         return new WebSocketResult("What");
     }

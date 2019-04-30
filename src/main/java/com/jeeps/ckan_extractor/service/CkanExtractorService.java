@@ -1,5 +1,6 @@
 package com.jeeps.ckan_extractor.service;
 
+import com.jeeps.ckan_extractor.core.CkanExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class CkanExtractorService {
 
     private final List<String> ckanUrls = Arrays.asList(
             "http://ambar.utpl.edu.ec/api/3/action/",
-            "https://data.europa.eu/euodp/data/api/3/action/",
+            "http://data.europa.eu/euodp/data/api/3/action/",
             "https://data.humdata.org/api/3/action/",
             "https://opendata.swiss/api/3/action/",
             "https://data.gov.au/api/3/action/"
@@ -25,7 +26,11 @@ public class CkanExtractorService {
         return ckanUrls;
     }
 
-    public void beginExtraction(String replace) {
-        ckanPackageService.deleteAllByOriginUrl(replace);
+    public void beginExtraction(String url) {
+        // Delete previously saved resources
+        ckanPackageService.deleteAllByOriginUrl(url.split("api")[0]);
+        // Begin extraction
+        CkanExtractor ckanExtractor = new CkanExtractor(ckanPackageService);
+        ckanExtractor.extract(url);
     }
 }
