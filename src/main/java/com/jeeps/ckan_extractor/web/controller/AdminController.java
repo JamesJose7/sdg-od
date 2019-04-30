@@ -1,5 +1,6 @@
 package com.jeeps.ckan_extractor.web.controller;
 
+import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ import static com.jeeps.ckan_extractor.core.CkanSemanticCreator.SERIALIZATION_FO
 public class AdminController {
     @Autowired
     private CkanPackageService ckanPackageService;
+    @Autowired
+    private CkanExtractorService ckanExtractorService;
 
     @RequestMapping("/admin")
     public String adminDashboard(Model model) {
@@ -49,5 +52,17 @@ public class AdminController {
         String socketUri = "socket-" + random.nextInt(1000);
         model.addAttribute("socketUri", socketUri);
         return "admin";
+    }
+
+    @RequestMapping("/admin/transformer")
+    public String transformer(Model model) {
+        List<String> ckanUrls = ckanExtractorService.getCkanUrls();
+        List<Boolean> availableRepos = new ArrayList<>();
+        ckanUrls.forEach(url -> availableRepos.add(ckanPackageService.existsByOriginUrl(url.replace("api/3/action/", ""))));
+        model.addAttribute("ckanUrls", ckanUrls);
+        model.addAttribute("availableRepos", availableRepos);
+
+
+        return "transfomer";
     }
 }

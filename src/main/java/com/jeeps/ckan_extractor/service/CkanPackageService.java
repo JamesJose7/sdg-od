@@ -12,4 +12,6 @@ public interface CkanPackageService {
     List<String> getOriginUrls();
     Integer countDistinctByOriginUrl(String url);
     Collection<CkanPackage> findAllByOriginUrl(String url);
+    Boolean existsByOriginUrl(String url);
+    void deleteAllByOriginUrl(String url);
 }

@@ -42,4 +42,14 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     public Collection<CkanPackage> findAllByOriginUrl(String url) {
         return ckanPackageDao.findAllByOriginUrl(url);
     }
+
+    @Override
+    public Boolean existsByOriginUrl(String url) {
+        return ckanPackageDao.existsDistinctByOriginUrl(url);
+    }
+
+    @Override
+    public void deleteAllByOriginUrl(String url) {
+        ckanPackageDao.deleteAllByOriginUrl(url);
+    }
 }

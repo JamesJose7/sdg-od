@@ -14,7 +14,7 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompcCient.subscribe(destination, function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
+            onServerResult(JSON.parse(greeting.body).content);
         })
     })
 }
@@ -23,7 +23,7 @@ function sendParameters(urls, format) {
     stompcCient.send(data, {}, JSON.stringify({'ckanUrls': urls, 'format': format}))
 }
 
-function showGreeting(message) {
+function onServerResult(message) {
     if (message.length === 0) {
         $('#failMessage').removeClass("invisible");
     } else {

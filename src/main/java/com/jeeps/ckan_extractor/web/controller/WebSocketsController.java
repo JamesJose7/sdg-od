@@ -57,4 +57,15 @@ public class WebSocketsController {
         return new WebSocketResult("http://localhost:8080/files/" +
                 fileName + ckanUrlsStomp.getFormat().split("\\|")[1]);
     }
+
+    @MessageMapping("/sendCkanApiUrls/")
+    @SendTo("/topic/extract-ckan/")
+    public WebSocketResult extractCkanData(CkanUrlsStomp ckanUrlsStomp) {
+        if (ckanUrlsStomp.getCkanUrls().isEmpty()) {
+            // At least one checkbox should be selected
+            return new WebSocketResult("");
+        }
+
+        return new WebSocketResult("What");
+    }
 }

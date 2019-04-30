@@ -15,4 +15,6 @@ public interface CkanPackageDao extends CrudRepository<CkanPackage, Long> {
 
     Integer countDistinctByOriginUrl(String url);
     Collection<CkanPackage> findAllByOriginUrl(String url);
+    Boolean existsDistinctByOriginUrl(String url);
+    void deleteAllByOriginUrl(String url);
 }
