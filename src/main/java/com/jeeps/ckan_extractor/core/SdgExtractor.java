@@ -7,11 +7,15 @@ import com.jeeps.ckan_extractor.service.FredService;
 import com.jeeps.ckan_extractor.service.HttpService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
 public class SdgExtractor {
     private final String BASE_URL = "https://unstats.un.org/SDGAPI/v1/sdg/Goal/";
+
+    private Logger logger = LoggerFactory.getLogger(SdgExtractor.class);
 
     private final Gson gson;
     private final HttpService httpService;
@@ -61,7 +65,7 @@ public class SdgExtractor {
         // Build targets array
         SdgTarget[] sdgTargets = gson.fromJson(targetsJson.toString(), SdgTarget[].class);
         sustainableGoals[counter].setTargets(Arrays.asList(sdgTargets));
-        Arrays.asList(sdgTargets).forEach(target -> System.out.println("Extracted target: " + target.getCode()));
+        Arrays.asList(sdgTargets).forEach(target -> logger.info("Extracted target: " + target.getCode()));
         counter++;
     }
 }

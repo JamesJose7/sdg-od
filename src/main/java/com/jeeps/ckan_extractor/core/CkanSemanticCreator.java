@@ -32,12 +32,6 @@ public class CkanSemanticCreator {
     private Model mModel;
     public static final String DATA_PREFIX = "http://example.org/data/";
 
-    public static String CURRENT_PLATFORM;
-    public static String CURRENT_COUNTRY;
-    private Property dboCountryP;
-    private Resource dboCountryC;
-    private String dbo;
-    private String dbr;
     private final Random random;
     private FileOutputStream os;
 
@@ -67,14 +61,6 @@ public class CkanSemanticCreator {
         // SKOS prefix
         String skos = SKOS.getURI();
         mModel.setNsPrefix("skos", skos);
-
-        // DBO prefix
-        dbo = "http://dbpedia.org/ontology/";
-        dbr = "http://dbpedia.org/resource/";
-        mModel.setNsPrefix("dbo", dbo);
-        mModel.setNsPrefix("dbr", dbr);
-        dboCountryP = ResourceFactory.createProperty(dbo + "country");
-        dboCountryC = ResourceFactory.createResource(dbo + "Country");
     }
 
     public void generateTriples(CkanPackage aPackage) {

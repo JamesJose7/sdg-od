@@ -9,6 +9,8 @@ import com.jeeps.ckan_extractor.service.HttpService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,20 +21,15 @@ import java.util.Optional;
 @Component
 public class CkanExtractor {
     private final CkanPackageService ckanPackageService;
-/*
-    @Autowired
-    private CkanResourceService ckanResourceService;
-*/
 
     public static final int MAX_SIZE = 100;
     private Gson mGson;
-    private CkanSemanticCreator mCkanSemanticCreator;
     private HttpService mHttpService;
     private String mBaseUrl;
     private String mListPackageDetailsUrl;
+    private Logger logger = LoggerFactory.getLogger(CkanExtractor.class);
 
     public CkanExtractor(CkanPackageService ckanPackageService) {
-        mCkanSemanticCreator = new CkanSemanticCreator();
         mGson = new GsonBuilder()
                 .addSerializationExclusionStrategy(getGsonStrategy())
                 .create();
@@ -77,7 +74,6 @@ public class CkanExtractor {
 //                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendRequest(this::extractDatasetDetails, (mListPackageDetailsUrl + dataset)));
-//        mCkanSemanticCreator.writeRdfFile();
     }
 
     private void extractDataSetsByPost(String json) {
@@ -86,13 +82,11 @@ public class CkanExtractor {
 //                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendPostRequest(this::extractDatasetDetails, (mListPackageDetailsUrl), String.format("{\"id\": \"%s\"}", dataset)));
-//        mCkanSemanticCreator.writeRdfFile();
     }
 
     private List<String> parseCkanContent(String json) {
-        System.out.println(json);
         CkanContent ckanContent = mGson.fromJson(json, CkanContent.class);
-        System.out.println(ckanContent.getResult().length);
+        logger.info(String.format("Packages found in %s: %d", mBaseUrl, ckanContent.getResult().length));
         return Arrays.asList(ckanContent.getResult());
     }
 
@@ -103,16 +97,16 @@ public class CkanExtractor {
 
             // Dataset info
             JSONObject resultJson = body.getJSONObject("result");
-            CkanPackage aPackage = null;
+            CkanPackage aPackage;
             try {
                 aPackage = mGson.fromJson(resultJson.toString(), CkanPackage.class);
             } catch (JsonSyntaxException e) {
-                System.out.println("-->Complex json");
+                logger.info("--> Complex json");
                 aPackage = buildComplexPackage(resultJson);
             }
             // Resource info
             JSONArray packageResource = resultJson.getJSONArray("resources");
-            CkanResource[] resourcesCkan = null;
+            CkanResource[] resourcesCkan;
             try {
                 resourcesCkan = mGson.fromJson(packageResource.toString(), CkanResource[].class);
             } catch (JsonSyntaxException e) {
@@ -120,7 +114,7 @@ public class CkanExtractor {
             }
             // Set origin URL
             aPackage.setOriginUrl(mBaseUrl.split("api")[0]);
-            System.out.println(aPackage);
+            logger.debug(aPackage.toString());
 
             // Set resources parent to store on DB
             List<CkanResource> resources = Arrays.asList(resourcesCkan);
@@ -130,7 +124,8 @@ public class CkanExtractor {
 
             ckanPackageService.save(aPackage);
         } catch (JSONException e) {
-//            e.printStackTrace();
+            logger.debug("Could not extract dataset details");
+            e.printStackTrace();
         }
     }
 
@@ -155,7 +150,7 @@ public class CkanExtractor {
         try {
             transformedTags = orgToGson(tags);
         } catch (NullPointerException e) {
-            System.out.println("cant find tags");
+            logger.debug("cant find tags");
         }
 
         JSONObject organization = resultJson.getJSONObject("organization");
