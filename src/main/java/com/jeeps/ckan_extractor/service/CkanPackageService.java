@@ -17,4 +17,5 @@ public interface CkanPackageService {
     Boolean existsByOriginUrl(String url);
     void deleteAllByOriginUrl(String url);
     Page<CkanPackage> findPackagesWithPaging(int pageNumber, int totalPages);
+    List<String> search(String term);
 }

@@ -10,7 +10,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,5 +41,16 @@ public class CkanPackageController {
         // Get close minimum and close maximum page
         model.addAttribute("page", page);
         return "ckanPackages/ckan-packages-list";
+    }
+
+    @RequestMapping("/search-test")
+    public String index() {
+        return "ckanPackages/search-test";
+    }
+
+    @RequestMapping(value = "search", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> search(HttpServletRequest request) {
+        return ckanPackageService.search(request.getParameter("term"));
     }
 }

@@ -6,6 +6,8 @@
 <div th:replace="layout :: nav"></div>
 
 <main class="container">
+    Search
+    <input type="text" id="productName">
     <table class="table-bordered">
         <tr><th>Id</th>
             <th>Name</th>
@@ -41,5 +43,28 @@
 
 <div th:replace="layout :: footer"></div>
 <div th:replace="layout :: scripts"></div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var cache = {};
+        $('#productName').autocomplete({
+            minLength: 2,
+            source: function( request, response ) {
+                var term = request.term;
+                if (term in cache) {
+                    response(cache[term]);
+                    return;
+                }
+
+                $.getJSON("/search", request, function (data, status, xhr) {
+                    cache[term] = data;
+                    // response(data);
+                    // Limit the amount of results
+                    var results = $.ui.autocomplete.filter(data, request.term);
+                    response(results.slice(0, 30));
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>

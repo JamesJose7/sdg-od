@@ -3,6 +3,7 @@ package com.jeeps.ckan_extractor.dao;
 import com.jeeps.ckan_extractor.model.CkanPackage;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -17,4 +18,6 @@ public interface CkanPackageDao extends PagingAndSortingRepository<CkanPackage, 
     Collection<CkanPackage> findAllByOriginUrl(String url);
     Boolean existsDistinctByOriginUrl(String url);
     void deleteAllByOriginUrl(String url);
+    @Query("SELECT title FROM CkanPackage where title like %:keyword%")
+    List<String> search(@Param("keyword") String keyword);
 }

@@ -60,4 +60,9 @@ public class CkanPackageServiceImpl implements CkanPackageService {
         Pageable pageable = PageRequest.of(pageNumber, totalPages);
         return ckanPackageDao.findAll(pageable);
     }
+
+    @Override
+    public List<String> search(String term) {
+        return ckanPackageDao.search(term);
+    }
 }
