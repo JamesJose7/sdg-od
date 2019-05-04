@@ -1,6 +1,5 @@
 package com.jeeps.ckan_extractor.web.controller;
 
-import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +13,12 @@ import java.util.Random;
 import static com.jeeps.ckan_extractor.core.CkanSemanticCreator.SERIALIZATION_FORMATS;
 
 @Controller
-public class AdminController {
+public class ToolsController {
     @Autowired
     private CkanPackageService ckanPackageService;
-    @Autowired
-    private CkanExtractorService ckanExtractorService;
 
-    @RequestMapping("/admin")
-    public String adminDashboard(Model model) {
+    @RequestMapping("/tools/converter")
+    public String rdfConverter(Model model) {
         List<String> originUrls = ckanPackageService.getOriginUrls();
         model.addAttribute("ckanUrls", originUrls);
 
@@ -52,17 +49,5 @@ public class AdminController {
         String socketUri = "socket-" + random.nextInt(1000);
         model.addAttribute("socketUri", socketUri);
         return "admin";
-    }
-
-    @RequestMapping("/admin/extractor")
-    public String transformer(Model model) {
-        List<String> ckanUrls = ckanExtractorService.getCkanUrls();
-        List<Boolean> availableRepos = new ArrayList<>();
-        ckanUrls.forEach(url -> availableRepos.add(ckanPackageService.existsByOriginUrl(url.split("api")[0])));
-        model.addAttribute("ckanUrls", ckanUrls);
-        model.addAttribute("availableRepos", availableRepos);
-
-
-        return "extractor";
     }
 }
