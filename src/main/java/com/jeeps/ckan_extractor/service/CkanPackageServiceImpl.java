@@ -3,6 +3,9 @@ package com.jeeps.ckan_extractor.service;
 import com.jeeps.ckan_extractor.dao.CkanPackageDao;
 import com.jeeps.ckan_extractor.model.CkanPackage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -14,8 +17,8 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     private CkanPackageDao ckanPackageDao;
 
     @Override
-    public Iterable<CkanPackage> findAll() {
-        return ckanPackageDao.findAll();
+    public Page<CkanPackage> findAll(Pageable pageable) {
+        return ckanPackageDao.findAll(pageable);
     }
 
     @Override
@@ -51,5 +54,10 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     @Override
     public void deleteAllByOriginUrl(String url) {
         ckanPackageDao.deleteAllByOriginUrl(url);
+    }
+
+    public Page<CkanPackage> findPackagesWithPaging(int pageNumber, int totalPages) {
+        Pageable pageable = PageRequest.of(pageNumber, totalPages);
+        return ckanPackageDao.findAll(pageable);
     }
 }
