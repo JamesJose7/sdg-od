@@ -10,3 +10,10 @@ body {
     font-family: 'Nunito', sans-serif;
     color: #384047;
 }
+
+a.disabled-link {
+    /* Make the disabled links grayish*/
+    color: gray; !important;
+    /* And disable the pointer events */
+    pointer-events: none; !important;
+}
