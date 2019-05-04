@@ -18,4 +18,7 @@ public interface CkanPackageService {
     void deleteAllByOriginUrl(String url);
     Page<CkanPackage> findPackagesWithPaging(int pageNumber, int totalPages);
     List<String> search(String term);
+    CkanPackage findByTitle(String title);
+
+    Page<CkanPackage> findAllByTitleContaining(String q, Pageable pageable);
 }

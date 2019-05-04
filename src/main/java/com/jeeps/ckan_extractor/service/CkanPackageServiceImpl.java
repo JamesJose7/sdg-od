@@ -65,4 +65,14 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     public List<String> search(String term) {
         return ckanPackageDao.search(term);
     }
+
+    @Override
+    public CkanPackage findByTitle(String title) {
+        return ckanPackageDao.findByTitle(title);
+    }
+
+    @Override
+    public Page<CkanPackage> findAllByTitleContaining(String q, Pageable pageable) {
+        return ckanPackageDao.findAllByTitleContains(q, pageable);
+    }
 }

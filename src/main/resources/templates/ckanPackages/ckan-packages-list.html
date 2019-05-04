@@ -6,8 +6,11 @@
 <div th:replace="layout :: nav"></div>
 
 <main class="container">
-    Search
-    <input type="text" id="productName">
+    <form th:action="${action}" th:method="get" class="form-inline">
+        <label for="searchDatasetsInput">Search</label>
+        <input type="text" name="q" id="searchDatasetsInput">
+        <input type="submit">
+    </form>
     <table class="table-bordered">
         <tr><th>Id</th>
             <th>Name</th>
@@ -15,28 +18,29 @@
         </tr>
         <tr th:each="package : ${page.content}">
             <td th:text="${package.name}"></td>
-            <td th:text="${package.title}"></td>
+            <td><a th:href="@{|/admin/datasets/${package.title}|}" th:text="${package.title}"></a></td>
             <td th:text="${package.originUrl}"></td>
         </tr>
     </table>
 
 <div class="pagination-div">
     <span th:if="${page.hasPrevious()}">
-        <a th:href="@{/admin/datasets(page=${0},size=${page.size})}">First</a>
+        <a th:if="${q.isEmpty()}" th:href="@{/admin/datasets(page=${0},size=${page.size})}">First</a>
+        <a th:unless="${q.isEmpty()}" th:href="@{/admin/datasets(q=${q},page=${0},size=${page.size})}">First</a>
     </span>
     <span th:if="${page.hasPrevious()}">
-        <a th:href="@{/admin/datasets(page=${page.number-1},size=${page.size})}">Previous</a>
+        <a th:if="${q.isEmpty()}" th:href="@{/admin/datasets(page=${page.number-1},size=${page.size})}">Previous</a>
+        <a th:unless="${q.isEmpty()}" th:href="@{/admin/datasets(q=${q},page=${page.number-1},size=${page.size})}">Previous</a>
     </span>
     <span th:text="|Page ${page.getNumber()}|" class="selected"></span>
     <span th:text="| of ${page.getTotalPages() - 1}|" class="selected"></span>
-    <!--<span th:unless="${page.number == i}">
-         <a th:href="@{/admin/datasets(page=${i},size=${page.size})}">[[${i}+1]]</a>
-    </span>-->
     <span th:if="${page.hasNext()}">
-        <a th:href="@{/admin/datasets(page=${page.number+1},size=${page.size})}">Next</a>
+        <a th:if="${q.isEmpty()}" th:href="@{/admin/datasets(page=${page.number+1},size=${page.size})}">Next</a>
+        <a th:unless="${q.isEmpty()}" th:href="@{/admin/datasets(q=${q},page=${page.number+1},size=${page.size})}">Next</a>
     </span>
     <span th:if="${page.hasNext()}">
-        <a th:href="@{/admin/datasets(page=${page.getTotalPages() - 1},size=${page.size})}">Last</a>
+        <a th:if="${q.isEmpty()}" th:href="@{/admin/datasets(page=${page.getTotalPages() - 1},size=${page.size})}" >Last</a>
+        <a th:unless="${q.isEmpty()}" th:href="@{/admin/datasets(q=${q},page=${page.getTotalPages() - 1},size=${page.size})}" >Last</a>
     </span>
 </div>
 </main>
@@ -46,7 +50,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var cache = {};
-        $('#productName').autocomplete({
+        $('#searchDatasetsInput').autocomplete({
             minLength: 2,
             source: function( request, response ) {
                 var term = request.term;

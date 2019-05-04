@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,16 +37,15 @@ public class CkanPackageController {
     }
 
     @RequestMapping("/admin/datasets")
-    public String showDatasets(@PageableDefault(size = 30)Pageable pageable, Model model) {
-        Page<CkanPackage> page = ckanPackageService.findAll(pageable);
-        // Get close minimum and close maximum page
+    public String showDatasets(@PageableDefault(size = 30)Pageable pageable,
+                               @RequestParam(name = "q", required = false) String q,
+                               Model model) {
+        q = q == null ? "" : q;
+        Page<CkanPackage> page = ckanPackageService.findAllByTitleContaining(q, pageable);
         model.addAttribute("page", page);
+        model.addAttribute("action", "/admin/datasets");
+        model.addAttribute("q", q);
         return "ckanPackages/ckan-packages-list";
-    }
-
-    @RequestMapping("/search-test")
-    public String index() {
-        return "ckanPackages/search-test";
     }
 
     @RequestMapping(value = "search", method = RequestMethod.GET)
