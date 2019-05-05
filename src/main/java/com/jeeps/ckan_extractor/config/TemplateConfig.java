@@ -2,7 +2,10 @@ package com.jeeps.ckan_extractor.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 public class TemplateConfig {
@@ -15,7 +18,6 @@ public class TemplateConfig {
         templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
     }
-/*
     @Bean
     public SpringTemplateEngine templateEngine() {
         final SpringTemplateEngine springTemplateEngine = new SpringTemplateEngine();
@@ -31,5 +33,5 @@ public class TemplateConfig {
         viewResolver.setOrder(1);
         viewResolver.setCharacterEncoding("UTF-8");
         return viewResolver;
-    }*/
+    }
 }

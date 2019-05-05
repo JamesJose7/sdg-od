@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-//                .antMatchers("/admin/**").hasRole("ADMIN") // TODO: Only for testing
+                .antMatchers("/admin/**").hasRole("ADMIN") // TODO: Only for testing
                 .anyRequest().permitAll()
                 .and()
             .formLogin()
@@ -65,6 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private AuthenticationSuccessHandler loginSuccessHandler() {
-        return ((request, response, authentication) -> response.sendRedirect("/admin"));
+        return ((request, response, authentication) -> response.sendRedirect("/"));
     }
 }
