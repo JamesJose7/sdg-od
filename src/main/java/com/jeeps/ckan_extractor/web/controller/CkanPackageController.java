@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -52,5 +49,13 @@ public class CkanPackageController {
     @ResponseBody
     public List<String> search(HttpServletRequest request) {
         return ckanPackageService.search(request.getParameter("term"));
+    }
+
+    @RequestMapping("/admin/datasets/{package}")
+    public String showDatasetInfo(@PathVariable("package") String packageName,
+                                  Model model) {
+        CkanPackage ckanPackage = ckanPackageService.findByName(packageName);
+        model.addAttribute("package", ckanPackage);
+        return "ckanPackages/ckan-package";
     }
 }

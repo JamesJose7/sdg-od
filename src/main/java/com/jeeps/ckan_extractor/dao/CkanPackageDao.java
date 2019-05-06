@@ -24,4 +24,6 @@ public interface CkanPackageDao extends PagingAndSortingRepository<CkanPackage, 
     CkanPackage findByTitle(String title);
 
     Page<CkanPackage> findAllByTitleContains(String q, Pageable pageable);
+
+    CkanPackage findByName(String packageName);
 }

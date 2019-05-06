@@ -30,7 +30,7 @@
         </thead>
         <tbody>
         <tr th:each="package : ${page.content}">
-            <td><a th:href="@{|/admin/datasets/${package.title}|}" th:text="${package.title}"></a></td>
+            <td><a th:href="@{|/admin/datasets/${package.name}|}" th:text="${package.title}"></a></td>
             <td th:text="${package.resources.size()}"></td>
             <td th:text="${package.originUrl}"></td>
         </tr>
