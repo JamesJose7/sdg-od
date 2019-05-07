@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-12 bg-light pt-2 pb-2 mb-5">
                     <div class="row">
-                        <div class="col-lg-2 col-sm-2"><img class="file-type-icon" th:src="@{/assets/icons/file_types/svg/ai.svg}" alt="File type"></div>
+                        <div class="col-lg-2 col-sm-2"><img class="file-type-icon" th:src="@{|/assets/icons/file_types/svg/${T(com.jeeps.ckan_extractor.utils.WebUtils).getFileTypeIcon(resource.format)}.svg|}" alt="File type"></div>
                         <div class="col-lg-7 col-sm-10">
                             <div>
                                 <p th:text="${resource.description == null || resource.description.isBlank() || resource.description.isEmpty()} ? 'No description' : ${resource.description}"></p>
