@@ -41,13 +41,18 @@
                 <li th:classappend="${#httpServletRequest.servletPath.equals('/about') ? 'active' : ''}" class="nav-item">
                     <a th:href="@{/about}" class="nav-link">About</a>
                 </li>
-                <li class="dropdown nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                <li class="dropdown nav-item" th:classappend="${#httpServletRequest.servletPath.contains('/tools') ? 'active' : ''}">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="nav-label">Tools</span><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" style="color: black" th:href="@{/tools/converter}">RDF Converter</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown nav-item" sec:authorize="hasRole('ROLE_ADMIN')"
+                    th:classappend="${#httpServletRequest.servletPath.contains('/admin/datasets') ? 'active' : ''}">
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="nav-label">Datasets</span><span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li th:classappend="${#httpServletRequest.servletPath.equals('/admin/datasets') ? 'active' : ''}">
-                            <a class="nav-link" style="color: black" th:href="@{/admin/datasets}">Browse</a></li>
-                        <li th:classappend="${#httpServletRequest.servletPath.equals('/admin/datasets/extractor') ? 'active' : ''}">
-                            <a class="nav-link" style="color: black" th:href="@{/admin/datasets/extractor}">Extractor</a></li>
+                        <li><a class="nav-link" style="color: black" th:href="@{/admin/datasets}">Browse</a></li>
+                        <li><a class="nav-link" style="color: black" th:href="@{/admin/datasets/extractor}">Extractor</a></li>
                     </ul>
                 </li>
             </ul>
