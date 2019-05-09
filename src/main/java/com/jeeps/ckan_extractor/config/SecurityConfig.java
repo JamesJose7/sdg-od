@@ -60,11 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler loginFailureHandler() {
         return ((request, response, exception) -> {
             request.getSession().setAttribute("flash", new FlashMessage("Incorrect username and/or password. Please try again", FlashMessage.Status.FAILURE));
-            response.sendRedirect("/login");
+            response.sendRedirect(request.getContextPath() + "/login");
         });
     }
 
     private AuthenticationSuccessHandler loginSuccessHandler() {
-        return ((request, response, authentication) -> response.sendRedirect("/"));
+        return ((request, response, authentication) -> response.sendRedirect(request.getContextPath() + "/"));
     }
 }

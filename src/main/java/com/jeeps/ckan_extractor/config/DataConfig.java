@@ -17,7 +17,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.jeeps.ckan_extractor.dao")
-@PropertySource("application.properties")
+@PropertySource("classpath:application.properties")
 public class DataConfig {
     @Autowired
     private Environment env;
