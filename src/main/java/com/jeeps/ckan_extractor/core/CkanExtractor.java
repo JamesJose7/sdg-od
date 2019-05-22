@@ -144,14 +144,12 @@ public class CkanExtractor {
 
     private CkanPackage buildComplexPackage(JSONObject resultJson) {
         // Get complex attributes
-        Optional title = resultJson.getJSONObject("title").toMap().entrySet().stream()
-                .filter(e -> e.getKey().equals("en"))
-                .map(e -> e.getValue().toString())
+        Optional title = resultJson.getJSONObject("title").toMap().values().stream()
+                .filter(o -> !((String) o).isEmpty())
                 .findFirst();
 
-        Optional description = resultJson.getJSONObject("description").toMap().entrySet().stream()
-                .filter(e -> e.getKey().equals("en"))
-                .map(e -> e.getValue().toString())
+        Optional description = resultJson.getJSONObject("description").toMap().values().stream()
+                .filter(o -> !((String) o).isEmpty())
                 .findFirst();
 
         // Transform Groups and Tags from org.json to gson.json
@@ -185,7 +183,7 @@ public class CkanExtractor {
         transformedOrg.addProperty("state", organization.getString("state"));
 
         return new CkanPackage.CkanPackageBuilder(resultJson.optString("id"))
-                .withTitle(title.isPresent() ? title.get().toString() : resultJson.getJSONObject("title").toMap().values().stream().findFirst().orElse("").toString())
+                .withTitle(title.isPresent() ? title.get().toString() : "No title")
                 .withName(resultJson.optString("name"))
                 .withLicense(resultJson.optString("license_title"))
                 .withMetadataCreated(resultJson.optString("metadata_created"))
@@ -195,7 +193,7 @@ public class CkanExtractor {
                 .withType(resultJson.optString("type"))
                 .withIssued(resultJson.optString("issued"))
                 .withVersion(resultJson.optString("version"))
-                .withDescription(description.isPresent() ? description.get().toString() : resultJson.getJSONObject("description").toMap().values().stream().findFirst().orElse("").toString())
+                .withDescription(description.isPresent() ? description.get().toString() : "No description")
                 .isPrivate(resultJson.optBoolean("private"))
                 .withState(resultJson.optString("state"))
                 .withModified(resultJson.optString("modified"))
