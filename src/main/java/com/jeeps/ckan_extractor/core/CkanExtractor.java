@@ -100,6 +100,9 @@ public class CkanExtractor {
             CkanPackage aPackage;
             try {
                 aPackage = mGson.fromJson(resultJson.toString(), CkanPackage.class);
+                // Extract tags and groups
+                aPackage.setPackageTags(extractTagsOrGroupsFromJson(resultJson, "tags"));
+                aPackage.setPackageGroups(extractTagsOrGroupsFromJson(resultJson, "groups"));
             } catch (JsonSyntaxException e) {
                 logger.info("--> Complex json");
                 aPackage = buildComplexPackage(resultJson);
@@ -129,6 +132,16 @@ public class CkanExtractor {
         }
     }
 
+    private List<String> extractTagsOrGroupsFromJson(JSONObject resultJson, String type) {
+        List<String> types = new ArrayList<>();
+        if (!resultJson.has(type)) return types;
+        JSONArray typesArray = resultJson.getJSONArray(type);
+        for (int i = 0; i < typesArray.length(); i++) {
+            types.add(typesArray.getJSONObject(i).optString("display_name"));
+        }
+        return types;
+    }
+
     private CkanPackage buildComplexPackage(JSONObject resultJson) {
         // Get complex attributes
         Optional title = resultJson.getJSONObject("title").toMap().entrySet().stream()
@@ -144,11 +157,23 @@ public class CkanExtractor {
         // Transform Groups and Tags from org.json to gson.json
         JSONArray groups = resultJson.getJSONArray("groups");
         JsonArray transformedGroups = orgToGson(groups);
+        List<String> packageGroups = new ArrayList<>();
+        transformedGroups.forEach(group -> {
+            if (group.getAsJsonObject().get("display_name") != null) {
+                String groupName = group.getAsJsonObject().get("display_name").getAsString();
+                packageGroups.add(groupName);
+            }
+        });
 
         JSONArray tags = resultJson.getJSONArray("tags");
         JsonArray transformedTags = new JsonArray();
+        List<String> packageTags = new ArrayList<>();
         try {
             transformedTags = orgToGson(tags);
+            transformedTags.forEach(tag -> {
+                String tagName = tag.getAsJsonObject().get("display_name").getAsString();
+                packageTags.add(tagName);
+            });
         } catch (NullPointerException e) {
             logger.debug("cant find tags");
         }
@@ -176,6 +201,8 @@ public class CkanExtractor {
                 .withModified(resultJson.optString("modified"))
                 .withGropus(transformedGroups)
                 .withTags(transformedTags)
+                .withPackageTags(packageTags)
+                .withPackageGroups(packageGroups)
                 .withOrganization(transformedOrg)
                 .build();
     }

@@ -79,6 +79,16 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     }
 
     @Override
+    public Page<CkanPackage> findAllByPackageTagsEquals(String tag, Pageable pageable) {
+        return ckanPackageDao.findAllByPackageTagsEquals(tag, pageable);
+    }
+
+    @Override
+    public Page<CkanPackage> findAllByPackageGroupsEquals(String group, Pageable pageable) {
+        return ckanPackageDao.findAllByPackageGroupsEquals(group, pageable);
+    }
+
+    @Override
     public CkanPackage findByName(String packageName) {
         return ckanPackageDao.findByName(packageName);
     }

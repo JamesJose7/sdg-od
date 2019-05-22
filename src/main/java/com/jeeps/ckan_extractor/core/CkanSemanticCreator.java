@@ -92,20 +92,18 @@ public class CkanSemanticCreator {
 
         // Add Groups
         List<Resource> groupList = new ArrayList<>();
-        if (aPackage.getGroups() != null) {
+        if (aPackage.getPackageGroups() != null) {
             Resource groupConceptScheme = mModel.createResource(DATA_PREFIX + "Groups_from_" + urlify(aPackage.getTitle()))
                     .addProperty(RDF.type, SKOS.ConceptScheme)
                     .addProperty(RDFS.label, "Groups from " + aPackage.getTitle())
                     .addProperty(DCTerms.title, "Groups from " + aPackage.getTitle());
-            aPackage.getGroups().forEach(tag -> {
-                if (tag.getAsJsonObject().get("display_name") != null) {
-                    String groupName = tag.getAsJsonObject().get("display_name").getAsString();
-                    Resource groupRes = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(groupName)))
-                            .addProperty(RDF.type, SKOS.Concept)
-                            .addProperty(SKOS.prefLabel, groupName)
-                            .addProperty(SKOS.inScheme, groupConceptScheme);
-                    groupList.add(groupRes);
-                }
+            aPackage.getPackageGroups().forEach(group -> {
+                Resource groupRes = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(group)))
+                        .addProperty(RDF.type, SKOS.Concept)
+                        .addProperty(SKOS.prefLabel, group)
+                        .addProperty(SKOS.inScheme, groupConceptScheme);
+                groupList.add(groupRes);
+
             });
             catalog.addProperty(DCAT.themeTaxonomy, groupConceptScheme);
         }
@@ -113,16 +111,15 @@ public class CkanSemanticCreator {
         // Add Tags
         // Create concept scheme for catalog
         List<Resource> tagList = new ArrayList<>();
-        if (aPackage.getTags() != null) {
+        if (aPackage.getPackageTags() != null) {
             Resource tagConceptScheme = mModel.createResource(DATA_PREFIX + "Tags_from_" + urlify(aPackage.getTitle()))
                     .addProperty(RDF.type, SKOS.ConceptScheme)
                     .addProperty(RDFS.label, "Tags from " + aPackage.getTitle())
                     .addProperty(DCTerms.title, "Tags from " + aPackage.getTitle());
-            aPackage.getTags().forEach(tag -> {
-                String tagName = tag.getAsJsonObject().get("display_name").getAsString();
-                Resource tagRes = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(tagName)))
+            aPackage.getPackageTags().forEach(tag -> {
+                Resource tagRes = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(tag)))
                         .addProperty(RDF.type, SKOS.Concept)
-                        .addProperty(SKOS.prefLabel, tagName)
+                        .addProperty(SKOS.prefLabel, tag)
                         .addProperty(SKOS.inScheme, tagConceptScheme);
                 tagList.add(tagRes);
             });

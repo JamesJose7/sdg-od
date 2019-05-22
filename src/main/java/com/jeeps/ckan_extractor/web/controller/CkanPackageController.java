@@ -36,9 +36,14 @@ public class CkanPackageController {
     @RequestMapping("/admin/datasets")
     public String showDatasets(@PageableDefault(size = 30)Pageable pageable,
                                @RequestParam(name = "q", required = false) String q,
+                               @RequestParam(name = "tag", required = false) String tag,
+                               @RequestParam(name = "group", required = false) String group,
                                Model model) {
         q = q == null ? "" : q;
-        Page<CkanPackage> page = ckanPackageService.findAllByTitleContaining(q, pageable);
+        Page<CkanPackage> page;
+        if (tag == null && group == null) page = ckanPackageService.findAllByTitleContaining(q, pageable);
+        else if (group == null) page = ckanPackageService.findAllByPackageTagsEquals(tag, pageable);
+        else page = ckanPackageService.findAllByPackageGroupsEquals(group, pageable);
         model.addAttribute("page", page);
         model.addAttribute("action", "/admin/datasets");
         model.addAttribute("q", q);

@@ -3,6 +3,8 @@ package com.jeeps.ckan_extractor.model;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -44,6 +46,14 @@ public class CkanPackage {
     private JsonArray tags;
     @Transient
     private JsonObject organization;
+
+    // TODO: should NOT use eager fetching
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<String> packageTags;
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<String> packageGroups;
 
     @OneToMany(mappedBy = "ckanPackage", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CkanResource> resources;
@@ -232,6 +242,22 @@ public class CkanPackage {
         this.organization = organization;
     }
 
+    public List<String> getPackageTags() {
+        return packageTags;
+    }
+
+    public void setPackageTags(List<String> packageTags) {
+        this.packageTags = packageTags;
+    }
+
+    public List<String> getPackageGroups() {
+        return packageGroups;
+    }
+
+    public void setPackageGroups(List<String> packageGroups) {
+        this.packageGroups = packageGroups;
+    }
+
     public List<CkanResource> getResources() {
         return resources;
     }
@@ -269,6 +295,8 @@ public class CkanPackage {
         private JsonArray groups;
         private JsonArray tags;
         private JsonObject organization;
+        private List<String> packageTags;
+        private List<String> packageGroups;
 
         public CkanPackageBuilder(String id) {
             this.id = id;
@@ -361,6 +389,16 @@ public class CkanPackage {
 
         public CkanPackageBuilder withOrganization(JsonObject organization) {
             this.organization = organization;
+            return this;
+        }
+
+        public CkanPackageBuilder withPackageTags(List<String> tags) {
+            this.packageTags = tags;
+            return this;
+        }
+
+        public CkanPackageBuilder withPackageGroups(List<String> groups) {
+            this.packageGroups = groups;
             return this;
         }
 
