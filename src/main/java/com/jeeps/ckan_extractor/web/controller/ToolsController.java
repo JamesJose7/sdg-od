@@ -48,6 +48,6 @@ public class ToolsController {
         Random random = new Random();
         String socketUri = "socket-" + random.nextInt(1000);
         model.addAttribute("socketUri", socketUri);
-        return "admin";
+        return "converter";
     }
 }
