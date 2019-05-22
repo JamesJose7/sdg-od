@@ -33,19 +33,27 @@ public class CkanPackageController {
         return "extractor";
     }
 
-    @RequestMapping("/admin/datasets")
+    @RequestMapping("/datasets")
     public String showDatasets(@PageableDefault(size = 30)Pageable pageable,
                                @RequestParam(name = "q", required = false) String q,
+                               @RequestParam(name = "originUrl", required = false) String originUrl,
                                @RequestParam(name = "tag", required = false) String tag,
                                @RequestParam(name = "group", required = false) String group,
                                Model model) {
         q = q == null ? "" : q;
         Page<CkanPackage> page;
-        if (tag == null && group == null) page = ckanPackageService.findAllByTitleContaining(q, pageable);
+        model.addAttribute("selectedUrl", "");
+        if (tag == null && group == null)
+            if (originUrl == null || originUrl.equals("none")) page = ckanPackageService.findAllByTitleContaining(q, pageable);
+            else {
+                model.addAttribute("selectedUrl", originUrl);
+                page = ckanPackageService.findAllByTitleContainsAndOriginUrlEquals(q, originUrl, pageable);
+            }
         else if (group == null) page = ckanPackageService.findAllByPackageTagsEquals(tag, pageable);
         else page = ckanPackageService.findAllByPackageGroupsEquals(group, pageable);
+        model.addAttribute("originUrls", ckanPackageService.getOriginUrls());
         model.addAttribute("page", page);
-        model.addAttribute("action", "/admin/datasets");
+        model.addAttribute("action", "/datasets");
         model.addAttribute("q", q);
         return "ckanPackages/ckan-packages-list";
     }
@@ -56,7 +64,7 @@ public class CkanPackageController {
         return ckanPackageService.search(request.getParameter("term"));
     }
 
-    @RequestMapping("/admin/datasets/{package}")
+    @RequestMapping("/datasets/{package}")
     public String showDatasetInfo(@PathVariable("package") String packageName,
                                   Model model) {
         CkanPackage ckanPackage = ckanPackageService.findByName(packageName);

@@ -21,6 +21,7 @@ public interface CkanPackageService {
     CkanPackage findByTitle(String title);
 
     Page<CkanPackage> findAllByTitleContaining(String q, Pageable pageable);
+    Page<CkanPackage> findAllByTitleContainsAndOriginUrlEquals(String title, String originUrl, Pageable pageable);
     Page<CkanPackage> findAllByPackageTagsEquals(String tag, Pageable pageable);
     Page<CkanPackage> findAllByPackageGroupsEquals(String group, Pageable pageable);
     CkanPackage findByName(String packageName);
