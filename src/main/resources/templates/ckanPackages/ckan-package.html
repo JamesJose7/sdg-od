@@ -23,7 +23,7 @@
             </ul>-->
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item" th:each="tag : ${package.packageTags}">
-                    <a class="nav-link" th:href="@{/datasets(tag=${tag})}" th:text="${tag}">Tag 1</a>
+                    <a class="nav-link" th:href="@{/datasets(filterType='tag',filter=${tag})}" th:text="${tag}">Tag 1</a>
                 </li>
                 <p th:if="${package.packageTags.isEmpty() || package.packageTags == null}">No tags for this dataset</p>
             </ul>
@@ -31,7 +31,7 @@
             <h3>Groups</h3>
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item" th:each="group : ${package.packageGroups}">
-                    <a class="nav-link" th:href="@{/datasets(group=${group})}" th:text="${group}">Group 1</a>
+                    <a class="nav-link" th:href="@{/datasets(filterType='group',filter=${group})}" th:text="${group}">Group 1</a>
                 </li>
                 <p th:if="${package.packageGroups.isEmpty() || package.packageGroups == null}">No groups for this dataset</p>
             </ul>

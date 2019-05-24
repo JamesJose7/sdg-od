@@ -79,8 +79,18 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     }
 
     @Override
-    public Page<CkanPackage> findAllByTitleContainsAndOriginUrlEquals(String title, String originUrl, Pageable pageable) {
-        return ckanPackageDao.findAllByTitleContainsAndOriginUrlEquals(title, originUrl, pageable);
+    public Page<CkanPackage> findAllByTitleContainsAndOriginUrlContains(String title, String originUrl, Pageable pageable) {
+        return ckanPackageDao.findAllByTitleContainsAndOriginUrlContains(title, originUrl, pageable);
+    }
+
+    @Override
+    public Page<CkanPackage> findAllByTitleContainsAndOriginUrlContainsAndPackageTagsEquals(String title, String originUrl, String tag, Pageable pageable) {
+        return ckanPackageDao.findAllByTitleContainsAndOriginUrlContainsAndPackageTagsEquals(title, originUrl, tag, pageable);
+    }
+
+    @Override
+    public Page<CkanPackage> findAllByTitleContainsAndOriginUrlContainsAndPackageGroupsEquals(String title, String originUrl, String group, Pageable pageable) {
+        return ckanPackageDao.findAllByTitleContainsAndOriginUrlContainsAndPackageGroupsEquals(title, originUrl, group, pageable);
     }
 
     @Override

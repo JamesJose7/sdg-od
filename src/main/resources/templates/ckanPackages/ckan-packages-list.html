@@ -28,6 +28,7 @@
             </div>
         </div>
     </form>
+    <h4 th:text="|Found ${page.getTotalElements()} datasets|"></h4>
     <div class="table-responsive">
     <table class="table table-hover table-striped">
         <thead>
@@ -49,25 +50,33 @@
 
 <div class="pagination-div justify-content-center text-center border-top row pt-4 pb-4 mb-5">
     <span class="col-2">
-        <a th:if="${q.isEmpty()}" th:href="@{/datasets(page=${0},size=${page.size})}" th:class="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}">First</a>
-        <a th:unless="${q.isEmpty()}" th:href="@{/datasets(q=${q},page=${0},size=${page.size})}" th:classappend="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}">First</a>
+        <a th:href="@{/datasets(page=${0},size=${page.size},q=${q},originUrl=${selectedUrl})}"
+           th:class="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}" th:if="${filterType == null}">First</a>
+        <a th:href="@{/datasets(page=${0},size=${page.size},q=${q},originUrl=${selectedUrl},filterType=${filterType},filter=${filter})}"
+           th:class="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}" th:unless="${filterType == null}">First</a>
     </span>
     <span class="col-2">
-        <a th:if="${q.isEmpty()}" th:href="@{/datasets(page=${page.number-1},size=${page.size})}" th:classappend="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}">Previous</a>
-        <a th:unless="${q.isEmpty()}" th:href="@{/datasets(q=${q},page=${page.number-1},size=${page.size})}" th:classappend="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}">Previous</a>
+        <a th:href="@{/datasets(page=${page.number-1},size=${page.size},q=${q},originUrl=${selectedUrl})}"
+           th:classappend="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}" th:if="${filterType == null}">Previous</a>
+        <a th:href="@{/datasets(page=${page.number-1},size=${page.size},q=${q},originUrl=${selectedUrl},filterType=${filterType},filter=${filter})}"
+           th:classappend="${page.hasPrevious() ? 'btn btn-dark' : 'btn disabled-link'}" th:unless="${filterType == null}">Previous</a>
     </span>
     <div class="col-2">
         <div class="btn">
-        <span th:text="|Page ${page.getNumber()} of ${page.getTotalPages() - 1}|" class="selected"></span>
+        <span th:text="|Page ${page.getNumber()+1} of ${page.getTotalPages()}|" class="selected"></span>
         </div>
     </div>
     <span class="col-2">
-        <a th:if="${q.isEmpty()}" th:href="@{/datasets(page=${page.number+1},size=${page.size})}" th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}">Next</a>
-        <a th:unless="${q.isEmpty()}" th:href="@{/datasets(q=${q},page=${page.number+1},size=${page.size})}" th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}">Next</a>
+        <a th:href="@{/datasets(page=${page.number+1},size=${page.size},q=${q},originUrl=${selectedUrl})}"
+           th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}" th:if="${filterType == null}">Next</a>
+        <a th:href="@{/datasets(page=${page.number+1},size=${page.size},q=${q},originUrl=${selectedUrl},filterType=${filterType},filter=${filter})}"
+           th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}" th:unless="${filterType == null}">Next</a>
     </span>
     <span class="col-2">
-        <a th:if="${q.isEmpty()}" th:href="@{/datasets(page=${page.getTotalPages() - 1},size=${page.size})}" th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}">Last</a>
-        <a th:unless="${q.isEmpty()}" th:href="@{/datasets(q=${q},page=${page.getTotalPages() - 1},size=${page.size})}" th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}">Last</a>
+        <a th:href="@{/datasets(page=${page.getTotalPages()-1},size=${page.size},q=${q},originUrl=${selectedUrl})}"
+           th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}" th:if="${filterType == null}">Last</a>
+        <a th:href="@{/datasets(page=${page.getTotalPages()-1},size=${page.size},q=${q},originUrl=${selectedUrl},filterType=${filterType},filter=${filter})}"
+           th:classappend="${page.hasNext() ? 'btn btn-dark' : 'btn disabled-link'}" th:unless="${filterType == null}">Last</a>
     </span>
 </div>
 </main>

@@ -37,24 +37,31 @@ public class CkanPackageController {
     public String showDatasets(@PageableDefault(size = 30)Pageable pageable,
                                @RequestParam(name = "q", required = false) String q,
                                @RequestParam(name = "originUrl", required = false) String originUrl,
-                               @RequestParam(name = "tag", required = false) String tag,
-                               @RequestParam(name = "group", required = false) String group,
+                               @RequestParam(name = "filterType", required = false) String filterType,
+                               @RequestParam(name = "filter", required = false) String filter,
                                Model model) {
+        // Prevent nulls for less logic checks
         q = q == null ? "" : q;
+        filter = filter == null ? "" : filter;
+        originUrl = originUrl == null || originUrl.equals("none") ? "" : originUrl;
         Page<CkanPackage> page;
-        model.addAttribute("selectedUrl", "");
-        if (tag == null && group == null)
-            if (originUrl == null || originUrl.equals("none")) page = ckanPackageService.findAllByTitleContaining(q, pageable);
-            else {
-                model.addAttribute("selectedUrl", originUrl);
-                page = ckanPackageService.findAllByTitleContainsAndOriginUrlEquals(q, originUrl, pageable);
-            }
-        else if (group == null) page = ckanPackageService.findAllByPackageTagsEquals(tag, pageable);
-        else page = ckanPackageService.findAllByPackageGroupsEquals(group, pageable);
+
+        // Filter according to parameters received
+        if (filterType == null)
+            page = ckanPackageService.findAllByTitleContainsAndOriginUrlContains(q, originUrl, pageable);
+        else if (filterType.equals("tag"))
+            page = ckanPackageService.findAllByTitleContainsAndOriginUrlContainsAndPackageTagsEquals(q, originUrl, filter, pageable);
+        else if (filterType.equals("group"))
+            page = ckanPackageService.findAllByTitleContainsAndOriginUrlContainsAndPackageGroupsEquals(q, originUrl, filter, pageable);
+        else page = ckanPackageService.findAllByTitleContaining(q, pageable);
+
         model.addAttribute("originUrls", ckanPackageService.getOriginUrls());
+        model.addAttribute("selectedUrl", originUrl);
+        model.addAttribute("q", q);
+        model.addAttribute("filterType", filterType);
+        model.addAttribute("filter", filter);
         model.addAttribute("page", page);
         model.addAttribute("action", "/datasets");
-        model.addAttribute("q", q);
         return "ckanPackages/ckan-packages-list";
     }
 

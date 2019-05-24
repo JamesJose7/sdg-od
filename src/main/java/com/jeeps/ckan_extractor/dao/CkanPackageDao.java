@@ -22,9 +22,11 @@ public interface CkanPackageDao extends PagingAndSortingRepository<CkanPackage, 
     @Query("SELECT title FROM CkanPackage where title like %:keyword%")
     List<String> search(@Param("keyword") String keyword);
     CkanPackage findByTitle(String title);
-
+    // Filtering
     Page<CkanPackage> findAllByTitleContains(String q, Pageable pageable);
-    Page<CkanPackage> findAllByTitleContainsAndOriginUrlEquals(String title, String originUrl, Pageable pageable);
+    Page<CkanPackage> findAllByTitleContainsAndOriginUrlContains(String title, String originUrl, Pageable pageable);
+    Page<CkanPackage> findAllByTitleContainsAndOriginUrlContainsAndPackageTagsEquals(String title, String originUrl, String tag, Pageable pageable);
+    Page<CkanPackage> findAllByTitleContainsAndOriginUrlContainsAndPackageGroupsEquals(String title, String originUrl, String group, Pageable pageable);
     Page<CkanPackage> findAllByPackageTagsEquals(String tag, Pageable pageable);
     Page<CkanPackage> findAllByPackageGroupsEquals(String group, Pageable pageable);
     CkanPackage findByName(String packageName);
