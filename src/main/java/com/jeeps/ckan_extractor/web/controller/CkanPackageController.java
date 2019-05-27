@@ -5,6 +5,7 @@ import com.jeeps.ckan_extractor.model.CkanRepository;
 import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.CkanRepositoryService;
+import com.jeeps.ckan_extractor.web.FlashMessage;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -28,14 +30,37 @@ public class CkanPackageController {
     private CkanRepositoryService ckanRepositoryService;
 
     @RequestMapping("/admin/datasets/extractor")
-    public String transformer(Model model) {
+    public String extractor(Model model) {
         List<CkanRepository> ckanRepos = Lists.newArrayList(ckanRepositoryService.findAll().iterator());
         List<Boolean> availableRepos = new ArrayList<>();
         ckanRepos.forEach(repo -> availableRepos.add(ckanPackageService.existsByOriginUrl(repo.getUrl().split("api")[0])));
         model.addAttribute("ckanRepos", ckanRepos);
         model.addAttribute("availableRepos", availableRepos);
 
-        return "extractor";
+        return "ckanPackages/extractor";
+    }
+
+    @RequestMapping("/admin/datasets/extractor/edit")
+    public String editCkanRepos(Model model) {
+        List<CkanRepository> ckanRepos = Lists.newArrayList(ckanRepositoryService.findAll().iterator());
+        model.addAttribute("ckanRepos", ckanRepos);
+        model.addAttribute("action", "/admin/datasets/extractor/delete");
+        return "ckanPackages/extractor-editor";
+    }
+
+    @RequestMapping(value = "/admin/datasets/extractor/delete", method = RequestMethod.POST)
+    public String deleteCkanRepo(@RequestParam("url") String url, RedirectAttributes redirectAttributes) {
+        // Check if url exists
+        CkanRepository ckanRepository = ckanRepositoryService.findByUrl(url);
+        if (ckanRepository == null) {
+            redirectAttributes.addFlashAttribute("flash",
+                    new FlashMessage("There was an error when deleting that repo", FlashMessage.Status.FAILURE));
+            return "redirect:/admin/datasets/extractor/edit";
+        }
+        ckanRepositoryService.delete(ckanRepository);
+        redirectAttributes.addFlashAttribute("flash",
+                new FlashMessage("Deleted correctly", FlashMessage.Status.SUCCESS));
+        return "redirect:/admin/datasets/extractor/edit";
     }
 
     @RequestMapping("/datasets")

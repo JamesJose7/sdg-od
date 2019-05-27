@@ -11,6 +11,10 @@ body {
     color: #384047;
 }
 
+nav {
+    background-color: #202124 !important;
+}
+
 a.disabled-link {
     /* Make the disabled links grayish*/
     color: gray; !important;
@@ -24,6 +28,17 @@ a.disabled-link {
 
 .download-resource {
     width: 100%;
+}
+
+.icon-with-text {
+    font-size: 21px;
+    line-height: 24px;
+}
+
+.icon-with-text i {
+    display: inline-flex;
+    vertical-align: top;
+    padding-left: 6px;
 }
 
 @media (max-width: 992px) {

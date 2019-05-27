@@ -82,7 +82,7 @@ public class StartupConfig {
         });
 
         // Test erase repos
-       ckanPackageService.deleteAllByOriginUrl("http://ambar.utpl.edu.ec/");
+//       ckanPackageService.deleteAllByOriginUrl("http://ambar.utpl.edu.ec/");
         /*ckanPackageService.deleteAllByOriginUrl("https://data.gov.au/");
         ckanPackageService.deleteAllByOriginUrl("https://data.humdata.org/");
         ckanPackageService.deleteAllByOriginUrl("http://data.europa.eu/euodp/data/");

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Extractor')"></head>
+<body>
+<div th:replace="layout :: nav"></div>
+
+
+<div class="container">
+    <!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
+    <div th:replace="layout :: flash"></div>
+    <div class="row mt-5">
+        <h1 class="col-12">CKAN Repositories extractor</h1>
+        <a class="col-12 right" th:href="@{/admin/datasets/extractor}" style="text-decoration: none">
+            <p class="text-right icon-with-text">Done<i class="material-icons">done</i></p>
+        </a>
+    </div>
+    <div class="table-responsive mt-1">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>CKAN API URL</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="ckanUrlSelector">
+            <tr th:each="i : ${#numbers.sequence(0, ckanRepos.size() - 1)}">
+                <td th:text="${ckanRepos.get(i).name}"></td>
+                <td th:text="${ckanRepos.get(i).url}"></td>
+                <td>
+                    <a href="#" class="btn btn-success">
+                        <i class="material-icons" style="vertical-align: middle">edit</i>
+                    </a>
+                </td>
+                <td>
+                    <form th:action="${action}" method="post">
+                        <input type="hidden" th:value="${ckanRepos.get(i).url}" name="url">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="material-icons" style="vertical-align: middle">delete</i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row justify-content-center mt-1 text-center invisible" id="failMessage">
+        <div class="flash col failure">Please select at least one repository</div>
+    </div>
+
+</div>
+
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

@@ -7,8 +7,13 @@
 
 <div class="container">
     <!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
-    <form class="mt-5" id="extractorForm">
-        <h1>CKAN Repositories extractor</h1>
+    <div class="row mt-5">
+        <h1 class="col-12">CKAN Repositories extractor</h1>
+        <a class="col-12 right" th:href="@{/admin/datasets/extractor/edit}" style="text-decoration: none">
+            <p class="text-right icon-with-text">Edit<i class="material-icons">edit</i></p>
+        </a>
+    </div>
+    <form class="mt-1" id="extractorForm">
         <div class="table-responsive">
         <table class="table table-striped">
             <thead>
