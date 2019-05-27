@@ -1,7 +1,10 @@
 package com.jeeps.ckan_extractor.config;
 
+import com.jeeps.ckan_extractor.model.CkanRepository;
 import com.jeeps.ckan_extractor.model.Role;
 import com.jeeps.ckan_extractor.model.User;
+import com.jeeps.ckan_extractor.service.CkanPackageService;
+import com.jeeps.ckan_extractor.service.CkanRepositoryService;
 import com.jeeps.ckan_extractor.service.RoleService;
 import com.jeeps.ckan_extractor.service.UserService;
 import org.apache.commons.io.FileUtils;
@@ -11,16 +14,25 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
+@Transactional
 public class StartupConfig {
     @Autowired
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private CkanRepositoryService ckanRepositoryService;
+    @Autowired
+    private CkanPackageService ckanPackageService;
 
     @EventListener(ContextRefreshedEvent.class)
     public void contextRefreshedEvent() {
@@ -55,5 +67,25 @@ public class StartupConfig {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Load initial CKAN repos
+        List<CkanRepository> repos = new ArrayList<>(Arrays.asList(
+                new CkanRepository("Ambar", "http://ambar.utpl.edu.ec/api/3/action/"),
+                new CkanRepository("Europe OD Portal", "http://data.europa.eu/euodp/data/api/3/action/"),
+                new CkanRepository("Humanitarian Data Exchange", "https://data.humdata.org/api/3/action/"),
+                new CkanRepository("OD Swiss", "https://opendata.swiss/api/3/action/"),
+                new CkanRepository("Australian Government", "https://data.gov.au/api/3/action/")
+                ));
+        repos.forEach(repo -> {
+            if (ckanRepositoryService.findByUrl(repo.getUrl()) == null)
+                ckanRepositoryService.save(repo);
+        });
+
+        // Test erase repos
+       ckanPackageService.deleteAllByOriginUrl("http://ambar.utpl.edu.ec/");
+        /*ckanPackageService.deleteAllByOriginUrl("https://data.gov.au/");
+        ckanPackageService.deleteAllByOriginUrl("https://data.humdata.org/");
+        ckanPackageService.deleteAllByOriginUrl("http://data.europa.eu/euodp/data/");
+        ckanPackageService.deleteAllByOriginUrl("https://opendata.swiss/");*/
     }
 }

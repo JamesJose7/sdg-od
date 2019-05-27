@@ -1,8 +1,11 @@
 package com.jeeps.ckan_extractor.web.controller;
 
 import com.jeeps.ckan_extractor.model.CkanPackage;
+import com.jeeps.ckan_extractor.model.CkanRepository;
 import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
+import com.jeeps.ckan_extractor.service.CkanRepositoryService;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +24,15 @@ public class CkanPackageController {
     private CkanPackageService ckanPackageService;
     @Autowired
     private CkanExtractorService ckanExtractorService;
+    @Autowired
+    private CkanRepositoryService ckanRepositoryService;
 
     @RequestMapping("/admin/datasets/extractor")
     public String transformer(Model model) {
-        List<String> ckanUrls = ckanExtractorService.getCkanUrls();
+        List<CkanRepository> ckanRepos = Lists.newArrayList(ckanRepositoryService.findAll().iterator());
         List<Boolean> availableRepos = new ArrayList<>();
-        ckanUrls.forEach(url -> availableRepos.add(ckanPackageService.existsByOriginUrl(url.split("api")[0])));
-        model.addAttribute("ckanUrls", ckanUrls);
+        ckanRepos.forEach(repo -> availableRepos.add(ckanPackageService.existsByOriginUrl(repo.getUrl().split("api")[0])));
+        model.addAttribute("ckanRepos", ckanRepos);
         model.addAttribute("availableRepos", availableRepos);
 
         return "extractor";

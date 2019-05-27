@@ -8,34 +8,43 @@
 <div class="container">
     <!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
     <form class="mt-5" id="extractorForm">
-        <div class="row justify-content-center">
-            <p class="form-check col-10 col-lg-5 font-weight-bolder border-bottom">CKAN Repository</p>
-            <p class="col-2 col-lg-1 text-center font-weight-bold border-bottom">Status</p>
-        </div>
+        <h1>CKAN Repositories extractor</h1>
+        <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>CKAN API URL</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="ckanUrlSelector">
+                <tr th:each="i : ${#numbers.sequence(0, ckanRepos.size() - 1)}">
+                    <td>
+                        <input class="form-check-input ml-1" name="ckanURL" type="checkbox" th:value="${ckanRepos.get(i).url}" th:id="|check${i}|">
+                        <label th:for="|check${i}|" class="form-check-label pl-4" th:text="${ckanRepos.get(i).name}"></label>
+                    </td>
+                    <td th:text="${ckanRepos.get(i).url}"></td>
+                    <td>
+                        <p class="badge badge-pill" style="width: 100%" th:classappend="${availableRepos.get(i) ? 'badge-success' : 'badge-danger'}">
+                            <span th:if="${availableRepos.get(i)}">available</span><span th:if="${!availableRepos.get(i)}">unavailable</span>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <!-- TODO: Change to table-->
-        <div id="ckanUrlSelector">
-            <div class="row justify-content-center" th:if="${!ckanUrls.isEmpty()}" th:each="i : ${#numbers.sequence(0, ckanUrls.size() - 1)}">
-                <div class="form-check col-10 col-lg-5">
-                    <input class="form-check-input pl-2" name="ckanURL" type="checkbox" th:value="${ckanUrls.get(i)}" th:id="|check${i}|">
-                    <label th:for="|check${i}|" class="form-check-label" th:text="${ckanUrls.get(i)}"></label>
-                </div>
-                <p class="col-2 col-lg-1 badge badge-pill" th:classappend="${availableRepos.get(i) ? 'badge-success' : 'badge-danger'}">
-                    <span th:if="${availableRepos.get(i)}">available</span><span th:if="${!availableRepos.get(i)}">unavailable</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="row justify-content-center mt-1 text-center invisible" id="failMessage">
-            <div class="flash col failure">Please select at least one repository</div>
-        </div>
-        <div class="row justify-content-center mt-3">
-            <button type="submit" class="btn btn-primary ld-ext-right" id="extractButton">
-                Extract
-                <!--<div class="ld ld-ball ld-bounce"></div>-->
-                <div class="ld ld-ring ld-spin"></div>
-            </button>
-        </div>
+    <div class="row justify-content-center mt-1 text-center invisible" id="failMessage">
+        <div class="flash col failure">Please select at least one repository</div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <button type="submit" class="btn btn-primary ld-ext-right" id="extractButton">
+            Extract
+            <!--<div class="ld ld-ball ld-bounce"></div>-->
+            <div class="ld ld-ring ld-spin"></div>
+        </button>
+    </div>
     </form>
 
     <!--<div class="row mt-5">

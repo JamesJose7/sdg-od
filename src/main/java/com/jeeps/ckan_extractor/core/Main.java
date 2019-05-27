@@ -1,19 +1,14 @@
 package com.jeeps.ckan_extractor.core;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         Instant start = Instant.now();
 
 //        extractCkanData();
 //        extractSDGData();
-        /*SdgSemanticCreator sdgSemanticCreator = new SdgSemanticCreator();
+        *//*SdgSemanticCreator sdgSemanticCreator = new SdgSemanticCreator();
         sdgSemanticCreator.generateTriples();
-        sdgSemanticCreator.writeRdfFile();*/
+        sdgSemanticCreator.writeRdfFile();*//*
 
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toMillis();
@@ -29,7 +24,7 @@ public class Main {
     }
 
     public static void extractCkanData() throws FileNotFoundException {
-        /*CkanExtractor ckanExtractor = new CkanExtractor();
+        *//*CkanExtractor ckanExtractor = new CkanExtractor();
 
 //        CURRENT_COUNTRY = "Ecuador";
 //        CURRENT_PLATFORM = "Ambar UTPL";
@@ -51,6 +46,6 @@ public class Main {
 //        CURRENT_PLATFORM = "Australian government";
         ckanExtractor.extract("https://data.gov.au/api/3/action/");
 
-        ckanExtractor.writeFile();*/
-    }
+        ckanExtractor.writeFile();*//*
+    }*/
 }
