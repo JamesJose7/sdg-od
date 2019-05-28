@@ -45,6 +45,7 @@ public class CkanPackageController {
         List<CkanRepository> ckanRepos = Lists.newArrayList(ckanRepositoryService.findAll().iterator());
         model.addAttribute("ckanRepos", ckanRepos);
         model.addAttribute("action", "/admin/datasets/extractor/delete");
+        model.addAttribute("actionEdit", "/admin/datasets/extractor/save");
         return "ckanPackages/extractor-editor";
     }
 
@@ -60,6 +61,18 @@ public class CkanPackageController {
         ckanRepositoryService.delete(ckanRepository);
         redirectAttributes.addFlashAttribute("flash",
                 new FlashMessage("Deleted correctly", FlashMessage.Status.SUCCESS));
+        return "redirect:/admin/datasets/extractor/edit";
+    }
+
+    @RequestMapping(value = "/admin/datasets/extractor/save", method = RequestMethod.POST)
+    public String saveCkanRepo(RedirectAttributes redirectAttributes,
+                               @RequestParam("name") String name,
+                               @RequestParam("url") String url,
+                               @RequestParam("id") String id) {
+        CkanRepository repo = new CkanRepository(name, url);
+        if (!id.equals("none"))
+            repo.setId(Long.parseLong(id));
+        ckanRepositoryService.save(repo);
         return "redirect:/admin/datasets/extractor/edit";
     }
 

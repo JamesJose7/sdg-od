@@ -26,12 +26,13 @@
             </thead>
             <tbody id="ckanUrlSelector">
             <tr th:each="i : ${#numbers.sequence(0, ckanRepos.size() - 1)}">
-                <td th:text="${ckanRepos.get(i).name}"></td>
-                <td th:text="${ckanRepos.get(i).url}"></td>
+                <td><p th:text="${ckanRepos.get(i).name}"></p><input type="hidden" name="name" th:value="${ckanRepos.get(i).name}" class="repoName"></td>
+                <td><p th:text="${ckanRepos.get(i).url}"></p><input type="hidden" name="url" th:value="${ckanRepos.get(i).url}" class="repoUrl"></td>
                 <td>
-                    <a href="#" class="btn btn-success">
+                    <input type="hidden" name="id" th:value="${ckanRepos.get(i).id}" class="repoId">
+                    <button type="button" class="btn btn-success editRepoButton">
                         <i class="material-icons" style="vertical-align: middle">edit</i>
-                    </a>
+                    </button>
                 </td>
                 <td>
                     <form th:action="${action}" method="post">
@@ -50,8 +51,89 @@
         <div class="flash col failure">Please select at least one repository</div>
     </div>
 
+    <div class="row justify-content-center mt-3">
+        <button type="button" class="btn btn-success ld-ext-right" id="addNewRepo">
+            Add new repository
+        </button>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h2>Edit repo</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body container mb-3">
+                <form th:action="${actionEdit}" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputName">Repo name</label>
+                            <input type="text" class="form-control" id="inputName" name="name" placeholder="Name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputUrl">Repo URL</label>
+                            <input type="text" class="form-control" id="inputUrl" name="url" placeholder="Url" required>
+                        </div>
+                        <input type="hidden" id="inputId" name="id">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 <div th:replace="layout :: scripts"></div>
+<script th:inline="javascript">
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Display the modal
+    function openModal(id, name, url) {
+        $("#inputId").val(id);
+        $("#inputName").val(name);
+        $("#inputUrl").val(url);
+
+        modal.style.display = "block";
+    }
+
+    // TODO: check the validity of a new repo URL
+
+    // Edit repo button
+    $(".editRepoButton").click(function () {
+        var row = $(this).closest("tr");
+        var id = row.find(".repoId").val();
+        var name = row.find(".repoName").val();
+        var url = row.find(".repoUrl").val();
+        // alert(id + ' - ' + name + ' - ' + url);
+
+        openModal(id, name, url);
+    });
+
+    // Create new repo button
+    $("#addNewRepo").click(function () {
+        openModal("none", "", "");
+    });
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>
