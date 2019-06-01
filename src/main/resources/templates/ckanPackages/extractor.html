@@ -20,18 +20,22 @@
                 <tr>
                     <th>Name</th>
                     <th>CKAN API URL</th>
+                    <th>Actions</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody id="ckanUrlSelector">
                 <tr th:each="i : ${#numbers.sequence(0, ckanRepos.size() - 1)}">
-                    <td>
+                    <td class="align-middle">
                         <input class="form-check-input ml-1" name="ckanURL" type="checkbox" th:value="${ckanRepos.get(i).url}" th:id="|check${i}|">
                         <label th:for="|check${i}|" class="form-check-label pl-4" th:text="${ckanRepos.get(i).name}"></label>
                     </td>
-                    <td th:text="${ckanRepos.get(i).url}"></td>
-                    <td>
-                        <p class="badge badge-pill" style="width: 100%" th:classappend="${availableRepos.get(i) ? 'badge-success' : 'badge-danger'}">
+                    <td class="align-middle"><a th:href="@{/datasets(originUrl=${ckanRepos.get(i).url.split('api')[0]})}" th:text="${ckanRepos.get(i).url}"></a></td>
+                    <td class="align-middle">
+                        <a th:href="@{/}" class="btn btn-primary">History</a>
+                    </td>
+                    <td class="align-middle">
+                        <p class="badge badge-pill" style="width: 100%; margin: 0;" th:classappend="${availableRepos.get(i) ? 'badge-success' : 'badge-danger'}">
                             <span th:if="${availableRepos.get(i)}">available</span><span th:if="${!availableRepos.get(i)}">unavailable</span>
                         </p>
                     </td>
