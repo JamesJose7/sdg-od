@@ -86,6 +86,7 @@ public class CkanPackageController {
                               Model model) {
         List<ExtractionHistory> extractionHistoryList = extractionHistoryService.findAllByUrl(repository);
         model.addAttribute("historyList", extractionHistoryList);
+        model.addAttribute("url", repository.replaceAll("/", ""));
         return "ckanPackages/extractor-history";
     }
 
