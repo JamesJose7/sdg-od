@@ -74,6 +74,11 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     }
 
     @Override
+    public List<String> findIdsByOriginUrl(String url) {
+        return ckanPackageDao.findIdsByOriginUrl(url);
+    }
+
+    @Override
     public CkanPackage findByTitle(String title) {
         return ckanPackageDao.findByTitle(title);
     }

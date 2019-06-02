@@ -22,6 +22,8 @@ public interface CkanPackageDao extends PagingAndSortingRepository<CkanPackage, 
     void deleteAllByOriginUrl(String url);
     @Query("SELECT title FROM CkanPackage where title like %:keyword%")
     List<String> search(@Param("keyword") String keyword);
+    @Query("SELECT name from CkanPackage where originUrl like %:url%")
+    List<String> findIdsByOriginUrl(@Param("url") String url);
     CkanPackage findByTitle(String title);
     // Filtering
     Page<CkanPackage> findAllByTitleContains(String q, Pageable pageable);

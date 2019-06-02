@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class CkanExtractor {
@@ -70,6 +71,8 @@ public class CkanExtractor {
 
     private void extractDatasets(String json) {
         List<String> ckanDatasets = parseCkanContent(json);
+        ckanDatasets = findMissingDatasets(ckanDatasets);
+        System.out.println();
         ckanDatasets.parallelStream()
 //                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
@@ -82,6 +85,14 @@ public class CkanExtractor {
 //                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
                         sendPostRequest(this::extractDatasetDetails, (mListPackageDetailsUrl), String.format("{\"id\": \"%s\"}", dataset)));
+    }
+
+    private List<String> findMissingDatasets(List<String> ckanDatasets) {
+        List<String> currentlySavedNames = ckanPackageService.findIdsByOriginUrl(mBaseUrl.split("api")[0]);
+        List<String> missingNames = ckanDatasets.stream()
+                .filter(name -> !currentlySavedNames.contains(name))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return missingNames;
     }
 
     private List<String> parseCkanContent(String json) {
@@ -223,6 +234,7 @@ public class CkanExtractor {
         for (int i = 0; i < packageResources.length(); i++) {
             JSONObject resourceJson = packageResources.getJSONObject(i);
             // Get complex attributes
+            // TODO: Fix name and description extraction as done above
             Optional name = resourceJson.getJSONObject("name").toMap().entrySet().stream()
                     .filter(e -> e.getKey().equals("en"))
                     .map(e -> e.getValue().toString())
