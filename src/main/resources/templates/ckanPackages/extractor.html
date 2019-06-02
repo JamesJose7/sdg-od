@@ -7,20 +7,21 @@
 
 <div class="container">
     <!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
+    <div th:replace="layout :: flash"></div>
     <div class="row mt-5">
         <h1 class="col-12">CKAN Repositories extractor</h1>
         <a class="col-12 right" th:href="@{/admin/datasets/extractor/edit}" style="text-decoration: none">
             <p class="text-right icon-with-text">Edit<i class="material-icons">edit</i></p>
         </a>
     </div>
-    <form class="mt-1" id="extractorForm">
+    <div class="mt-1" id="extractorForm">
         <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>CKAN API URL</th>
-                    <th>Actions</th>
+                    <th colspan="2" class="text-center">Actions</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -32,7 +33,15 @@
                     </td>
                     <td class="align-middle"><a th:href="@{/datasets(originUrl=${ckanRepos.get(i).url.split('api')[0]})}" th:text="${ckanRepos.get(i).url}"></a></td>
                     <td class="align-middle">
-                        <a th:href="@{/}" class="btn btn-primary">History</a>
+<!--                        <a th:href="@{|/admin/datasets/extractor/history/${T(java.net.URLEncoder).encode(ckanRepos.get(i).url.split('api')[0], 'UTF-8')}|}" class="btn btn-primary">History</a>-->
+                        <a th:href="@{|/admin/datasets/extractor/history/${T(com.jeeps.ckan_extractor.utils.StringUtils).removeUrlProtocol(ckanRepos.get(i).url.split('api')[0])}|}" class="btn btn-primary">History</a>
+<!--                        <a th:href="@{|/admin/datasets/extractor/history/${ckanRepos.get(i).url.split('api')[0]}|}" class="btn btn-primary">History</a>-->
+                    </td>
+                    <td class="align-middle">
+                        <form th:action="${actionDelete}" method="post">
+                            <input type="hidden" name="url" th:value="${ckanRepos.get(i).url.split('api')[0]}">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </td>
                     <td class="align-middle">
                         <p class="badge badge-pill" style="width: 100%; margin: 0;" th:classappend="${availableRepos.get(i) ? 'badge-success' : 'badge-danger'}">
@@ -54,7 +63,7 @@
             <div class="ld ld-ring ld-spin"></div>
         </button>
     </div>
-    </form>
+    </div>
 
     <!--<div class="row mt-5">
         <div class="col-md-12 text-center" id="conversation">

@@ -36,9 +36,9 @@ function onServerResult(message) {
 }
 
 $(document).ready(function () {
-    $("form").on('submit', function (e) {
+    /*$("form").on('submit', function (e) {
         e.preventDefault();
-    });
+    });*/
 
     // check first radio button by default
     $("#radio0").prop("checked", true);

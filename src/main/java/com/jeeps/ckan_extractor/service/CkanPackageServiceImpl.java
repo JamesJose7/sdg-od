@@ -44,6 +44,11 @@ public class CkanPackageServiceImpl implements CkanPackageService {
     }
 
     @Override
+    public Integer countAllByOriginUrl(String url) {
+        return ckanPackageDao.countAllByOriginUrl(url);
+    }
+
+    @Override
     public Collection<CkanPackage> findAllByOriginUrl(String url) {
         return ckanPackageDao.findAllByOriginUrl(url);
     }

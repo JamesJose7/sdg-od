@@ -2,9 +2,11 @@ package com.jeeps.ckan_extractor.web.controller;
 
 import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.CkanRepository;
+import com.jeeps.ckan_extractor.model.ExtractionHistory;
 import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.CkanRepositoryService;
+import com.jeeps.ckan_extractor.service.ExtractionHistoryService;
 import com.jeeps.ckan_extractor.web.FlashMessage;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class CkanPackageController {
     private CkanExtractorService ckanExtractorService;
     @Autowired
     private CkanRepositoryService ckanRepositoryService;
+    @Autowired
+    private ExtractionHistoryService extractionHistoryService;
 
     @RequestMapping("/admin/datasets/extractor")
     public String extractor(Model model) {
@@ -36,6 +40,7 @@ public class CkanPackageController {
         ckanRepos.forEach(repo -> availableRepos.add(ckanPackageService.existsByOriginUrl(repo.getUrl().split("api")[0])));
         model.addAttribute("ckanRepos", ckanRepos);
         model.addAttribute("availableRepos", availableRepos);
+        model.addAttribute("actionDelete", "/admin/datasets/extractor/repository/delete");
 
         return "ckanPackages/extractor";
     }
@@ -74,6 +79,22 @@ public class CkanPackageController {
             repo.setId(Long.parseLong(id));
         ckanRepositoryService.save(repo);
         return "redirect:/admin/datasets/extractor/edit";
+    }
+
+    @RequestMapping(value = "/admin/datasets/extractor/history/{repository}")
+    public String viewHistory(@PathVariable("repository") String repository,
+                              Model model) {
+        List<ExtractionHistory> extractionHistoryList = extractionHistoryService.findAllByUrl(repository);
+        model.addAttribute("historyList", extractionHistoryList);
+        return "ckanPackages/extractor-history";
+    }
+
+    @RequestMapping(value = "/admin/datasets/extractor/repository/delete", method = RequestMethod.POST)
+    public String deleteRepository(@RequestParam("url") String url, RedirectAttributes redirectAttributes) {
+        ckanExtractorService.deleteDatasets(url);
+        redirectAttributes.addFlashAttribute("flash",
+                new FlashMessage("Repository deleted succesfully", FlashMessage.Status.SUCCESS));
+        return "redirect:/admin/datasets/extractor";
     }
 
     @RequestMapping("/datasets")

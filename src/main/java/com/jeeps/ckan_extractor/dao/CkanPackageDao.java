@@ -16,6 +16,7 @@ public interface CkanPackageDao extends PagingAndSortingRepository<CkanPackage, 
     @Query("SELECT DISTINCT originUrl from CkanPackage")
     List<String> findDistinctOriginUrl();
     Integer countDistinctByOriginUrl(String url);
+    Integer countAllByOriginUrl(String url);
     Collection<CkanPackage> findAllByOriginUrl(String url);
     Boolean existsDistinctByOriginUrl(String url);
     void deleteAllByOriginUrl(String url);

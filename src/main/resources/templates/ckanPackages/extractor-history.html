@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Login')"></head>
+<body>
+<div th:replace="layout :: nav"></div>
+
+
+<div class="container">
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="history : ${historyList}">
+                    <td th:text="${history.timestamp}"></td>
+                    <td th:text="${history.description}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

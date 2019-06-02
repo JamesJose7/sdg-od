@@ -33,4 +33,8 @@ public class StringUtils {
                 .replaceAll("[^\\w\\s]", "_")
                 .replaceAll("_+", "_");
     }
+
+    public static String removeUrlProtocol(String url) {
+       return url.replace("https://", "").replace("http://", "");
+    }
 }
