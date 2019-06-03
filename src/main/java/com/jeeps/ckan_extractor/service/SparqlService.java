@@ -1,5 +1,9 @@
 package com.jeeps.ckan_extractor.service;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
@@ -14,7 +18,16 @@ import java.util.List;
 public class SparqlService {
 
     public static List<List<String>> queryEndpoint(String endpoint, String query, String... vars) {
-        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpoint, query);
+        HttpClient client =
+                HttpClientBuilder.create()
+                        .useSystemProperties()
+                        .setRedirectStrategy(new LaxRedirectStrategy())
+                        .setConnectionManager(new BasicHttpClientConnectionManager())
+//                        .setMaxConnPerRoute(200000)
+//                        .setMaxConnTotal(10000)
+//                        .setConnectionTimeToLive(10, TimeUnit.SECONDS)
+                        .build();
+        QueryExecution queryExecution = QueryExecutionFactory.sparqlService(endpoint, query, client);
         return query(queryExecution, vars);
     }
 

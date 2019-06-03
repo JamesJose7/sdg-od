@@ -2,6 +2,7 @@ extractions/
 triples.rdf
 temp/
 sdgTriples.rdf
+ods-od-links.rdf
 
 # Compiled class file
 *.class
