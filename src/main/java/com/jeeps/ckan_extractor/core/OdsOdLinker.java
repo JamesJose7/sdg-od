@@ -12,6 +12,7 @@ import org.apache.jena.vocabulary.SKOS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class OdsOdLinker {
     public static final String DATA_PREFIX = "http://ods-od.org/data/";
     public static final String SCHEMA_PREFIX = "http://ods-od.org/schema/";
     private static final String DBR_PREFIX = "http://dbpedia.org/resource/";
+    private static final int QUERY_LIMIT = 10000;
 
     private static final String FIND_ALL_CATALOGS_Q = "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n" +
             "select ?catalog where { \n" +
@@ -84,12 +86,25 @@ public class OdsOdLinker {
     }
 
     private List<String> findAllCatalogs() {
-        List<String> catalogs = SparqlService.queryEndpoint(SPARQL_ENDPOINT,
-                FIND_ALL_CATALOGS_Q, "catalog").stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        // First result is the variable
-        catalogs.remove(0);
+        // Repeat the query offsetting the result until all triples are returned
+        int offset = 0;
+        int results;
+        List<String> catalogs = new ArrayList<>();
+        do {
+            List<String> tempResult =
+                    SparqlService.queryEndpoint(SPARQL_ENDPOINT,
+                    getAllCatalogsQueryWithOffset(QUERY_LIMIT, offset),
+                    "catalog").stream()
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList());
+            // First result is the variable
+            tempResult.remove(0);
+            // check the # of returned results
+            results = tempResult.size();
+            offset += QUERY_LIMIT;
+            // Add the resulting triples
+            catalogs.addAll(tempResult);
+        } while (results != 0);
         return catalogs;
     }
 
@@ -108,6 +123,11 @@ public class OdsOdLinker {
                         "    filter(?conceptLabel=?sdgLabel)\n" +
                         "}",
                 catalog);
+    }
+
+    private String getAllCatalogsQueryWithOffset(int limit, int offset) {
+        return String.format("%s \nQUERY_LIMIT %d\nOFFSET %d",
+                FIND_ALL_CATALOGS_Q, limit, offset);
     }
 
     public void writeRdfFile() {
