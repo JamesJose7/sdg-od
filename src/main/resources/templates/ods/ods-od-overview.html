@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Login')"></head>
+<body>
+<div th:replace="layout :: nav"></div>
+
+
+<div class="container pt-5 pb-5">
+    <h1>Sustainable Development Goals as a graph</h1>
+    <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, alias amet architecto aspernatur assumenda culpa deserunt dolore enim id itaque iusto labore necessitatibus recusandae rem, velit, voluptatem voluptatibus! Consequuntur, praesentium?</span><span>Aspernatur dignissimos ea esse illo iste iusto, natus voluptatem! Atque doloribus earum maxime nesciunt, quod temporibus. Alias aliquid atque cumque cupiditate deserunt doloribus, ea libero magnam nostrum odit, officiis quo.</span><span>Atque consequuntur distinctio iure minus nesciunt non nulla placeat qui quod rem reprehenderit, ullam velit veritatis voluptas, voluptatibus! Ab accusantium, atque consequatur corporis enim id iure laborum porro quas vitae.</span><span>Alias aliquam architecto, aspernatur commodi consequatur dicta dolores eaque explicabo facere facilis fugiat illum itaque iusto libero minima nesciunt pariatur perspiciatis placeat porro quibusdam quod ratione repellendus rerum sint ullam?</span><span>Commodi dicta dignissimos, dolores eius, id itaque nobis perspiciatis porro quibusdam recusandae rem repellat temporibus voluptatum. Accusantium at cumque dolor dolorem, ea eaque, fugit id, ipsa iure nobis quae tempora.</span></p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error laboriosam odit quae recusandae rerum tempore tenetur unde. Ducimus ea est illo, libero nam nihil quaerat. Asperiores consectetur facere tempora unde.</p>
+    <div style="width: 100%; overflow: auto;">
+        <div id="result"></div>
+    </div>
+    <h1 class="mt-4">Connections between Open Data and the SDG</h1>
+
+</div>
+
+<div th:replace="layout :: scripts"></div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script th:src="@{/assets/d3/d3sparql.js}"></script>
+<script>
+    function exec() {
+        // var endpoint = d3.select("#endpoint").property("value")
+        // var sparql = d3.select("#sparql").property("value")
+        var endpoint = "http://192.168.99.100:32768/sparqlQuery";
+        var sparql = "select ?name ?label where {\n" +
+            "?s a skos:Concept ;\n" +
+            "    skos:inScheme ?concept ;\n" +
+            "    skos:prefLabel ?name .\n" +
+            "?concept rdfs:label ?label .\n" +
+            "FILTER regex(str(?concept), \"SDG_Goal\")\n" +
+            "} ";
+        d3sparql.query(endpoint, sparql, render)
+    }
+    function render(json) {
+        var config = {
+            "charge": -200,
+            "distance": 65,
+            "width": 1110,
+            "height": 750,
+            "selector": "#result"
+        }
+        d3sparql.forcegraph(json, config)
+    }
+    function exec_offline() {
+        d3.json("cache/dbpedia/proglang_pair.json", render)
+    }
+    function toggle() {
+        d3sparql.toggle()
+    }
+    $( document ).ready(function() {
+        exec();
+    });
+</script>
+</body>
+</html>

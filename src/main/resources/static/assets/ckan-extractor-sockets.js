@@ -32,6 +32,7 @@ function onServerResult(message) {
         $("#downloadLink").append("<a class='rdfLinks' href='" + message + "'>Download Triples</a>");
         $('#extractButton').removeClass("running");
         $('#extractButton').attr("disabled", false);
+        document.location.reload();
     }
 }
 
