@@ -105,14 +105,27 @@ a.disabled-link {
 
 .modal-body {padding: 10px 16px;}
 
+.graph-container {
+    width: 60%;
+    margin: 0 auto;
+}
+
 @media (max-width: 992px) {
     .download-resource {
         margin-top: 1em;
+    }
+
+    .graph-container {
+        width: 80%;
     }
 }
 
 @media (max-width: 576px) {
     .modal-content {
         width: 80%;
+    }
+
+    .graph-container {
+        width: 100%;
     }
 }
