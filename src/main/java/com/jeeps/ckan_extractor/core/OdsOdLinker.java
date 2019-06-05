@@ -17,11 +17,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.jeeps.ckan_extractor.dao.KnowledgeBaseDaoImpl.*;
+
 public class OdsOdLinker {
     private Model model;
     private FileOutputStream os;
 
-    public static final String SPARQL_ENDPOINT = "http://192.168.99.100:32770/sparqlQuery";
     public static final String DATA_PREFIX = "http://ods-od.org/data/";
     public static final String SCHEMA_PREFIX = "http://ods-od.org/schema/";
     private static final String DBR_PREFIX = "http://dbpedia.org/resource/";
