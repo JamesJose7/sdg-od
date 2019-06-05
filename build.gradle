@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.1.4.RELEASE'
     id 'java'
-    /*id 'war'*/
+    id 'war'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -9,12 +9,13 @@ apply plugin: 'io.spring.dependency-management'
 group 'com.jeeps'
 version '1.0-SNAPSHOT'
 
-jar {
-    baseName = 'ckan-extractor'
-    version = '1.0'
-}
+group = 'com.jeeps'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
 
-sourceCompatibility = 1.11
+bootWar {
+    archiveName="ods-od.war"
+}
 
 repositories {
     mavenCentral()
@@ -41,11 +42,11 @@ dependencies {
     implementation 'org.webjars:jquery-ui:1.12.1'
 
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'mysql:mysql-connector-java'
-    implementation 'org.postgresql:postgresql:9.4-1201-jdbc4'
+    implementation 'mysql:mysql-connector-java'
+    /*implementation 'org.postgresql:postgresql:9.4-1201-jdbc4'*/
     
     // War deployment
-//    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat' 
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat' 
     
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     
@@ -54,12 +55,4 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.13'
     implementation 'org.apache.jena:apache-jena-libs:3.10.0'
 //    implementation 'org.slf4j:slf4j-simple:1.6.2'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = 4.10
-}
-
-task stage {
-    dependsOn build
 }

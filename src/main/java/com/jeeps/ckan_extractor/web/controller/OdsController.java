@@ -1,5 +1,6 @@
 package com.jeeps.ckan_extractor.web.controller;
 
+import com.jeeps.ckan_extractor.core.OdsOdLinker;
 import com.jeeps.ckan_extractor.service.OdsOdStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +15,9 @@ public class OdsController {
     @Autowired
     private OdsOdStatisticsService odsOdStatisticsService;
 
-    @RequestMapping("/ods/overview")
+    @RequestMapping("/sdg/overview")
     public String odsOverview(Model model) {
+        model.addAttribute("sparqlEndpoint", OdsOdLinker.SPARQL_ENDPOINT);
         try {
             Map<String, Integer> datasetsPerOds = odsOdStatisticsService.howManyDatasetsRelateToEachGoal();
             model.addAttribute("odsLabels", datasetsPerOds.keySet());

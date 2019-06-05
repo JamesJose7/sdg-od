@@ -72,7 +72,6 @@ public class CkanExtractor {
     private void extractDatasets(String json) {
         List<String> ckanDatasets = parseCkanContent(json);
         ckanDatasets = findMissingDatasets(ckanDatasets);
-        System.out.println();
         ckanDatasets.parallelStream()
 //                .limit(MAX_SIZE)
                 .forEach(dataset -> mHttpService.
@@ -234,21 +233,19 @@ public class CkanExtractor {
         for (int i = 0; i < packageResources.length(); i++) {
             JSONObject resourceJson = packageResources.getJSONObject(i);
             // Get complex attributes
-            // TODO: Fix name and description extraction as done above
-            Optional name = resourceJson.getJSONObject("name").toMap().entrySet().stream()
-                    .filter(e -> e.getKey().equals("en"))
-                    .map(e -> e.getValue().toString())
+           Optional name = resourceJson.getJSONObject("name").toMap().values().stream()
+                    .filter(o -> !((String) o).isEmpty())
                     .findFirst();
-            Optional description = resourceJson.getJSONObject("description").toMap().entrySet().stream()
-                    .filter(e -> e.getKey().equals("en"))
-                    .map(e -> e.getValue().toString())
+
+            Optional description = resourceJson.getJSONObject("description").toMap().values().stream()
+                    .filter(o -> !((String) o).isEmpty())
                     .findFirst();
 
             ckanResources.add(
                     new CkanResource.CkanResourceBuilder(resourceJson.optString("id"),
                             resourceJson.optString("package_id"))
-                            .withDescription(description.isPresent() ? description.get().toString() : "")
-                            .withName(name.isPresent() ? name.get().toString() : "")
+                            .withDescription(description.isPresent() ? description.get().toString() : "No description")
+                            .withName(name.isPresent() ? name.get().toString() : "No name")
                             .withFormat(resourceJson.optString("format"))
                             .withCreated(resourceJson.optString("created"))
                             .withLastModified(resourceJson.optString("last_modified"))

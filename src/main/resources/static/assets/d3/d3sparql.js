@@ -103,9 +103,6 @@ d3sparql.query = function(endpoint, sparql, callback) {
       d3sparql.forcegraph(json, config)
       d3sparql.sankey(json, config)
     }
-
-  TODO:
-    Should follow the convention in the miserables.json https://gist.github.com/mbostock/4062045 to contain group for nodes and value for edges.
 */
 d3sparql.graph = function(json, config) {
   config = config || {}
@@ -430,7 +427,7 @@ d3sparql.barchart = function(json, config) {
     "var_y":    config.var_y    || head[1],
     "width":    config.width    || 750,
     "height":   config.height   || 300,
-    "margin":   config.margin   || 80,  // TODO: to make use of {top: 10, right: 10, bottom: 80, left: 80}
+    "margin":   config.margin   || 80,
     "selector": config.selector || null
   }
 
@@ -597,7 +594,6 @@ d3sparql.piechart = function(json, config) {
   slice.attr({
     "stroke": "#ffffff",
   })
-  // TODO: not working?
   svg.selectAll("text").attr({
     "stroke": "none",
     "fill": "black",
@@ -784,8 +780,6 @@ d3sparql.scatterplot = function(json, config) {
     }
     </style>
 
-  TODO:
-    Try other d3.layout.force options.
 */
 d3sparql.forcegraph = function(json, config) {
   config = config || {}
@@ -924,7 +918,7 @@ d3sparql.sankey = function(json, config) {
   var nodes = graph.nodes
   var links = graph.links
   for (var i = 0; i < links.length; i++) {
-    links[i].value = 2  // TODO: fix to use values on links
+    links[i].value = 2
   }
   var sankey = d3.sankey()
     .size([opts.width, opts.height])
@@ -1393,8 +1387,6 @@ d3sparql.sunburst = function(json, config) {
     }
     </style>
 
-  TODO:
-    Fix rotation angle for each text to avoid string collision
 */
 d3sparql.circlepack = function(json, config) {
   config = config || {}
