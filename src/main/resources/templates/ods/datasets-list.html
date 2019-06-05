@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Datasets')"></head>
+<body>
+<div th:replace="layout :: nav"></div>
+
+<main class="container">
+    <h1 class="text-center mt-3 mb-4">Datasets related to the SDG</h1>
+    <div class="table-responsive">
+        <table id="odsDatasetsTable" class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>ODS</th>
+            </tr>
+            </thead>
+            <!--<tbody>
+            <tr th:each="dataset : ${datasets}">
+                <td><a th:href="@{|/datasets/${dataset.datasetUri}|}" th:text="${dataset.dataset}"></a></td>
+                <td><a th:href="@{|/datasets/${dataset.sdgUri}|}" th:text="${dataset.sdg}"></a></td>
+            </tr>
+            </tbody>-->
+        </table>
+    </div>
+</main>
+
+<div th:replace="layout :: scripts"></div>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#odsDatasetsTable').DataTable({
+            responsive: true,
+            deferRender:    true,
+            "sAjaxSource": "/api/sdg/datasets",
+            "sAjaxDataProp": "",
+            "columns": [
+                {
+                    "data": "dataset",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/sdg/datasets/" + oData.datasetUri + "'>" + oData.dataset + "</a>");
+                    }
+                },
+                { "data": "sdg" }
+            ]
+        });
+    })
+</script>
+</body>
+</html>
