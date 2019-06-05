@@ -9,6 +9,7 @@ import org.apache.jena.riot.RiotException;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.SKOS;
 
 import java.io.File;
@@ -22,7 +23,8 @@ public class SdgSemanticCreator {
     private Model model;
     private FileOutputStream os;
 
-    public static final String DATA_PREFIX = "http://example.org/data/";
+    public static final String DATA_PREFIX = "http://ods-od.org/data/";
+    public static final String SCHEMA_PREFIX = "http://ods-od.org/schema/";
     private static final String FRED_PREFIX = "http://www.ontologydesignpatterns.org/ont/fred/domain.owl#";
     private static final String DBR_PREFIX = "http://dbpedia.org/resource/";
 
@@ -54,10 +56,17 @@ public class SdgSemanticCreator {
 
     private void initializeVocabs() {
         // Data prefix
-        model.setNsPrefix("data", DATA_PREFIX);
+        model.setNsPrefix("odsdata", DATA_PREFIX);
 
         // SKOS prefix
         model.setNsPrefix("skos", SKOS.getURI());
+
+        // DCTerms prefix
+        model.setNsPrefix("dct", DCTerms.getURI());
+
+        // Create custom property
+        model.setNsPrefix("ods", SCHEMA_PREFIX);
+        model.createProperty("ods", "automaticallyAnnotatedSubject");
     }
 
     public synchronized void generateTriples() {
@@ -90,7 +99,8 @@ public class SdgSemanticCreator {
 
         // Create concept scheme
         Resource conceptScheme = model.createResource(DATA_PREFIX + sdgElement)
-                .addProperty(RDF.type, SKOS.ConceptScheme);
+                .addProperty(RDF.type, SKOS.ConceptScheme)
+                .addProperty(RDFS.label, getSDGLabel(sdgElement));
         // Get all owl:Class
         List<List<String>> resultStatements = SparqlService.queryModel(fredModel, queryClasses, "s");
         // Create a skos:Concept out of every class
@@ -101,7 +111,6 @@ public class SdgSemanticCreator {
                     if (result.contains(FRED_PREFIX)) {
                         String conceptUri = result.replace(FRED_PREFIX, DATA_PREFIX);
                         // Create resource
-                        // TODO: Test method createResource(Uri, Type)
                         model.createResource(conceptUri)
                                 .addProperty(RDF.type, SKOS.Concept)
                                 .addProperty(SKOS.prefLabel, result.replace(FRED_PREFIX, ""))
@@ -150,6 +159,10 @@ public class SdgSemanticCreator {
                 }
             }
         });
+    }
+
+    private String getSDGLabel(String sdgElement) {
+        return sdgElement.replaceAll("_", " ").replace("SDG ", "");
     }
 
     private String getConceptSchemeName(String fileName) {

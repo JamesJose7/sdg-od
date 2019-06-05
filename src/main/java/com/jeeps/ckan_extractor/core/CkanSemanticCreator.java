@@ -30,7 +30,7 @@ public class CkanSemanticCreator {
     );
 
     private Model mModel;
-    public static final String DATA_PREFIX = "http://example.org/data/";
+    public static final String DATA_PREFIX = "http://opendata.org/resource/";
 
     private final Random random;
     private FileOutputStream os;
