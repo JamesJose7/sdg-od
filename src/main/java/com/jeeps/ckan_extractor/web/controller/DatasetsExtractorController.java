@@ -89,7 +89,7 @@ public class DatasetsExtractorController {
                               Model model) {
         List<ExtractionHistory> extractionHistoryList = extractionHistoryService.findAllByUrl(repository);
         model.addAttribute("historyList", extractionHistoryList);
-        model.addAttribute("url", repository.replaceAll("/", ""));
+        model.addAttribute("url", repository);
         return "ckanPackages/extractor-history";
     }
 
@@ -97,7 +97,7 @@ public class DatasetsExtractorController {
     public String deleteRepository(@RequestParam("url") String url, RedirectAttributes redirectAttributes) {
         ckanExtractorService.deleteDatasets(url);
         redirectAttributes.addFlashAttribute("flash",
-                new FlashMessage("Repository deleted succesfully", FlashMessage.Status.SUCCESS));
+                new FlashMessage("Repository deleted successfully", FlashMessage.Status.SUCCESS));
         return "redirect:/admin/datasets/extractor";
     }
 }

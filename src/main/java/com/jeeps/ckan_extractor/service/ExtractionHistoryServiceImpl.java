@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExtractionHistoryServiceImpl implements ExtractionHistoryService {
@@ -15,6 +16,11 @@ public class ExtractionHistoryServiceImpl implements ExtractionHistoryService {
     @Override
     public Iterable<ExtractionHistory> findAll() {
         return historyDao.findAll();
+    }
+
+    @Override
+    public Optional<ExtractionHistory> findById(Long id) {
+        return historyDao.findById(id);
     }
 
     @Override

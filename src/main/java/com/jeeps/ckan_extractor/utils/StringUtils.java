@@ -35,6 +35,7 @@ public class StringUtils {
     }
 
     public static String removeUrlProtocol(String url) {
-       return url.replace("https://", "").replace("http://", "");
+       return url.replace("https://", "").replace("http://", "")
+               .split("/")[0];
     }
 }
