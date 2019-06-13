@@ -47,7 +47,8 @@
             <h4 class="border-top pt-4">Resources</h4>
             <div th:each="resource : ${package.getResources()}" class="containter">
                 <div class="col-12 bg-dark text-white pt-3 pb-2">
-                    <h5 th:text="${resource.name}"></h5>
+                    <h5 th:if="${!resource.name.isBlank()}" th:text="${resource.name}"></h5>
+                    <h5 th:unless="${!resource.name.isBlank()}">No title</h5>
                 </div>
                 <div class="col-12 bg-light pt-2 pb-2 mb-5">
                     <div class="row">
