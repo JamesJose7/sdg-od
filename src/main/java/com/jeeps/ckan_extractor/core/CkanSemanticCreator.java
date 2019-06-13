@@ -58,6 +58,10 @@ public class CkanSemanticCreator {
         String dct = DCTerms.getURI();
         mModel.setNsPrefix("dct", dct);
 
+        // RDF Schema prefix
+        String rdfs = RDFS.getURI();
+        mModel.setNsPrefix("rdfs", rdfs);
+
         // SKOS prefix
         String skos = SKOS.getURI();
         mModel.setNsPrefix("skos", skos);
@@ -65,8 +69,9 @@ public class CkanSemanticCreator {
 
     public void generateTriples(CkanPackage aPackage) {
         // Create package as Catalog
-        Resource catalog = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(aPackage.getTitle())))
+        Resource catalog = mModel.createResource(DATA_PREFIX + upperCaseFirst(urlify(aPackage.getTitle() + "_catalog")))
                 .addProperty(RDF.type, DCAT.Catalog)
+                .addProperty(DCTerms.identifier, aPackage.getIdDB() + "")
                 .addProperty(FOAF.homepage, mModel.createResource(aPackage.getOriginUrl()));
 
         if (exists(aPackage.getAuthor()))
