@@ -22,4 +22,9 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     public Map<String, Integer> howManyDatasetsRelateToEachGoal() {
         return knowledgeBaseDao.howManyDatasetsRelateToEachGoal();
     }
+
+    @Override
+    public List<SdgRelatedDataset> getRelatedOdsByDatasetId(Long id) {
+        return knowledgeBaseDao.getRelatedOdsByDatasetId(id);
+    }
 }

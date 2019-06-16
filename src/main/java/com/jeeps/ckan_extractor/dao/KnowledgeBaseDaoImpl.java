@@ -4,6 +4,7 @@ import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.SparqlService;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -54,5 +55,29 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
         // sort it
         Map<String, Integer> sortedCountResult = new TreeMap<>(countResult);
         return sortedCountResult;
+    }
+
+    @Override
+    public List<SdgRelatedDataset> getRelatedOdsByDatasetId(Long id) {
+        String query = "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n" +
+                "PREFIX dct: <http://purl.org/dc/terms/>\n" +
+                "PREFIX ods: <http://ods-od.org/schema/>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "\n" +
+                "select ?catalog ?id ?ods ?odsLabel where {\n" +
+                " ?catalog a dcat:Catalog ;\n" +
+                "          dct:identifier ?id ;\n" +
+                "          ods:automaticallyAnnotatedSubject ?ods .\n" +
+                " ?ods rdfs:label ?odsLabel .\n" +
+                " FILTER(?id=\"" + id  + "\")\n" +
+                "}";
+        List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT,
+                query, "catalog", "id", "ods", "odsLabel");
+        result.remove(0);
+        // Transform into Object list
+        List<SdgRelatedDataset> sdgRelatedDatasets = result.stream()
+                .map(o -> new SdgRelatedDataset(o.get(0), Long.parseLong(o.get(1)), o.get(2), o.get(3)))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return sdgRelatedDatasets;
     }
 }

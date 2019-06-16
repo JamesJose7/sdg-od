@@ -17,6 +17,14 @@ public class SdgRelatedDataset {
         this.sdg = sdg;
     }
 
+    public SdgRelatedDataset(String datasetUri, Long id, String sdgUri, String sdg) {
+        this.datasetUri = datasetUri;
+        this.dataset = dataset;
+        this.datasetId = id;
+        this.sdgUri = sdgUri;
+        this.sdg = sdg;
+    }
+
     public Long getDatasetId() {
         return datasetId;
     }

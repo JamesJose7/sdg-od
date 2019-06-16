@@ -44,6 +44,27 @@
             <p th:text="${package.description == null} ? 'No description' : ${package.description}" class="text-justify">Description</p>
             <br>
 
+            <div th:if="${sdgs != null && !sdgs.isEmpty()}">
+                <h4 class="border-top pt-4">Related SDGs</h4>
+
+                <div class="" th:each=" sdg : ${sdgs}">
+                    <div class="row">
+                        <div class="col-4">
+                            <img th:src="@{|/assets/icons/sdg_icons/${T(com.jeeps.ckan_extractor.utils.SdgResourcesHelper).getFileName(sdg.sdg)}.png|}" alt="" style="width: 100%;">
+                        </div>
+                        <div class="col-8">
+                            <h5 style="padding: 0;"><strong th:text="${T(com.jeeps.ckan_extractor.utils.SdgResourcesHelper).getSdgTitle(sdg.sdg)}"></strong></h5>
+                            <p class="col-12" style="padding: 0;" th:text="${T(com.jeeps.ckan_extractor.utils.SdgResourcesHelper).getSdgDescription(sdg.sdg)}"></p>
+                            <a th:href="@{${T(com.jeeps.ckan_extractor.utils.SdgResourcesHelper).getSdgMoreInfoLink(sdg.sdg)}}">More info...</a>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+
+
+            <br>
+
             <h4 class="border-top pt-4">Resources</h4>
             <div th:each="resource : ${package.getResources()}" class="containter">
                 <div class="col-12 bg-dark text-white pt-3 pb-2">

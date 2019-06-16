@@ -8,4 +8,5 @@ import java.util.Map;
 public interface KnowledgeBaseService {
     List<SdgRelatedDataset> findAllCatalogsRelatedToOds();
     Map<String, Integer> howManyDatasetsRelateToEachGoal();
+    List<SdgRelatedDataset> getRelatedOdsByDatasetId(Long id);
 }

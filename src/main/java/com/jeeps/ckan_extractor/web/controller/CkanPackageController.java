@@ -1,7 +1,9 @@
 package com.jeeps.ckan_extractor.web.controller;
 
 import com.jeeps.ckan_extractor.model.CkanPackage;
+import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
+import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,8 @@ import java.util.List;
 public class CkanPackageController {
     @Autowired
     private CkanPackageService ckanPackageService;
+    @Autowired
+    private KnowledgeBaseService knowledgeBaseService;
 
     @RequestMapping("/datasets")
     public String showDatasets(@PageableDefault(size = 30)Pageable pageable,
@@ -60,7 +64,9 @@ public class CkanPackageController {
     public String showDatasetInfo(@PathVariable("package") Long packageId,
                                   Model model) {
         CkanPackage ckanPackage = ckanPackageService.findOne(packageId);
+        List<SdgRelatedDataset> sdgRelatedDatasets = knowledgeBaseService.getRelatedOdsByDatasetId(packageId);
         model.addAttribute("package", ckanPackage);
+        model.addAttribute("sdgs", sdgRelatedDatasets);
         return "ckanPackages/ckan-package";
     }
 }
