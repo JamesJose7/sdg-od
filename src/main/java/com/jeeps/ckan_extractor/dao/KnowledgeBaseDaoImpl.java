@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Repository
 public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
 
-    public static final String SPARQL_ENDPOINT = "http://192.168.99.100:32770/sparqlQuery";
+    public static final String SPARQL_ENDPOINT = "http://192.168.99.100:32768/sparqlQuery";
 
     @Override
     public List<SdgRelatedDataset> findAllCatalogsRelatedToOds() {
@@ -20,19 +20,20 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
                 "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n" +
                 "PREFIX dct: <http://purl.org/dc/terms/>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "select ?catalog ?title ?ods ?odsLabel where { \n" +
+                "select ?catalog ?title ?id ?ods ?odsLabel where { \n" +
                 "\t?catalog ods:automaticallyAnnotatedSubject ?ods ;\n" +
                 "          a dcat:Catalog ;\n" +
+                "          dct:identifier ?id ;\n" +
                 "          dct:title ?title .\n" +
                 "    ?ods rdfs:label ?odsLabel\n" +
                 "}";
         // Get sparql result
 
         List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT, query,
-                "catalog", "title", "ods", "odsLabel");
+                "catalog", "title", "id", "ods", "odsLabel");
         result.remove(0);
         List<SdgRelatedDataset> sdgRelatedDatasets = result.stream()
-                .map(l -> new SdgRelatedDataset(l.get(0), l.get(1), l.get(2), l.get(3)))
+                .map(l -> new SdgRelatedDataset(l.get(0), l.get(1), Long.parseLong(l.get(2)), l.get(3), l.get(4)))
                 .collect(Collectors.toList());
         return sdgRelatedDatasets;
     }

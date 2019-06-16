@@ -57,9 +57,9 @@ public class CkanPackageController {
     }
 
     @RequestMapping("/datasets/{package}")
-    public String showDatasetInfo(@PathVariable("package") String packageName,
+    public String showDatasetInfo(@PathVariable("package") Long packageId,
                                   Model model) {
-        CkanPackage ckanPackage = ckanPackageService.findByName(packageName);
+        CkanPackage ckanPackage = ckanPackageService.findOne(packageId);
         model.addAttribute("package", ckanPackage);
         return "ckanPackages/ckan-package";
     }

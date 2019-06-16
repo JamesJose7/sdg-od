@@ -14,12 +14,6 @@
                 <th>ODS</th>
             </tr>
             </thead>
-            <!--<tbody>
-            <tr th:each="dataset : ${datasets}">
-                <td><a th:href="@{|/datasets/${dataset.datasetUri}|}" th:text="${dataset.dataset}"></a></td>
-                <td><a th:href="@{|/datasets/${dataset.sdgUri}|}" th:text="${dataset.sdg}"></a></td>
-            </tr>
-            </tbody>-->
         </table>
     </div>
 </main>
@@ -37,7 +31,7 @@
                 {
                     "data": "dataset",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                        $(nTd).html("<a href='/sdg/datasets/" + oData.datasetUri + "'>" + oData.dataset + "</a>");
+                        $(nTd).html("<a href='/datasets/" + oData.datasetId + "'>" + oData.dataset + "</a>");
                     }
                 },
                 { "data": "sdg" }

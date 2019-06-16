@@ -74,15 +74,15 @@ public class OdsOdLinker {
     private void findSimilarTagsInOds(List<String> catalogs) {
         catalogs
                 .forEach(catalog -> {
-            List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT,
-                    getSimilarityQuery(catalog), "sdgConcept", "scheme");
-            // Remove variables
-            result.remove(0);
-            // Add link between the catalog and each ODS
-            result.forEach(link ->
-                    model.createResource(catalog)
-                    .addProperty(automaticallyAnnotagedSubject,
-                            model.createResource(link.get(1))));
+                    List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT,
+                            getSimilarityQuery(catalog), "concept", "scheme");
+                    // Remove variables
+                    result.remove(0);
+                    // Add link between the catalog and each ODS
+                    result.forEach(link ->
+                            model.createResource(catalog)
+                                    .addProperty(automaticallyAnnotagedSubject,
+                                            model.createResource(link.get(1))));
         });
     }
 
@@ -110,10 +110,10 @@ public class OdsOdLinker {
     }
 
     private String getSimilarityQuery(String catalog) {
-        return String.format("PREFIX data: <http://example.org/data/>\n" +
+        return String.format("PREFIX data: <http://opendata.org/resource/>\n" +
                         "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n" +
                         "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n" +
-                        "select ?sdgConcept ?scheme where { \n" +
+                        "select ?concept ?scheme where { \n" +
                         "\t<%s> dcat:themeTaxonomy ?taxonomy .\n" +
                         "    ?concept a skos:Concept ;\n" +
                         "             skos:inScheme ?taxonomy ;\n" +
@@ -127,7 +127,7 @@ public class OdsOdLinker {
     }
 
     private String getAllCatalogsQueryWithOffset(int limit, int offset) {
-        return String.format("%s \nQUERY_LIMIT %d\nOFFSET %d",
+        return String.format("%s \nLIMIT %d\nOFFSET %d",
                 FIND_ALL_CATALOGS_Q, limit, offset);
     }
 

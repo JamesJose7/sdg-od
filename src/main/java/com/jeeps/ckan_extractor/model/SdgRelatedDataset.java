@@ -1,6 +1,7 @@
 package com.jeeps.ckan_extractor.model;
 
 public class SdgRelatedDataset {
+    private Long datasetId;
     private String datasetUri;
     private String dataset;
     private String sdgUri;
@@ -8,11 +9,20 @@ public class SdgRelatedDataset {
 
     public SdgRelatedDataset() {}
 
-    public SdgRelatedDataset(String datasetUri, String dataset, String sdgUri, String sdg) {
+    public SdgRelatedDataset(String datasetUri, String dataset, Long id, String sdgUri, String sdg) {
         this.datasetUri = datasetUri;
         this.dataset = dataset;
+        this.datasetId = id;
         this.sdgUri = sdgUri;
         this.sdg = sdg;
+    }
+
+    public Long getDatasetId() {
+        return datasetId;
+    }
+
+    public void setDatasetId(Long datasetId) {
+        this.datasetId = datasetId;
     }
 
     public String getDatasetUri() {
