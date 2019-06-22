@@ -24,29 +24,18 @@ public class ToolsController {
 
         // Packages count
         List<Integer> ckanPackageCount = new ArrayList<>();
-        List<Long> resourcesCount = new ArrayList<>();
         originUrls.forEach(url -> {
             Integer originUrlCount = ckanPackageService.countDistinctByOriginUrl(url);
             ckanPackageCount.add(originUrlCount);
-
-            // Resources count
-            // TODO: Too resource intensive
-            /*Collection<CkanPackage> ckanPackages = ckanPackageService.findAllByOriginUrl(url);
-            Long count = ckanPackages.stream()
-                    .map(CkanPackage::getResources)
-                    .mapToLong(Collection::size)
-                    .sum();
-            resourcesCount.add(count);*/
         });
         model.addAttribute("urlCount", ckanPackageCount);
-        /*model.addAttribute("resourcesCount", resourcesCount);*/
 
         // Serialization formats
         model.addAttribute("formats", SERIALIZATION_FORMATS);
 
         // Create a random socket for each client
         Random random = new Random();
-        String socketUri = "socket-" + random.nextInt(1000);
+        String socketUri = "socket-" + random.nextInt(10000);
         model.addAttribute("socketUri", socketUri);
         return "converter";
     }

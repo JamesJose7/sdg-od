@@ -184,14 +184,14 @@ public class CkanSemanticCreator {
                 });
     }
 
-    public void writeRdfFile(String fileName, String serializeFormat) throws IOException {
+    public void writeRdfFile(String path, String fileName, String serializeFormat) throws IOException {
         String format = serializeFormat.split("\\|")[0];
         String extension = serializeFormat.split("\\|")[1];
         // File dump
-        File temp = new File("temp/");
+        File temp = new File(path);
         if (!(temp.exists()))
             Files.createDirectories(temp.toPath()); // Create temp directory if id doesn't exist
-        File fos = new File("temp/" + fileName + extension);
+        File fos = new File(path + fileName + extension);
         os = new FileOutputStream(fos);
         // Write model to file
         RDFWriter writer = mModel.getWriter(format);
@@ -203,5 +203,9 @@ public class CkanSemanticCreator {
         if (string == null)
             return false;
         return !string.isBlank() && !string.isEmpty();
+    }
+
+    public void loadTriples(String fileName) {
+        mModel.read(fileName);
     }
 }

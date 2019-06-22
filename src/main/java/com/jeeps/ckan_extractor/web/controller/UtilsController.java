@@ -16,7 +16,7 @@ import java.io.InputStream;
 @Controller
 public class UtilsController {
     @RequestMapping(value = "/files/{file_name}", method = RequestMethod.GET)
-    public void getFile(@PathVariable("file_name") String fileName,
+    public void getTempFile(@PathVariable("file_name") String fileName,
                         HttpServletResponse response) {
         try {
             // Add temp dir
@@ -29,6 +29,26 @@ public class UtilsController {
             FileCopyUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
             deleteTempFile(fileName);
+        } catch (IOException ex) {
+//            Log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+        System.out.println("Finished");
+    }
+
+    @RequestMapping(value = "/rdf-cache/{file_name}", method = RequestMethod.GET)
+    public void getFile(@PathVariable("file_name") String fileName,
+                        HttpServletResponse response) {
+        try {
+            // Add temp dir
+            fileName = "rdf-cache/" + fileName;
+            // get your file as InputStream
+            InputStream is = new FileInputStream(fileName);
+
+            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+            response.setContentType("application/xml");
+            FileCopyUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
         } catch (IOException ex) {
 //            Log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
             throw new RuntimeException("IOError writing file to output stream");

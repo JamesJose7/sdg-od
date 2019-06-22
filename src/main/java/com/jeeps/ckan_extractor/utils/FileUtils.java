@@ -1,5 +1,6 @@
 package com.jeeps.ckan_extractor.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,5 +13,9 @@ public class FileUtils {
         byte[] strToBytes = content.getBytes();
         Files.createDirectories(path.getParent());
         Files.write(path, strToBytes);
+    }
+
+    public static boolean isFilePresent(String fileName) {
+        return new File(fileName).exists();
     }
 }

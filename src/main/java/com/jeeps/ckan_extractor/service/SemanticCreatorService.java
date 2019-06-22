@@ -13,19 +13,26 @@ import java.util.Collection;
 public class SemanticCreatorService {
     private CkanSemanticCreator semanticCreator;
 
+    public void createNewModel() {
+        semanticCreator = new CkanSemanticCreator();
+    }
+
 //    @Async("asyncExecutor")
     public Long generateCkanTriples(Collection<CkanPackage> ckanPackages) {
         Instant start = Instant.now();
 
         // Generate triples
-        semanticCreator = new CkanSemanticCreator();
         ckanPackages.forEach(ckanPackage -> semanticCreator.generateTriples(ckanPackage));
 
         Instant finish = Instant.now();
         return Duration.between(start, finish).toMillis();
     }
 
-    public void writeFile(String fileName, String serializeFormat) throws IOException {
-        semanticCreator.writeRdfFile(fileName, serializeFormat);
+    public void writeFile(String path, String fileName, String serializeFormat) throws IOException {
+        semanticCreator.writeRdfFile(path, fileName, serializeFormat);
+    }
+
+    public void loadTriples(String fileName) {
+        semanticCreator.loadTriples(fileName);
     }
 }

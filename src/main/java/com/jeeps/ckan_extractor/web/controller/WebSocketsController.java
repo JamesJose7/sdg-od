@@ -1,11 +1,14 @@
 package com.jeeps.ckan_extractor.web.controller;
 
+import com.jeeps.ckan_extractor.core.CkanSemanticCreator;
 import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.stomp.CkanUrlsStomp;
 import com.jeeps.ckan_extractor.model.stomp.WebSocketResult;
 import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.SemanticCreatorService;
+import com.jeeps.ckan_extractor.utils.FileUtils;
+import com.jeeps.ckan_extractor.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +45,37 @@ public class WebSocketsController {
             return new WebSocketResult("");
         }
 
+        // File names for each repo
+        List<String> fileNames = new ArrayList<>();
+        // Get the package list for repos that haven't been transformed yet
         List<CkanPackage> ckanPackageList = new ArrayList<>();
         ckanUrlsStomp.getCkanUrls().forEach(url -> {
-            Collection<CkanPackage> ckanPackages = ckanPackageService.findAllByOriginUrl(url);
-            ckanPackageList.addAll(ckanPackages);
+            String fileName = StringUtils.removeUrlProtocol(url).replaceAll("\\.", "-");
+            fileNames.add(fileName);
+            if (!FileUtils.isFilePresent("rdf/" + fileName + ".rdf")) {
+                Collection<CkanPackage> ckanPackages = ckanPackageService.findAllByOriginUrl(url);
+                ckanPackageList.addAll(ckanPackages);
+
+                // Generate missing triples files
+                semanticCreatorService.createNewModel();
+                semanticCreatorService.generateCkanTriples(ckanPackages);
+                try {
+                    semanticCreatorService.writeFile("rdf/", fileName, CkanSemanticCreator.RDF_XML);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
-        semanticCreatorService.generateCkanTriples(ckanPackageList);
+        // Load existing models
+        semanticCreatorService.createNewModel();
+        fileNames.forEach(fileName -> semanticCreatorService.loadTriples("rdf/" + fileName + ".rdf"));
+
+        //Generate file name
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss-SSS");
         String fileName = dateFormat.format(new Date());
         try {
-            semanticCreatorService.writeFile(fileName, ckanUrlsStomp.getFormat());
+            semanticCreatorService.writeFile("temp/", fileName, ckanUrlsStomp.getFormat());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,7 +94,6 @@ public class WebSocketsController {
 
         // Extract Datasets from each endpoint
         ckanUrlsStomp.getCkanUrls().forEach(url -> ckanExtractorService.beginExtraction(url));
-
 
         return new WebSocketResult("What");
     }
