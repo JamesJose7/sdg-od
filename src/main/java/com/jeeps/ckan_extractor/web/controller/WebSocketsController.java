@@ -80,7 +80,7 @@ public class WebSocketsController {
             e.printStackTrace();
         }
 
-        return new WebSocketResult("http://localhost:8080/files/" +
+        return new WebSocketResult("/files/" +
                 fileName + ckanUrlsStomp.getFormat().split("\\|")[1]);
     }
 

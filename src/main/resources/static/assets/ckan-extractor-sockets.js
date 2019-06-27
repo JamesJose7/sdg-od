@@ -29,7 +29,9 @@ function onServerResult(message) {
     } else {
         // Replace link with new one
         $(".rdfLinks").remove();
-        $("#downloadLink").append("<a class='rdfLinks' href='" + message + "'>Download Triples</a>");
+        var getUrl = window.location;
+        var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        $("#downloadLink").append("<a class='rdfLinks' href='" + baseUrl + message + "'>Download Triples</a>");
         $('#extractButton').removeClass("running");
         $('#extractButton').attr("disabled", false);
         document.location.reload();
