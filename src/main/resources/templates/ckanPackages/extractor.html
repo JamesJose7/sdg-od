@@ -2,11 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout :: head('Extractor')"></head>
 <body>
+<div class="main-container">
 <div th:replace="layout :: nav"></div>
 
-
 <div class="container">
-    <!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
     <div th:replace="layout :: flash"></div>
     <div class="row mt-5">
         <h1 class="col-12">CKAN Repositories extractor</h1>
@@ -54,7 +53,7 @@
     <div class="row justify-content-center mt-1 text-center invisible" id="failMessage">
         <div class="flash col failure">Please select at least one repository</div>
     </div>
-    <div class="row justify-content-center mt-3">
+    <div class="row justify-content-center mt-3 mb-5">
         <button type="submit" class="btn btn-primary ld-ext-right" id="extractButton">
             Extract
             <!--<div class="ld ld-ball ld-bounce"></div>-->
@@ -62,14 +61,10 @@
         </button>
     </div>
     </div>
-
-    <!--<div class="row mt-5">
-        <div class="col-md-12 text-center" id="conversation">
-            <div id="downloadLink"></div>
-        </div>
-    </div>-->
 </div>
 
+<div th:replace="layout :: main-footer"></div>
+</div>
 <div th:replace="layout :: scripts"></div>
 <div th:replace="layout :: websocketScripts"></div>
 <script th:src="@{/assets/ckan-extractor-sockets.js}" th:inline="javascript"></script>

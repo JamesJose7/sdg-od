@@ -1,3 +1,23 @@
+* {
+    box-sizing: border-box;
+}
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+html,
+body {
+    height: 100%;
+    position: relative;
+}
+.main-container {
+    min-height: 100vh; /* will cover the 100% of viewport */
+    overflow: hidden;
+    display: block;
+    position: relative;
+    padding-bottom: 316px; /* height of your footer */
+}
+
 header, footer {
     margin-bottom: 0 !important;
 }
@@ -13,6 +33,24 @@ body {
 
 nav {
     background-color: #202124 !important;
+}
+
+footer {
+    background-color: #242320 !important;
+    border-radius: 0 !important;
+
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer img {
+    display: block;
+    max-width:230px;
+    /*max-height:95px;*/
+    width: auto;
+    height: auto;
+    margin: 0 auto;
 }
 
 a.disabled-link {
@@ -108,6 +146,13 @@ a.disabled-link {
 .graph-container {
     width: 60%;
     margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    /* The footer will change height, adjust the main container width to keep the footer at the bottom */
+    .main-container {
+        padding-bottom: 463px; /* height of your footer */
+    }
 }
 
 @media (max-width: 992px) {

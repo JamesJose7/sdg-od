@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout :: head('Datasets')"></head>
 <body>
+<div class="main-container">
 <div th:replace="layout :: nav"></div>
 
 <main class="container">
@@ -81,6 +82,8 @@
 </div>
 </main>
 
+<div th:replace="layout :: main-footer"></div>
+</div>
 <div th:replace="layout :: scripts"></div>
 <script type="text/javascript">
     $(document).ready(function() {

@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout :: head('Login')"></head>
 <body>
+<div class="main-container">
 <div th:replace="layout :: main-header"></div>
 <div th:replace="layout :: nav"></div>
-
 
 <div class="container">
     <h1>Oops!</h1>
@@ -12,6 +12,8 @@
     <p>Try something else while we fix this please</p>
 </div>
 
+<div th:replace="layout :: main-footer"></div>
+</div>
 <div th:replace="layout :: scripts"></div>
 </body>
 </html>

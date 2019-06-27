@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout :: head('Login')"></head>
 <body>
+<div class="main-container">
 <div th:replace="layout :: nav"></div>
-
 
 <div class="container">
     <div class="row mt-5">
@@ -40,6 +40,8 @@
     </div>
 </div>
 
+<div th:replace="layout :: main-footer"></div>
+</div>
 <div th:replace="layout :: scripts"></div>
 </body>
 </html>

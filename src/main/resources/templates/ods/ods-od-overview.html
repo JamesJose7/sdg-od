@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout :: head('Login')"></head>
 <body>
+<div class="main-container">
 <div th:replace="layout :: nav"></div>
-
 
 <div class="container pt-5 pb-5 text-justify">
     <h1>Sustainable Development Goals as a graph</h1>
@@ -19,6 +19,8 @@
     </div>
 </div>
 
+<div th:replace="layout :: main-footer"></div>
+</div>
 <div th:replace="layout :: scripts"></div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>

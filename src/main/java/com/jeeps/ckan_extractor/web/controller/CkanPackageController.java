@@ -23,7 +23,7 @@ public class CkanPackageController {
     private KnowledgeBaseService knowledgeBaseService;
 
     @RequestMapping("/datasets")
-    public String showDatasets(@PageableDefault(size = 30)Pageable pageable,
+    public String showDatasets(@PageableDefault(size = 15)Pageable pageable,
                                @RequestParam(name = "q", required = false) String q,
                                @RequestParam(name = "originUrl", required = false) String originUrl,
                                @RequestParam(name = "filterType", required = false) String filterType,

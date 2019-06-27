@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="../../static/assets/app.css"/>
 </head>
 <body>
+<div class="main-container">
 <div th:replace="layout :: nav"></div>
 
 <main class="container" style="margin-top:30px">
@@ -92,7 +93,8 @@
     </div>
 </main>
 
-<div th:replace="layout :: package-footer"></div>
+<div th:replace="layout :: main-footer"></div>
+</div>
 <div th:replace="layout :: scripts"></div>
 </body>
 </html>

@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout :: head('Extractor')"></head>
 <body>
+<div class="main-container">
 <div th:replace="layout :: nav"></div>
-
 
 <div class="container">
     <!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
@@ -88,6 +88,8 @@
 
 </div>
 
+<div th:replace="layout :: main-footer"></div>
+</div>
 <div th:replace="layout :: scripts"></div>
 <script th:inline="javascript">
     // Get the modal
