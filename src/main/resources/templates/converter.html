@@ -6,21 +6,30 @@
 <div th:replace="layout :: nav"></div>
 
 <div class="container">
-<!--    <form th:action="@{/admin/extract}" method="post" class="mt-5 form-inline">-->
     <form class="mt-5" id="extractorForm">
-        <div class="row justify-content-center">
-            <p class="form-check col-10 col-lg-5 font-weight-bolder border-bottom">CKAN Repository</p>
-            <p class="col-2 col-lg-1 text-center font-weight-bold border-bottom">Datasets</p>
-        </div>
 
-        <div id="ckanUrlSelector">
-        <div class="row justify-content-center" th:if="${!ckanUrls.isEmpty()}" th:each="i : ${#numbers.sequence(0, ckanUrls.size() - 1)}">
-            <div class="form-check col-10 col-lg-5">
-                <input class="form-check-input pl-2" name="ckanURL" type="checkbox" th:value="${ckanUrls.get(i)}" th:id="|check${i}|">
-                <label th:for="|check${i}|" class="form-check-label" th:text="${ckanUrls.get(i)}"></label>
+        <div class="table-responsive">
+            <div class="col-lg-6" style="margin: 0 auto; padding: 0;">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>CKAN Repository</th>
+                        <th>Datasets</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ckanUrlSelector">
+                    <tr th:if="${!ckanUrls.isEmpty()}" th:each="i : ${#numbers.sequence(0, ckanUrls.size() - 1)}">
+                        <td class="form-check">
+                            <input class="form-check-input ml-1" name="ckanURL" type="checkbox" th:value="${ckanUrls.get(i)}" th:id="|check${i}|">
+                            <label th:for="|check${i}|" class="form-check-label pl-4" th:text="${ckanUrls.get(i)}"></label>
+                        </td>
+                        <td class="align-middle">
+                            <p th:text="${urlCount.get(i)}" class="badge badge-primary badge-pill" style="width: 100%; margin: 0;"></p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <p th:text="${urlCount.get(i)}" class="col-2 col-lg-1 badge badge-primary badge-pill"></p>
-        </div>
         </div>
 
         <div class="row mt-1 mb-1 justify-content-center" id="formatSelector">
@@ -44,7 +53,7 @@
         </div>
     </form>
 
-    <div class="row mt-5">
+    <div class="row mt-5 mb-4">
         <div class="col-md-12 text-center" id="conversation">
             <div id="downloadLink"></div>
         </div>
