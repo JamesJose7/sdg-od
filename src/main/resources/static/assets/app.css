@@ -15,7 +15,7 @@ body {
     overflow: hidden;
     display: block;
     position: relative;
-    padding-bottom: 316px; /* height of your footer */
+    padding-bottom: 253px; /* height of your footer */
 }
 
 header, footer {
@@ -46,7 +46,7 @@ footer {
 
 footer img {
     display: block;
-    max-width:230px;
+    max-width:190px;
     /*max-height:95px;*/
     width: auto;
     height: auto;
@@ -151,7 +151,7 @@ a.disabled-link {
 @media (max-width: 768px) {
     /* The footer will change height, adjust the main container width to keep the footer at the bottom */
     .main-container {
-        padding-bottom: 463px; /* height of your footer */
+        padding-bottom: 502px; /* height of your footer */
     }
 }
 

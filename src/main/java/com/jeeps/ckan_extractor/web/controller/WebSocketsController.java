@@ -48,13 +48,11 @@ public class WebSocketsController {
         // File names for each repo
         List<String> fileNames = new ArrayList<>();
         // Get the package list for repos that haven't been transformed yet
-        List<CkanPackage> ckanPackageList = new ArrayList<>();
         ckanUrlsStomp.getCkanUrls().forEach(url -> {
             String fileName = StringUtils.removeUrlProtocol(url).replaceAll("\\.", "-");
             fileNames.add(fileName);
             if (!FileUtils.isFilePresent("rdf/" + fileName + ".rdf")) {
                 Collection<CkanPackage> ckanPackages = ckanPackageService.findAllByOriginUrl(url);
-                ckanPackageList.addAll(ckanPackages);
 
                 // Generate missing triples files
                 semanticCreatorService.createNewModel();
