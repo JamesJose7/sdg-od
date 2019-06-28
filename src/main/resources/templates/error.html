@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout :: head('Login')"></head>
+<head th:replace="layout :: head('error')"></head>
 <body>
 <div class="main-container">
 <div th:replace="layout :: main-header"></div>
 <div th:replace="layout :: nav"></div>
 
 <div class="container">
-    <h1>Oops!</h1>
-    <p>Something went wrong...</p>
-    <p>Try something else while we fix this please</p>
+    <h1 th:text="|${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} Error|"
+    class="mt-5"></h1>
+    <div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code') == 404}" class="err404">
+        <p>Maybe you are lost, we couldn't find that resource</p>
+        <a th:href="@{/}">Click here to get somewhere safe!</a>
+    </div>
+    <div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.exception')} != null" class="app-error">
+<!--        <code th:text="${#httpServletRequest.getAttribute('javax.servlet.error.exception')}">Error Message</code>-->
+        <h1>Oops!</h1>
+        <p>Something went wrong...</p>
+        <p>Try something else while we fix this please</p>
+    </div>
 </div>
 
 <div th:replace="layout :: main-footer"></div>
