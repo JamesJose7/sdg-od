@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Home')"></head>
+<body>
+<div class="main-container">
+    <div th:replace="layout :: nav"></div>
+
+    <main class="container">
+        <h1 class="mt-4">App configuration</h1>
+        <form th:action="${action}" method="post" th:object="${configuration}" class="mb-5">
+            <h3 class="border-bottom">Virtuoso</h3>
+            <div class="form-group">
+                <label for="dbEndpoint">SPARQL DB Endpoint</label>
+                <input type="text" th:field="*{sparqlDBEndpoint}" id="dbEndpoint" name="sparqlDBEndpoint" class="form-control">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="sparqlDBUser">DB User</label>
+                    <input type="text" th:field="*{sparqlDBUser}" id="sparqlDBUser" name="sparqlDBUser" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="sparqlDBPass">DB User</label>
+                    <input type="password" th:field="*{sparqlDBPass}" id="sparqlDBPass" name="sparqlDBPass" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="webEndpoint">SPARQL Web Endpoint</label>
+                <input type="text" th:field="*{sparqlWebEndpoint}" id="webEndpoint" name="sparqlWebEndpoint" class="form-control    ">
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Update
+            </button>
+        </form>
+    </main>
+
+    <div th:replace="layout :: main-footer"></div>
+</div>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

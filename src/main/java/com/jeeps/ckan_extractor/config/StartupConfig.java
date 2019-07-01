@@ -1,12 +1,7 @@
 package com.jeeps.ckan_extractor.config;
 
-import com.jeeps.ckan_extractor.model.CkanRepository;
-import com.jeeps.ckan_extractor.model.Role;
-import com.jeeps.ckan_extractor.model.User;
-import com.jeeps.ckan_extractor.service.CkanPackageService;
-import com.jeeps.ckan_extractor.service.CkanRepositoryService;
-import com.jeeps.ckan_extractor.service.RoleService;
-import com.jeeps.ckan_extractor.service.UserService;
+import com.jeeps.ckan_extractor.model.*;
+import com.jeeps.ckan_extractor.service.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -33,6 +28,8 @@ public class StartupConfig {
     private CkanRepositoryService ckanRepositoryService;
     @Autowired
     private CkanPackageService ckanPackageService;
+    @Autowired
+    private ConfigurationRegistryService configurationRegistryService;
 
     @EventListener(ContextRefreshedEvent.class)
     public void contextRefreshedEvent() {
@@ -80,6 +77,10 @@ public class StartupConfig {
             if (ckanRepositoryService.findByUrl(repo.getUrl()) == null)
                 ckanRepositoryService.save(repo);
         });
+
+        // Load configuration parameters
+        ConfigurationRegistry cr = configurationRegistryService.getConfiguration();
+        ConfigurationSingleton.getInstance().setConfigurationRegistry(cr);
 
         // Test erase repos
 //       ckanPackageService.deleteAllByOriginUrl("http://ambar.utpl.edu.ec/");
