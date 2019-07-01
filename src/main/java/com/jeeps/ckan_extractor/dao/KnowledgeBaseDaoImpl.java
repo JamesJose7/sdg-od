@@ -1,5 +1,6 @@
 package com.jeeps.ckan_extractor.dao;
 
+import com.jeeps.ckan_extractor.model.ConfigurationSingleton;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.SparqlService;
 import org.apache.jena.rdf.model.Model;
@@ -14,7 +15,8 @@ import java.util.stream.Collectors;
 @Repository
 public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
 
-    public static final String SPARQL_ENDPOINT = "http://192.168.99.100:32768/sparql";
+    public static final String SPARQL_ENDPOINT = ConfigurationSingleton.getInstance()
+                                                    .getConfigurationRegistry().getSparqlWebEndpoint();
 
     @Override
     public List<SdgRelatedDataset> findAllCatalogsRelatedToOds() {

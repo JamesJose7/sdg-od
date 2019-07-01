@@ -3,6 +3,7 @@ package com.jeeps.ckan_extractor.web.controller;
 import com.jeeps.ckan_extractor.model.ConfigurationRegistry;
 import com.jeeps.ckan_extractor.model.ConfigurationSingleton;
 import com.jeeps.ckan_extractor.service.ConfigurationRegistryService;
+import com.jeeps.ckan_extractor.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,12 @@ public class AdminController {
     public String updateConfigurationParameters(RedirectAttributes redirectAttributes,
                                                 ConfigurationRegistry configurationRegistry) {
         configurationRegistryService.save(configurationRegistry);
+        if (configurationRegistry != null)
+            redirectAttributes.addFlashAttribute("flash",
+                new FlashMessage("Configuration updated correctly", FlashMessage.Status.SUCCESS));
+        else
+            redirectAttributes.addFlashAttribute("flash",
+                    new FlashMessage("There was a problem when saving the new configuration", FlashMessage.Status.FAILURE));
         return "redirect:/admin/configuration";
     }
 }

@@ -22,6 +22,10 @@ header, footer {
     margin-bottom: 0 !important;
 }
 
+.flash.success {
+    color: #008744;
+}
+
 .flash.failure {
     color: firebrick;
 }

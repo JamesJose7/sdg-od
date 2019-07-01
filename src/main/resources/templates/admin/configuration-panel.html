@@ -7,7 +7,8 @@
 
     <main class="container">
         <h1 class="mt-4">App configuration</h1>
-        <form th:action="${action}" method="post" th:object="${configuration}" class="mb-5">
+        <div th:replace="layout :: flash"></div>
+        <form th:action="${action}" method="post" th:object="${configuration}" class="mb-5 mt-3">
             <h3 class="border-bottom">Virtuoso</h3>
             <div class="form-group">
                 <label for="dbEndpoint">SPARQL DB Endpoint</label>
@@ -19,7 +20,7 @@
                     <input type="text" th:field="*{sparqlDBUser}" id="sparqlDBUser" name="sparqlDBUser" class="form-control">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="sparqlDBPass">DB User</label>
+                    <label for="sparqlDBPass">DB Password</label>
                     <input type="password" th:field="*{sparqlDBPass}" id="sparqlDBPass" name="sparqlDBPass" class="form-control">
                 </div>
             </div>

@@ -1,5 +1,7 @@
 package com.jeeps.ckan_extractor.service;
 
+import com.jeeps.ckan_extractor.model.ConfigurationRegistry;
+import com.jeeps.ckan_extractor.model.ConfigurationSingleton;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
@@ -61,11 +63,12 @@ public class SparqlService {
     }
 
     public static void uploadModelToTriplestore(Model model, String graph) {
-        //http://192.168.99.100:32768/sparqlQuery
+        ConfigurationRegistry configurationRegistry = ConfigurationSingleton.getInstance().getConfigurationRegistry();
         VirtModel virtualModel = VirtModel.openDatabaseModel(
                 graph,
-                "jdbc:virtuoso://192.168.99.100:32773/",
-                "dba", "dba");
+                configurationRegistry.getSparqlDBEndpoint(),
+                configurationRegistry.getSparqlDBUser(),
+                configurationRegistry.getSparqlDBPass());
         //Add model
         virtualModel.add(model);
     }
