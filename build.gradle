@@ -54,5 +54,8 @@ dependencies {
     implementation 'org.json:json:20180130'
     implementation 'mysql:mysql-connector-java:8.0.13'
     implementation 'org.apache.jena:apache-jena-libs:3.10.0'
+    implementation files('libs/virt_jena3.jar')
+    implementation files('libs/virtjdbc4.jar')
+
 //    implementation 'org.slf4j:slf4j-simple:1.6.2'
 }

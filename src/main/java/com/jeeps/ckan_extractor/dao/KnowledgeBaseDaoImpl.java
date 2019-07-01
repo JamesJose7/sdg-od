@@ -2,6 +2,7 @@ package com.jeeps.ckan_extractor.dao;
 
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.SparqlService;
+import org.apache.jena.rdf.model.Model;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 @Repository
 public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
 
-    public static final String SPARQL_ENDPOINT = "http://192.168.99.100:32768/sparqlQuery";
+    public static final String SPARQL_ENDPOINT = "http://192.168.99.100:32768/sparql";
 
     @Override
     public List<SdgRelatedDataset> findAllCatalogsRelatedToOds() {
@@ -79,5 +80,11 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
                 .map(o -> new SdgRelatedDataset(o.get(0), Long.parseLong(o.get(1)), o.get(2), o.get(3)))
                 .collect(Collectors.toCollection(ArrayList::new));
         return sdgRelatedDatasets;
+    }
+
+    @Override
+    public void uploadCatalogModel(Model model) {
+        String graph = "http://opendata.org/resource/";
+        SparqlService.uploadModelToTriplestore(model, graph);
     }
 }

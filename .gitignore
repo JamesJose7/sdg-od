@@ -101,3 +101,4 @@ fabric.properties
 
 # Exclude these files from the rules
 !gradle/wrapper/gradle-wrapper.jar
+!libs/*

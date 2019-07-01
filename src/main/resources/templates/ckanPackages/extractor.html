@@ -53,12 +53,17 @@
     <div class="row justify-content-center mt-1 text-center invisible" id="failMessage">
         <div class="flash col failure">Please select at least one repository</div>
     </div>
-    <div class="row justify-content-center mt-3 mb-5">
+    <div class="row justify-content-center mt-3 mb-3">
         <button type="submit" class="btn btn-primary ld-ext-right" id="extractButton">
             Extract
             <!--<div class="ld ld-ball ld-bounce"></div>-->
             <div class="ld ld-ring ld-spin"></div>
         </button>
+    </div>
+    <div class="row justify-content-center mt-2 mb-5">
+        <a th:href="@{/tools/converter}" class="btn btn-primary ld-ext-right">
+            Upload RDF
+        </a>
     </div>
     </div>
 </div>

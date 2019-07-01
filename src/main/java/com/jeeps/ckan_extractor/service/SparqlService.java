@@ -10,6 +10,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
+import virtuoso.jena.driver.VirtModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,5 +58,15 @@ public class SparqlService {
             resultSet.add(row);
         }
         return resultSet;
+    }
+
+    public static void uploadModelToTriplestore(Model model, String graph) {
+        //http://192.168.99.100:32768/sparqlQuery
+        VirtModel virtualModel = VirtModel.openDatabaseModel(
+                graph,
+                "jdbc:virtuoso://192.168.99.100:32773/",
+                "dba", "dba");
+        //Add model
+        virtualModel.add(model);
     }
 }

@@ -2,6 +2,7 @@ package com.jeeps.ckan_extractor.service;
 
 import com.jeeps.ckan_extractor.core.CkanSemanticCreator;
 import com.jeeps.ckan_extractor.model.CkanPackage;
+import org.apache.jena.rdf.model.Model;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,5 +35,9 @@ public class SemanticCreatorService {
 
     public void loadTriples(String fileName) {
         semanticCreator.loadTriples(fileName);
+    }
+
+    public Model getModel() {
+        return semanticCreator.getModel();
     }
 }

@@ -6,6 +6,7 @@ import com.jeeps.ckan_extractor.model.stomp.CkanUrlsStomp;
 import com.jeeps.ckan_extractor.model.stomp.WebSocketResult;
 import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
+import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
 import com.jeeps.ckan_extractor.service.SemanticCreatorService;
 import com.jeeps.ckan_extractor.utils.FileUtils;
 import com.jeeps.ckan_extractor.utils.StringUtils;
@@ -32,6 +33,8 @@ public class WebSocketsController {
     private SemanticCreatorService semanticCreatorService;
     @Autowired
     private CkanExtractorService ckanExtractorService;
+    @Autowired
+    private KnowledgeBaseService knowledgeBaseService;
 
     Logger logger = LoggerFactory.getLogger(WebSocketsController.class);
 
@@ -68,6 +71,11 @@ public class WebSocketsController {
         // Load existing models
         semanticCreatorService.createNewModel();
         fileNames.forEach(fileName -> semanticCreatorService.loadTriples("rdf/" + fileName + ".rdf"));
+
+        // Upload if option selected
+        if (ckanUrlsStomp.isUpload()) {
+            knowledgeBaseService.uploadCatalogsModel(semanticCreatorService.getModel());
+        }
 
         //Generate file name
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss-SSS");

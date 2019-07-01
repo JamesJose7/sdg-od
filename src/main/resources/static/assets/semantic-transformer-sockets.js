@@ -19,8 +19,8 @@ function connect() {
     })
 }
 
-function sendParameters(urls, format) {
-    stompcCient.send(data, {}, JSON.stringify({'ckanUrls': urls, 'format': format}))
+function sendParameters(urls, format, upload, noCache) {
+    stompcCient.send(data, {}, JSON.stringify({'ckanUrls': urls, 'format': format, 'upload': upload, 'noCache': noCache}))
 }
 
 function onServerResult(message) {
@@ -57,7 +57,11 @@ $(document).ready(function () {
         // Get selected format
         var selectedFormat = $("#formatSelector input:checked").attr('value');
 
-        sendParameters(selectedUrls, selectedFormat);
+        // Get aditional options
+        var upload = $("#upload").is(':checked');
+        var noCache = $("#no-cache").is(':checked');
+
+        sendParameters(selectedUrls, selectedFormat, upload, noCache);
 
         // Start loading
         if (selectedUrls.length > 0) {

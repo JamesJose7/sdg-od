@@ -208,4 +208,8 @@ public class CkanSemanticCreator {
     public void loadTriples(String fileName) {
         mModel.read(fileName);
     }
+
+    public Model getModel() {
+        return mModel;
+    }
 }

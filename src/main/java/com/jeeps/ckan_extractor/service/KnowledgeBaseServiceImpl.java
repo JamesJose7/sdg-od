@@ -2,6 +2,7 @@ package com.jeeps.ckan_extractor.service;
 
 import com.jeeps.ckan_extractor.dao.KnowledgeBaseDao;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
+import org.apache.jena.rdf.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,10 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     @Override
     public List<SdgRelatedDataset> getRelatedOdsByDatasetId(Long id) {
         return knowledgeBaseDao.getRelatedOdsByDatasetId(id);
+    }
+
+    @Override
+    public void uploadCatalogsModel(Model model) {
+        knowledgeBaseDao.uploadCatalogModel(model);
     }
 }
