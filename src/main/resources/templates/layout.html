@@ -60,7 +60,6 @@
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="nav-label">Datasets</span><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" style="color: black" th:href="@{/datasets}">Browse</a></li>
-                        <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link" style="color: black" th:href="@{/admin/datasets/extractor}">Extractor</a></li>
                     </ul>
                 </li>
                 <li class="dropdown nav-item" sec:authorize="hasRole('ROLE_ADMIN')"
@@ -68,6 +67,7 @@
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="nav-label">Admin</span><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" style="color: black" th:href="@{/admin/configuration}">App Configuration</a></li>
+                        <li><a class="nav-link" style="color: black" th:href="@{/admin/extractor}">Datasets Extractor</a></li>
                     </ul>
                 </li>
                 <li th:classappend="${#httpServletRequest.servletPath.equals('/login') ? 'active' : ''}" class="nav-item">

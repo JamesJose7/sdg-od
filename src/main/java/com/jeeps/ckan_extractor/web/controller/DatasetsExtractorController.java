@@ -36,43 +36,43 @@ public class DatasetsExtractorController {
         return "index";
     }
 
-    @RequestMapping("/admin/datasets/extractor")
+    @RequestMapping("/admin/extractor")
     public String extractor(Model model) {
         List<CkanRepository> ckanRepos = Lists.newArrayList(ckanRepositoryService.findAll().iterator());
         List<Boolean> availableRepos = new ArrayList<>();
         ckanRepos.forEach(repo -> availableRepos.add(ckanPackageService.existsByOriginUrl(repo.getUrl().split("api")[0])));
         model.addAttribute("ckanRepos", ckanRepos);
         model.addAttribute("availableRepos", availableRepos);
-        model.addAttribute("actionDelete", "/admin/datasets/extractor/repository/delete");
+        model.addAttribute("actionDelete", "/admin/extractor/repository/delete");
 
         return "ckanPackages/extractor";
     }
 
-    @RequestMapping("/admin/datasets/extractor/edit")
+    @RequestMapping("/admin/extractor/edit")
     public String editCkanRepos(Model model) {
         List<CkanRepository> ckanRepos = Lists.newArrayList(ckanRepositoryService.findAll().iterator());
         model.addAttribute("ckanRepos", ckanRepos);
-        model.addAttribute("action", "/admin/datasets/extractor/delete");
-        model.addAttribute("actionEdit", "/admin/datasets/extractor/save");
+        model.addAttribute("action", "/admin/extractor/delete");
+        model.addAttribute("actionEdit", "/admin/extractor/save");
         return "ckanPackages/extractor-editor";
     }
 
-    @RequestMapping(value = "/admin/datasets/extractor/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/extractor/delete", method = RequestMethod.POST)
     public String deleteCkanRepo(@RequestParam("url") String url, RedirectAttributes redirectAttributes) {
         // Check if url exists
         CkanRepository ckanRepository = ckanRepositoryService.findByUrl(url);
         if (ckanRepository == null) {
             redirectAttributes.addFlashAttribute("flash",
                     new FlashMessage("There was an error when deleting that repo", FlashMessage.Status.FAILURE));
-            return "redirect:/admin/datasets/extractor/edit";
+            return "redirect:/admin/extractor/edit";
         }
         ckanRepositoryService.delete(ckanRepository);
         redirectAttributes.addFlashAttribute("flash",
                 new FlashMessage("Deleted correctly", FlashMessage.Status.SUCCESS));
-        return "redirect:/admin/datasets/extractor/edit";
+        return "redirect:/admin/extractor/edit";
     }
 
-    @RequestMapping(value = "/admin/datasets/extractor/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/extractor/save", method = RequestMethod.POST)
     public String saveCkanRepo(RedirectAttributes redirectAttributes,
                                @RequestParam("name") String name,
                                @RequestParam("url") String url,
@@ -81,10 +81,10 @@ public class DatasetsExtractorController {
         if (!id.equals("none"))
             repo.setId(Long.parseLong(id));
         ckanRepositoryService.save(repo);
-        return "redirect:/admin/datasets/extractor/edit";
+        return "redirect:/admin/extractor/edit";
     }
 
-    @RequestMapping(value = "/admin/datasets/extractor/history/{repository}")
+    @RequestMapping(value = "/admin/extractor/history/{repository}")
     public String viewHistory(@PathVariable("repository") String repository,
                               Model model) {
         List<ExtractionHistory> extractionHistoryList = extractionHistoryService.findAllByUrl(repository);
@@ -93,11 +93,11 @@ public class DatasetsExtractorController {
         return "ckanPackages/extractor-history";
     }
 
-    @RequestMapping(value = "/admin/datasets/extractor/repository/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/extractor/repository/delete", method = RequestMethod.POST)
     public String deleteRepository(@RequestParam("url") String url, RedirectAttributes redirectAttributes) {
         ckanExtractorService.deleteDatasets(url);
         redirectAttributes.addFlashAttribute("flash",
                 new FlashMessage("Repository deleted successfully", FlashMessage.Status.SUCCESS));
-        return "redirect:/admin/datasets/extractor";
+        return "redirect:/admin/extractor";
     }
 }

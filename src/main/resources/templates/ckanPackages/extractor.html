@@ -9,7 +9,7 @@
     <div th:replace="layout :: flash"></div>
     <div class="row mt-5">
         <h1 class="col-12">CKAN Repositories extractor</h1>
-        <a class="col-12 right" th:href="@{/admin/datasets/extractor/edit}" style="text-decoration: none">
+        <a class="col-12 right" th:href="@{/admin/extractor/edit}" style="text-decoration: none">
             <p class="text-right icon-with-text">Edit<i class="material-icons">edit</i></p>
         </a>
     </div>
@@ -32,7 +32,7 @@
                     </td>
                     <td class="align-middle"><a th:href="@{/datasets(originUrl=${ckanRepos.get(i).url.split('api')[0]})}" th:text="${ckanRepos.get(i).url}"></a></td>
                     <td class="align-middle">
-                        <a th:href="@{|/admin/datasets/extractor/history/${T(com.jeeps.ckan_extractor.utils.StringUtils).removeUrlProtocol(ckanRepos.get(i).url.split('api')[0])}|}" class="btn btn-primary">History</a>
+                        <a th:href="@{|/admin/extractor/history/${T(com.jeeps.ckan_extractor.utils.StringUtils).removeUrlProtocol(ckanRepos.get(i).url.split('api')[0])}|}" class="btn btn-primary">History</a>
                     </td>
                     <td class="align-middle">
                         <form th:action="${actionDelete}" method="post">
