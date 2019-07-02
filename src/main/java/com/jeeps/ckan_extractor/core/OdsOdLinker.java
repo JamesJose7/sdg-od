@@ -1,5 +1,7 @@
 package com.jeeps.ckan_extractor.core;
 
+import com.jeeps.ckan_extractor.model.ConfigurationRegistry;
+import com.jeeps.ckan_extractor.model.ConfigurationSingleton;
 import com.jeeps.ckan_extractor.service.SparqlService;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -12,12 +14,12 @@ import org.apache.jena.vocabulary.SKOS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.jeeps.ckan_extractor.dao.KnowledgeBaseDaoImpl.*;
 
 public class OdsOdLinker {
     private Model model;
@@ -34,12 +36,13 @@ public class OdsOdLinker {
             "}";
 
     private Property automaticallyAnnotagedSubject;
+    private ConfigurationRegistry configurationRegistry;
 
     public OdsOdLinker() throws FileNotFoundException {
+        // Configuration for sparql endpoint
+        configurationRegistry = ConfigurationSingleton.getInstance().getConfigurationRegistry();
         // Create model
         model = ModelFactory.createDefaultModel();
-        File fos = new File("ods-od-links.rdf");
-        os = new FileOutputStream(fos);
         initializeVocabs();
     }
 
@@ -74,7 +77,7 @@ public class OdsOdLinker {
     private void findSimilarTagsInOds(List<String> catalogs) {
         catalogs
                 .forEach(catalog -> {
-                    List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT,
+                    List<List<String>> result = SparqlService.queryEndpoint(configurationRegistry.getSparqlWebEndpoint(),
                             getSimilarityQuery(catalog), "concept", "scheme");
                     // Remove variables
                     result.remove(0);
@@ -93,7 +96,7 @@ public class OdsOdLinker {
         List<String> catalogs = new ArrayList<>();
         do {
             List<String> tempResult =
-                    SparqlService.queryEndpoint(SPARQL_ENDPOINT,
+                    SparqlService.queryEndpoint(configurationRegistry.getSparqlWebEndpoint(),
                     getAllCatalogsQueryWithOffset(QUERY_LIMIT, offset),
                     "catalog").stream()
                         .flatMap(Collection::stream)
@@ -131,8 +134,14 @@ public class OdsOdLinker {
                 FIND_ALL_CATALOGS_Q, limit, offset);
     }
 
-    public void writeRdfFile() {
+    public void writeRdfFile() throws IOException {
         // File dump
+        String path = "rdf/";
+        File temp = new File(path);
+        if (!(temp.exists()))
+            Files.createDirectories(temp.toPath()); // Create temp directory if id doesn't exist
+        File fos = new File(path + "sdg-od-links-gen.rdf");
+        os = new FileOutputStream(fos);
         // Write model to file
         RDFWriter writer = model.getWriter("RDF/XML");
         writer.write(model, os,  "");

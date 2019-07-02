@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('SDG extractor')"></head>
+<body>
+<div class="main-container">
+    <div th:replace="layout :: nav"></div>
+
+    <main class="container">
+        <h1 class="mt-5">SDG-OD Linker</h1>
+
+        <p>Executing this process will perform the following actions:</p>
+        <ol>
+            <li>Query both OD and SDG semantic representations stored in virtuoso to find similarities between them.</li>
+            <li>When a similarity is found a relationship is drawn between them using a custom property.</li>
+            <li>The generated triples will be uploaded to our virtuoso endpoint.</li>
+        </ol>
+
+        <form th:action="${action}" method="post" class="mb-5 mt-4">
+            <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isLinkingRunning}"
+                    th:classappend="${isLinkingRunning ? 'running' : ''}" id="extractButton">
+                Begin linking
+                <div class="ld ld-ring ld-spin"></div>
+            </button>
+
+            <p style="color: #008744;" class="mt-4" th:if="${isLinkingRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
+        </form>
+
+    </main>
+
+    <div th:replace="layout :: main-footer"></div>
+</div>
+<script th:inline="javascript">
+
+</script>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

@@ -14,7 +14,7 @@ import java.util.Map;
 import static com.jeeps.ckan_extractor.dao.KnowledgeBaseDaoImpl.SPARQL_ENDPOINT;
 
 @Controller
-public class OdsController {
+public class SdgController {
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
 
