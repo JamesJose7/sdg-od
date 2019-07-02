@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('SDG extractor')"></head>
+<body>
+<div class="main-container">
+    <div th:replace="layout :: main-header"></div>
+    <div th:replace="layout :: nav"></div>
+
+    <main class="container">
+        <h1 class="mt-5">SDG extractor</h1>
+
+        <p>Executing this process will perform the following actions:</p>
+        <ol>
+            <li>Extract information from every Sustainable Development Goal via <a
+                    href="https://unstats.un.org/SDGAPI/swagger/">UNSD's API</a>.</li>
+            <li>Analyze each goal, target and indicator using <a href="http://wit.istc.cnr.it/stlab-tools/fred/">FRED</a>.</li>
+            <li>Convert <a href="http://wit.istc.cnr.it/stlab-tools/fred/">FRED</a>'s result into a SKOS taxonomy.</li>
+            <li>Upload said taxonomy into our virtuoso endpoint.</li>
+        </ol>
+
+        <form th:action="${action}" method="post" class="mb-5 mt-4">
+            <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isExtractionRunning}"
+                    th:classappend="${isExtractionRunning ? 'running' : ''}" id="extractButton">
+                Begin extraction
+                <div class="ld ld-ring ld-spin"></div>
+            </button>
+
+            <p style="color: #008744;" class="mt-4" th:if="${isExtractionRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
+        </form>
+
+    </main>
+
+    <div th:replace="layout :: main-footer"></div>
+</div>
+<script th:inline="javascript">
+
+</script>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

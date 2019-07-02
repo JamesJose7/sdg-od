@@ -43,19 +43,21 @@ public class SdgExtractor {
         Arrays.stream(sustainableGoals)
 //                .limit(1)
                 .forEach(goal -> {
-            FredService fredService = new FredService("fred\\" + goal.getCode());
-            // Analyze goal
-            fredService.fredActivate(goal.getTitle(), goal.getCode());
-            fredService.fredActivate(goal.getDescription(), goal.getCode() + "_description");
-            // Analyze goal targets
-            goal.getTargets().forEach(target -> {
-                fredService.fredActivate(target.getTitle(), target.getCode());
-                fredService.fredActivate(target.getDescription(), target.getCode() + "_description");
-                // Analyze target indicators
-                target.getIndicators().forEach(indicator -> {
-                    fredService.fredActivate(indicator.getDescription(), indicator.getCode());
-                });
-            });
+                    FredService fredService = new FredService("fred\\" + goal.getCode());
+                    // Analyze goal
+                    fredService.fredActivate(goal.getTitle(), goal.getCode());
+                    fredService.fredActivate(goal.getDescription(), goal.getCode() + "_description");
+                    // Analyze goal targets
+                    goal.getTargets().forEach(target -> {
+                        fredService.fredActivate(target.getTitle(), target.getCode());
+                        fredService.fredActivate(target.getDescription(), target.getCode() + "_description");
+                        // Analyze target indicators
+                        target.getIndicators().forEach(indicator -> {
+                            fredService.fredActivate(indicator.getDescription(), indicator.getCode());
+                        });
+                    });
+                    // Log when each goal finishes
+                    logger.info("FRED processing finished on goal > " + goal.getCode());
         });
     }
 
