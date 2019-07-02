@@ -32,8 +32,9 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
                 "    ?ods rdfs:label ?odsLabel\n" +
                 "}";
         // Get sparql result
-
-        List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT, query,
+        String sparqlEndpoint = ConfigurationSingleton.getInstance()
+                .getConfigurationRegistry().getSparqlWebEndpoint();
+        List<List<String>> result = SparqlService.queryEndpoint(sparqlEndpoint, query,
                 "catalog", "title", "id", "ods", "odsLabel");
         result.remove(0);
         List<SdgRelatedDataset> sdgRelatedDatasets = result.stream()
@@ -48,7 +49,9 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
                 "select (count(?catalog) as ?count) ?goal where { \n" +
                 "\t?catalog ods:automaticallyAnnotatedSubject ?goal .\n" +
                 "} group by ?goal";
-        List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT,
+        String sparqlEndpoint = ConfigurationSingleton.getInstance()
+                .getConfigurationRegistry().getSparqlWebEndpoint();
+        List<List<String>> result = SparqlService.queryEndpoint(sparqlEndpoint,
                 query, "count", "goal");
         result.remove(0);
         // Transform into map
@@ -74,7 +77,9 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
                 " ?ods rdfs:label ?odsLabel .\n" +
                 " FILTER(?id=\"" + id  + "\")\n" +
                 "}";
-        List<List<String>> result = SparqlService.queryEndpoint(SPARQL_ENDPOINT,
+        String sparqlEndpoint = ConfigurationSingleton.getInstance()
+                .getConfigurationRegistry().getSparqlWebEndpoint();
+        List<List<String>> result = SparqlService.queryEndpoint(sparqlEndpoint,
                 query, "catalog", "id", "ods", "odsLabel");
         result.remove(0);
         // Transform into Object list
