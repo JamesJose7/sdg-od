@@ -11,4 +11,5 @@ public interface KnowledgeBaseDao {
     Map<String, Integer> howManyDatasetsRelateToEachGoal();
     List<SdgRelatedDataset> getRelatedOdsByDatasetId(Long id);
     void uploadCatalogModel(Model model);
+    void uploadSdgModel(Model model);
 }

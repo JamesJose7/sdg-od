@@ -94,4 +94,10 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
         String graph = "http://opendata.org/resource/";
         SparqlService.uploadModelToTriplestore(model, graph);
     }
+
+    @Override
+    public void uploadSdgModel(Model model) {
+        String graph = "http://ods-od.org/data";
+        SparqlService.uploadModelToTriplestore(model, graph);
+    }
 }

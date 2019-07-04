@@ -139,7 +139,7 @@ public class OdsOdLinker {
         String path = "rdf/";
         File temp = new File(path);
         if (!(temp.exists()))
-            Files.createDirectories(temp.toPath()); // Create temp directory if id doesn't exist
+            Files.createDirectories(temp.toPath()); // Create directory if it doesn't exist
         File fos = new File(path + "sdg-od-links-gen.rdf");
         os = new FileOutputStream(fos);
         // Write model to file

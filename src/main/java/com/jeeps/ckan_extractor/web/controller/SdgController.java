@@ -1,5 +1,6 @@
 package com.jeeps.ckan_extractor.web.controller;
 
+import com.jeeps.ckan_extractor.model.ConfigurationSingleton;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.jeeps.ckan_extractor.dao.KnowledgeBaseDaoImpl.SPARQL_ENDPOINT;
-
 @Controller
 public class SdgController {
     @Autowired
@@ -20,7 +19,8 @@ public class SdgController {
 
     @RequestMapping("/sdg/overview")
     public String odsOverview(Model model) {
-        model.addAttribute("sparqlEndpoint", SPARQL_ENDPOINT);
+        model.addAttribute("sparqlEndpoint", ConfigurationSingleton.getInstance()
+                                .getConfigurationRegistry().getSparqlWebEndpoint());
         try {
             Map<String, Integer> datasetsPerOds = knowledgeBaseService.howManyDatasetsRelateToEachGoal();
             model.addAttribute("odsLabels", datasetsPerOds.keySet());

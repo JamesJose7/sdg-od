@@ -11,4 +11,5 @@ public interface KnowledgeBaseService {
     Map<String, Integer> howManyDatasetsRelateToEachGoal();
     List<SdgRelatedDataset> getRelatedOdsByDatasetId(Long id);
     void uploadCatalogsModel(Model model);
+    void uploadSdgModel(Model model);
 }

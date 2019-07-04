@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.Collection;
 
 @Service
-public class SemanticCreatorService {
+public class CkanSemanticCreatorService {
     private CkanSemanticCreator semanticCreator;
 
     public void createNewModel() {

@@ -7,7 +7,7 @@ import com.jeeps.ckan_extractor.model.stomp.WebSocketResult;
 import com.jeeps.ckan_extractor.service.CkanExtractorService;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
-import com.jeeps.ckan_extractor.service.SemanticCreatorService;
+import com.jeeps.ckan_extractor.service.CkanSemanticCreatorService;
 import com.jeeps.ckan_extractor.utils.FileUtils;
 import com.jeeps.ckan_extractor.utils.StringUtils;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class WebSocketsController {
     @Autowired
     private CkanPackageService ckanPackageService;
     @Autowired
-    private SemanticCreatorService semanticCreatorService;
+    private CkanSemanticCreatorService ckanSemanticCreatorService;
     @Autowired
     private CkanExtractorService ckanExtractorService;
     @Autowired
@@ -58,10 +58,10 @@ public class WebSocketsController {
                 Collection<CkanPackage> ckanPackages = ckanPackageService.findAllByOriginUrl(url);
 
                 // Generate missing triples files
-                semanticCreatorService.createNewModel();
-                semanticCreatorService.generateCkanTriples(ckanPackages);
+                ckanSemanticCreatorService.createNewModel();
+                ckanSemanticCreatorService.generateCkanTriples(ckanPackages);
                 try {
-                    semanticCreatorService.writeFile("rdf/", fileName, CkanSemanticCreator.RDF_XML);
+                    ckanSemanticCreatorService.writeFile("rdf/", fileName, CkanSemanticCreator.RDF_XML);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -69,19 +69,19 @@ public class WebSocketsController {
         });
 
         // Load existing models
-        semanticCreatorService.createNewModel();
-        fileNames.forEach(fileName -> semanticCreatorService.loadTriples("rdf/" + fileName + ".rdf"));
+        ckanSemanticCreatorService.createNewModel();
+        fileNames.forEach(fileName -> ckanSemanticCreatorService.loadTriples("rdf/" + fileName + ".rdf"));
 
         // Upload if option selected
         if (ckanUrlsStomp.isUpload()) {
-            knowledgeBaseService.uploadCatalogsModel(semanticCreatorService.getModel());
+            knowledgeBaseService.uploadCatalogsModel(ckanSemanticCreatorService.getModel());
         }
 
         //Generate file name
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss-SSS");
         String fileName = dateFormat.format(new Date());
         try {
-            semanticCreatorService.writeFile("temp/", fileName, ckanUrlsStomp.getFormat());
+            ckanSemanticCreatorService.writeFile("temp/", fileName, ckanUrlsStomp.getFormat());
         } catch (IOException e) {
             e.printStackTrace();
         }

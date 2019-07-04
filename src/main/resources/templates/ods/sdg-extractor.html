@@ -6,26 +6,74 @@
     <div th:replace="layout :: nav"></div>
 
     <main class="container">
-        <h1 class="mt-5">SDG extractor</h1>
+        <h1 class="mt-5">SDG Extractor</h1>
 
-        <p>Executing this process will perform the following actions:</p>
-        <ol>
-            <li>Extract information from every Sustainable Development Goal via <a
-                    href="https://unstats.un.org/SDGAPI/swagger/">UNSD's API</a>.</li>
-            <li>Analyze each goal, target and indicator using <a href="http://wit.istc.cnr.it/stlab-tools/fred/">FRED</a>.</li>
-            <li>Convert <a href="http://wit.istc.cnr.it/stlab-tools/fred/">FRED</a>'s result into a SKOS taxonomy.</li>
-            <li>Upload said taxonomy into our virtuoso endpoint.</li>
-        </ol>
+        <div class="row text-justify">
+            <p>This process consists in three separate and consecutive stages. They have been separated due to the variable execution time
+                they may produce. Each stage uses an external system that may or may not perform the best due to the time when
+                it is run. They <strong>must</strong> be executed in order because each stage uses the result from the previous one.</p>
+        </div>
 
-        <form th:action="${action}" method="post" class="mb-5 mt-4">
-            <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isExtractionRunning}"
-                    th:classappend="${isExtractionRunning ? 'running' : ''}" id="extractButton">
-                Begin extraction
-                <div class="ld ld-ring ld-spin"></div>
-            </button>
+        <div class="row mb-5">
+            <div class="col-4">
+                <h2>1. SDG Extraction</h2>
+                <p>This first stage executes the following actions</p>
+                <ol>
+                    <li>Extract information from every Sustainable Development Goal via <a
+                            href="https://unstats.un.org/SDGAPI/swagger/">UNSD's API</a>.</li>
+                    <li>Analyze each goal, target and indicator using <a href="http://wit.istc.cnr.it/stlab-tools/fred/">FRED</a>.</li>
+                    <li>Each element resulting from FRED is serialized and stored in an RDF/XML file locally</li>
+                </ol>
 
-            <p style="color: #008744;" class="mt-4" th:if="${isExtractionRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
-        </form>
+                <form th:action="${actionStg1}" method="post" class="mt-4">
+                    <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isExtractionRunning}"
+                            th:classappend="${isExtractionRunning ? 'running' : ''}">
+                        Begin extraction
+                        <div class="ld ld-ring ld-spin"></div>
+                    </button>
+
+                    <p style="color: #008744;" class="mt-4" th:if="${isExtractionRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
+                </form>
+            </div>
+            <div class="col-4">
+                <h2>2. SKOS taxonomy</h2>
+                <p class="text-justify">This process uses the multiple results from FRED and transforms them into a SKOS taxonomy. This taxonomy
+                represents the most important information inside each goal, target and indicator.</p>
+                <p class="text-justify">This stage produces a single RDF/XML file containing the entire SDG representation. If it's available
+                it can be downloaded from the following link:</p>
+                <div th:if="${modelExists}">
+                    <a th:href="@{/rdf-cache/sdg-triples-gen.rdf}">Download SDG representation</a>
+                </div>
+                <div th:unless="${modelExists}">
+                    <p class="flash failure">File has not being generated, please execute this process</p>
+                </div>
+                <form th:action="${actionStg2}" method="post" class="mt-4">
+                    <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isExtractionRunning}"
+                            th:classappend="${isExtractionRunning ? 'running' : ''}">
+                        Transform to SKOS
+                        <div class="ld ld-ring ld-spin"></div>
+                    </button>
+
+                    <p style="color: #008744;" class="mt-4" th:if="${isExtractionRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
+                </form>
+            </div>
+
+            <div class="col-4">
+                <h2>3. Upload to virtuoso</h2>
+                <p>Once the previous stages have been completed, executing this will upload the SKOS model to our Virtuoso
+                endpoint.</p>
+
+                <form th:action="${actionStg3}" method="post" class="mt-4">
+                    <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isExtractionRunning}"
+                            th:classappend="${isExtractionRunning ? 'running' : ''}">
+                        Upload
+                        <div class="ld ld-ring ld-spin"></div>
+                    </button>
+
+                    <p style="color: #008744;" class="mt-4" th:if="${isExtractionRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
+                </form>
+            </div>
+        </div>
 
     </main>
 

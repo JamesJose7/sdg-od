@@ -41,7 +41,7 @@ public class UtilsController {
                         HttpServletResponse response) {
         try {
             // Add temp dir
-            fileName = "rdf-cache/" + fileName;
+            fileName = "rdf/" + fileName;
             // get your file as InputStream
             InputStream is = new FileInputStream(fileName);
 

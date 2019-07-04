@@ -15,11 +15,14 @@ import org.apache.jena.vocabulary.SKOS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 public class SdgSemanticCreator {
+    public static final String SDG_TRIPLES_FILE_NAME = "sdg-triples-gen.rdf";
     private Model model;
     private FileOutputStream os;
 
@@ -49,8 +52,6 @@ public class SdgSemanticCreator {
     public SdgSemanticCreator() throws FileNotFoundException {
         // Create model
         model = ModelFactory.createDefaultModel();
-        File fos = new File("sdgTriples.rdf");
-        os = new FileOutputStream(fos);
         initializeVocabs();
     }
 
@@ -178,10 +179,24 @@ public class SdgSemanticCreator {
         return "SDG_Indicator_" + sdgElement;
     }
 
-    public void writeRdfFile() {
+    public void writeRdfFile() throws IOException {
         // File dump
+        String path = "rdf/";
+        File temp = new File(path);
+        if (!(temp.exists()))
+            Files.createDirectories(temp.toPath()); // Create directory if it doesn't exist
+        File fos = new File(path + SDG_TRIPLES_FILE_NAME);
+        os = new FileOutputStream(fos);
         // Write model to file
         RDFWriter writer = model.getWriter("RDF/XML");
         writer.write(model, os,  "");
+    }
+
+    public void loadTriples(String fileName) {
+        model.read(fileName);
+    }
+
+    public Model getModel() {
+        return model;
     }
 }
