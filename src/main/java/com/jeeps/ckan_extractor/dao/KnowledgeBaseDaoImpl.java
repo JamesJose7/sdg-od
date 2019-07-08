@@ -75,7 +75,7 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
                 "          dct:identifier ?id ;\n" +
                 "          ods:automaticallyAnnotatedSubject ?ods .\n" +
                 " ?ods rdfs:label ?odsLabel .\n" +
-                " FILTER(?id=\"" + id  + "\")\n" +
+                " FILTER(str(?id)=str(\"" + id  + "\"))\n" +
                 "}";
         String sparqlEndpoint = ConfigurationSingleton.getInstance()
                 .getConfigurationRegistry().getSparqlWebEndpoint();
