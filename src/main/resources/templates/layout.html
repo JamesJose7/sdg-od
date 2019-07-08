@@ -22,9 +22,19 @@
 <body>
 
 <div th:fragment="main-header">
-    <header class="jumbotron text-center">
-        <h1>CKAN Extractor</h1>
+    <style th:inline="text">
+        #header{
+            background: url([[@{/assets/logos/sdg_od_logo.png}]]) no-repeat center center;
+            height:184px;
+            border-radius: 0 !important;
+        }
+    </style>
+    <header class="jumbotrontext-center" id="header">
+    <!--<h1>CKANExtractor</h1>-->
     </header>
+    <!--<header class="jumbotron text-center" id="header">
+        <h1>CKAN Extractor</h1>
+    </header>-->
 </div>
 
 <div th:fragment="nav">
@@ -98,6 +108,7 @@
                 <img th:src="@{/assets/logos/smartland.png}" alt="">
             </div>
         </div>
+        <!--<p style="color: #242320; position: absolute; bottom: 0;">Jose estuvo aqui</p>-->
         <!--<p>@jeeguiguren</p>-->
     </footer>
 </div>

@@ -37,6 +37,6 @@ public class ToolsController {
         Random random = new Random();
         String socketUri = "socket-" + random.nextInt(10000);
         model.addAttribute("socketUri", socketUri);
-        return "converter";
+        return "ckanPackages/converter";
     }
 }

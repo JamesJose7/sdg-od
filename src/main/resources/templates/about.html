@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Home')"></head>
+<body>
+<div class="main-container">
+    <div th:replace="layout :: main-header"></div>
+    <div th:replace="layout :: nav"></div>
+
+    <main class="container">
+        <h1 class="mt-4">About</h1>
+
+        <div class="row mb-4">
+            <div class="col text-justify">
+                <p>The development of this application was part of a bachelor thesis. Its purpose is to implement the proposals
+                    stated in the research process and show the expected results. For more info about this project, you can find
+                    the full document in <a href="http://dspace.utpl.edu.ec/handle/123456789/15918">this link</a>.</p>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3 class="mb-3">Authors</h3>
+            </div>
+            <div class="col-md-6">
+                <div class="author-card">
+                    <h4 class="text-center">José Eguiguren</h4>
+                    <img th:src="@{assets/img/about_pic_jose.png}" alt="">
+                    <div class="text-center">
+                        <p>Thesis' author</p>
+                        <p>App developer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="author-card">
+                    <h4 class="text-center">Nelson Piedra</h4>
+                    <img th:src="@{assets/img/about_pic_nelson.png}" alt="">
+                    <div class="text-center">
+                        <p>Thesis director</p>
+                        <p>Advisor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12 mb-3">
+                <h3>Other places you should visit</h3>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="ref-card">
+                    <div class="ref-image-container text-center">
+                        <img th:src="@{assets/logos/smartland.png}" alt="" class="align-middle">
+                    </div>
+                    <h4 class="">SmartLand-LD</h4>
+                    <div class="text-justify">
+                        <p>Es una iniciativa de la UTPL que inició en el 2014 ampliando el concepto de “smartcities”
+                            haciendo referencia a un territorio en el que se impulsa un desarrollo sostenible “inteligente”</p>
+                    </div>
+                    <div class="text-center">
+                        <a href="https://smartland.utpl.edu.ec/" class="btn btn-primary">Visit</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="ref-card">
+                    <div class="ref-image-container text-center">
+                        <img th:src="@{assets/logos/ambar_logo.png}" alt="" class="align-middle">
+                    </div>
+                    <h4 class="">Ámbar UTPL</h4>
+                    <div class="text-justify">
+                        <p>Ambar es un Portal de Datos creado con el propósito de desarrollar una nueva infraestructura
+                            de datos abierta en el contexto de Gestión Inteligente de Territorios.</p>
+                    </div>
+                    <div class="text-center">
+                        <a href="http://ambar.utpl.edu.ec/" class="btn btn-primary">Visit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12 mb-3">
+                <h3>Some great projects that helped build this one</h3>
+            </div>
+            <div class="col-12">
+                <ul>
+                    <li>Piedra, N., & Suárez, J. P. (2018). SmartLand-LD: <i>A Linked data approach for integration of heterogeneous datasets to intelligent management of high biodiversity territories.</i>
+                        Advances in Intelligent Systems and Computing, 688, 207–218. <a href="https://doi.org/10.1007/978-3-319-69341-5_19">https://doi.org/10.1007/978-3-319-69341-5_19</a></li>
+                    <li>Piedra, N., Chicaiza, J., López, J., & Caro, E. T. (2017). <i>A rating system that open-data repositories must satisfy to be considered OER: Reusing open data resources in teaching.</i>
+                        In Global Engineering Education Conference (EDUCON), 2017 IEEE (pp. 1768–1777).</li>
+                    <li>Piedra, N., Tovar, E., Colomo-Palacios, R., Lopez-Vargas, J., & Alexandra Chicaiza, J. (2014). <i>Consuming and producing linked open data: the case of Opencourseware.</i> Program, 48(1), 16–40.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12 mb-3">
+                <h3>Used resources</h3>
+                <ul>
+                    <li>
+                        <div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" 		    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 		    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="layout :: main-footer"></div>
+</div>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

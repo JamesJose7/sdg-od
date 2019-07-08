@@ -152,6 +152,64 @@ a.disabled-link {
     margin: 0 auto;
 }
 
+/* About page */
+.author-card {
+    padding: 1em 1em;
+    margin: 5px auto;
+    width: 50%;
+    min-width: 240px;
+    /*border: 1px solid rgba(100,100,100,.3);*/
+    border-radius: 15px;
+    /*box-shadow: 1px 1px 2px rgba(0,0,0,.5);*/
+}
+
+.author-card img {
+    width: 100%;
+    border-radius: 50%;
+    border: 2px solid grey;
+    margin-bottom: 10px;
+}
+
+.author-card h4 {
+    /*border-bottom: 1px solid #384047;*/
+    padding-bottom: 2px;
+    margin-bottom: 10px;
+}
+
+.author-card p {
+    margin-bottom: 5px;
+}
+
+.ref-card {
+    width: 100%;
+}
+
+.ref-card img {
+    height: 250px;
+    padding: 0 3em;
+}
+
+.ref-card a {
+    width: 40%;
+}
+
+.ref-card {
+    margin: 10px 0;
+}
+
+.ref-card img {
+    display: inline-block;
+    max-width:320px;
+    max-height:150px;
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+}
+
+.ref-image-container {
+    height: 150px;
+}
+
 @media (max-width: 768px) {
     /* The footer will change height, adjust the main container width to keep the footer at the bottom */
     .main-container {
