@@ -38,4 +38,9 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     public void uploadSdgModel(Model model) {
         knowledgeBaseDao.uploadSdgModel(model);
     }
+
+    @Override
+    public void uploadSdgOdLinks(Model model) {
+        knowledgeBaseDao.uploadSdgOdLinks(model);
+    }
 }

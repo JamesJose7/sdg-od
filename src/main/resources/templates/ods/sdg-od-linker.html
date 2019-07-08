@@ -8,22 +8,61 @@
     <main class="container">
         <h1 class="mt-5">SDG-OD Linker</h1>
 
-        <p>Executing this process will perform the following actions:</p>
-        <ol>
-            <li>Query both OD and SDG semantic representations stored in virtuoso to find similarities between them.</li>
-            <li>When a similarity is found a relationship is drawn between them using a custom property.</li>
-            <li>The generated triples will be uploaded to our virtuoso endpoint.</li>
-        </ol>
+        <div class="row">
+            <div class="col-12 text-justify">
+                <p>This final step will generate links between the Sustainable Development Goals (SDG) and Open Data (OD).
+                In order to obtain results from this process, the <a th:href="@{/admin/extractor}">extraction of some data sets</a> and
+                    the <a th:href="@{/admin/sdg-extractor}">extraction and transformation of the SDG</a>
+                    must be completed beforehand. </p>
 
-        <form th:action="${action}" method="post" class="mb-5 mt-4">
-            <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isLinkingRunning}"
-                    th:classappend="${isLinkingRunning ? 'running' : ''}" id="extractButton">
-                Begin linking
-                <div class="ld ld-ring ld-spin"></div>
-            </button>
+            </div>
+        </div>
 
-            <p style="color: #008744;" class="mt-4" th:if="${isLinkingRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
-        </form>
+        <div class="row">
+             <div class="col-md-6">
+                 <h2>1. Generate links</h2>
+
+                 <p>Executing this process will perform the following actions:</p>
+                 <ol>
+                     <li>Query both OD and SDG semantic representations stored in virtuoso to find similarities between them.</li>
+                     <li>When a similarity is found a relationship is drawn between them using a custom property.</li>
+                     <li>The generated triples will be serialized and stored in an RDF/XML file.</li>
+                 </ol>
+
+                 <div th:if="${modelExists}">
+                     <a th:href="@{|/rdf-cache/${rdfFile}|}">Download SDG-OD links</a>
+                 </div>
+                 <div th:unless="${modelExists}">
+                     <p class="flash failure">File has not being generated, please execute this process</p>
+                 </div>
+
+                 <form th:action="${actionStg1}" method="post" class="mb-5 mt-4">
+                     <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isLinkingRunning}"
+                             th:classappend="${isLinkingRunning ? 'running' : ''}">
+                         Begin linking
+                         <div class="ld ld-ring ld-spin"></div>
+                     </button>
+
+                     <p style="color: #008744;" class="mt-4" th:if="${isLinkingRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
+                 </form>
+             </div>
+
+            <div class="col-md-6">
+                <h2>2. Upload to Triplestore</h2>
+
+                <p>Once the previous stages have been completed, executing this will upload the SDG-OD links to our Virtuoso endpoint.</p>
+
+                <form th:action="${actionStg2}" method="post" class="mb-5 mt-4">
+                    <button type="submit" class="btn btn-primary ld-ext-right" th:disabled="${isLinkingRunning}"
+                            th:classappend="${isLinkingRunning ? 'running' : ''}">
+                        Upload
+                        <div class="ld ld-ring ld-spin"></div>
+                    </button>
+
+                    <p style="color: #008744;" class="mt-4" th:if="${isLinkingRunning}"><strong>This process is still in execution, come back later to check on its progress.</strong></p>
+                </form>
+            </div>
+        </div>
 
     </main>
 

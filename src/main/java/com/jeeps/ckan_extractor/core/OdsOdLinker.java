@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class OdsOdLinker {
+    public static final String SDG_OD_LINKS_FILE_NAME = "sdg-od-links-gen.rdf";
     private Model model;
     private FileOutputStream os;
 
@@ -140,10 +141,18 @@ public class OdsOdLinker {
         File temp = new File(path);
         if (!(temp.exists()))
             Files.createDirectories(temp.toPath()); // Create directory if it doesn't exist
-        File fos = new File(path + "sdg-od-links-gen.rdf");
+        File fos = new File(path + SDG_OD_LINKS_FILE_NAME);
         os = new FileOutputStream(fos);
         // Write model to file
         RDFWriter writer = model.getWriter("RDF/XML");
         writer.write(model, os,  "");
+    }
+
+    public void loadTriples(String fileName) {
+        model.read(fileName);
+    }
+
+    public Model getModel() {
+        return model;
     }
 }

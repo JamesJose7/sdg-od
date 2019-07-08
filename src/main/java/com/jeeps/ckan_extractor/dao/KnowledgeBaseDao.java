@@ -12,4 +12,5 @@ public interface KnowledgeBaseDao {
     List<SdgRelatedDataset> getRelatedOdsByDatasetId(Long id);
     void uploadCatalogModel(Model model);
     void uploadSdgModel(Model model);
+    void uploadSdgOdLinks(Model model);
 }
