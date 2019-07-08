@@ -21,6 +21,7 @@ public class SdgExtractorController {
         model.addAttribute("actionStg1", "/admin/sdg-extractor/stage1");
         model.addAttribute("actionStg2", "/admin/sdg-extractor/stage2");
         model.addAttribute("actionStg3", "/admin/sdg-extractor/stage3");
+        model.addAttribute("rdfFile", SdgSemanticCreator.SDG_TRIPLES_FILE_NAME);
         // Check if SKOS model exists
         model.addAttribute("modelExists", FileUtils.isFilePresent("rdf/" +
                 SdgSemanticCreator.SDG_TRIPLES_FILE_NAME));
