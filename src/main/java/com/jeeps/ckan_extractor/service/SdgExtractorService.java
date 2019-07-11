@@ -18,6 +18,9 @@ public class SdgExtractorService {
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
 
+    @Autowired
+    private FredService fredService;
+
     @Async("asyncExecutor")
     public void extractAndTransformWithFRED() {
         logger.info("Began async extraction on SDG data and FRED transformation");
@@ -25,7 +28,7 @@ public class SdgExtractorService {
             isProcessRunning = true;
             try {
                 // Extract SDG Data
-                SdgExtractor sdgExtractor = new SdgExtractor();
+                SdgExtractor sdgExtractor = new SdgExtractor(fredService);
                 sdgExtractor.extract();
                 logger.info("Finished SDG extraction and transformation");
             } catch (Exception e) {

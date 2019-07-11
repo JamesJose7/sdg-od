@@ -9,9 +9,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 public class SdgExtractor {
     private final String BASE_URL = "https://unstats.un.org/SDGAPI/v1/sdg/Goal/";
 
@@ -22,10 +24,13 @@ public class SdgExtractor {
     private SustainableGoal[] sustainableGoals;
     private int counter;
 
-    public SdgExtractor() {
+    private final FredService fredService;
+
+    public SdgExtractor(FredService fredService) {
         gson = new Gson();
         httpService = new HttpService();
         counter = 0;
+        this.fredService = fredService;
     }
 
     public void extract() {
@@ -43,7 +48,8 @@ public class SdgExtractor {
         Arrays.stream(sustainableGoals)
 //                .limit(1)
                 .forEach(goal -> {
-                    FredService fredService = new FredService("fred\\" + goal.getCode());
+                    // Set the folder to be equal to the current goal
+                    fredService.setPath(goal.getCode());
                     // Analyze goal
                     fredService.fredActivate(goal.getTitle(), goal.getCode());
                     fredService.fredActivate(goal.getDescription(), goal.getCode() + "_description");
