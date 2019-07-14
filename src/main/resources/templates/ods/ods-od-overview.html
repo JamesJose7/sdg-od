@@ -80,6 +80,8 @@
     }
 
     $( document ).ready(function() {
+        // Show that the first goal is selected
+        $(".wordCloudBtn").first().removeClass("btn-primary").addClass("btn-success");
 
         am4core.ready(function() {
 
@@ -118,6 +120,10 @@
             });
 
             $(".wordCloudBtn").click(function () {
+                // Show which button was clicked
+                $(".wordCloudBtn").removeClass("btn-success").addClass("btn-primary");
+                $(this).removeClass("btn-primary").addClass("btn-success");
+
                 series.text = "loading";
                 var endpoint = "/api/sdg/concepts/" + $(this).val();
                 $.getJSON( endpoint, function( data ) {
