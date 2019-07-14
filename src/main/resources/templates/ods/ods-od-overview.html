@@ -111,12 +111,7 @@
             series.fontWeight = "700"
 
             $.getJSON( "/api/sdg/concepts/1", function( data ) {
-                var items = [];
-                $.each( data, function( key, val ) {
-                    items.push( "<li id='" + key + "'>" + val + "</li>" );
-                });
-
-                series.text = items[1];
+                series.text = data["concepts"].join(" ");
             });
 
             $(".wordCloudBtn").click(function () {
@@ -127,12 +122,7 @@
                 series.text = "loading";
                 var endpoint = "/api/sdg/concepts/" + $(this).val();
                 $.getJSON( endpoint, function( data ) {
-                    var items = [];
-                    $.each( data, function( key, val ) {
-                        items.push( "<li id='" + key + "'>" + val + "</li>" );
-                    });
-
-                    series.text = items[1];
+                    series.text = data["concepts"].join(" ");
                 });
             });
         }); // end am4core.ready()
