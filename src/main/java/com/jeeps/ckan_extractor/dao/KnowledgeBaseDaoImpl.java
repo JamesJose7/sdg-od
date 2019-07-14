@@ -1,15 +1,13 @@
 package com.jeeps.ckan_extractor.dao;
 
 import com.jeeps.ckan_extractor.model.ConfigurationSingleton;
+import com.jeeps.ckan_extractor.model.SdgConceptScheme;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.SparqlService;
 import org.apache.jena.rdf.model.Model;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -87,6 +85,56 @@ public class KnowledgeBaseDaoImpl implements KnowledgeBaseDao {
                 .map(o -> new SdgRelatedDataset(o.get(0), Long.parseLong(o.get(1)), o.get(2), o.get(3)))
                 .collect(Collectors.toCollection(ArrayList::new));
         return sdgRelatedDatasets;
+    }
+
+    @Override
+    public SdgConceptScheme getSdgConcepts(int sdg) {
+        String sparqlEndpoint = ConfigurationSingleton.getInstance()
+                .getConfigurationRegistry().getSparqlWebEndpoint();
+        // Get Goal concepts
+        String goalQuery = String.format("PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" +
+                "PREFIX ods: <http://ods-od.org/data/>\n" +
+                "\n" +
+                "select ?conceptLabel where {\n" +
+                " ?concept skos:inScheme ods:SDG_Goal_%d ;\n" +
+                "          skos:prefLabel ?conceptLabel . \n" +
+                "}", sdg);
+        List<List<String>> goalConcepts = SparqlService.queryEndpoint(sparqlEndpoint,
+                goalQuery, "conceptLabel");
+        goalConcepts.remove(0);
+
+        // Get Targets concepts
+        String targetsQuery = String.format("PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" +
+                "select ?conceptLabel where {\n" +
+                " ?scheme a skos:ConceptScheme .\n" +
+                " ?concept skos:inScheme ?scheme ;\n" +
+                "          skos:prefLabel ?conceptLabel . \n" +
+                " FILTER regex(str(?scheme), \"SDG_Target_%d\\\\.\")\n" +
+                "}", sdg);
+        List<List<String>> targetConcepts = SparqlService.queryEndpoint(sparqlEndpoint,
+                targetsQuery, "conceptLabel");
+        targetConcepts.remove(0);
+
+        // Get Indicators concepts
+        String indicatorsQuery = String.format("PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" +
+                "select ?conceptLabel where {\n" +
+                " ?scheme a skos:ConceptScheme .\n" +
+                " ?concept skos:inScheme ?scheme ;\n" +
+                "          skos:prefLabel ?conceptLabel . \n" +
+                " FILTER regex(str(?scheme), \"SDG_Indicator_%d\\\\.\")\n" +
+                "}", sdg);
+        List<List<String>> indicatorsConcepts = SparqlService.queryEndpoint(sparqlEndpoint,
+                indicatorsQuery, "conceptLabel");
+        indicatorsConcepts.remove(0);
+
+        List<String> concepts = new ArrayList<>();
+        goalConcepts.parallelStream().flatMap(Collection::parallelStream)
+                .forEach(concepts::add);
+        targetConcepts.parallelStream().flatMap(Collection::parallelStream)
+                .forEach(concepts::add);
+        indicatorsConcepts.parallelStream().flatMap(Collection::parallelStream)
+                .forEach(concepts::add);
+        return new SdgConceptScheme(sdg + "", concepts);
     }
 
     @Override
