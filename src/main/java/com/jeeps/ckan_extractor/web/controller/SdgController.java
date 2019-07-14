@@ -20,7 +20,14 @@ public class SdgController {
     @RequestMapping("/sdg/overview")
     public String odsOverview(Model model) {
         model.addAttribute("sparqlEndpoint", ConfigurationSingleton.getInstance()
-                                .getConfigurationRegistry().getSparqlWebEndpoint());
+                .getConfigurationRegistry().getSparqlWebEndpoint());
+        return "ods/ods-od-overview";
+    }
+
+    @RequestMapping("/sdg/datasets")
+    public String datasetsRelatedToOds(Model model) {
+        List<SdgRelatedDataset> datasets = knowledgeBaseService.findAllCatalogsRelatedToOds();
+        model.addAttribute("datasets", datasets);
         try {
             Map<String, Integer> datasetsPerOds = knowledgeBaseService.howManyDatasetsRelateToEachGoal();
             model.addAttribute("odsLabels", datasetsPerOds.keySet());
@@ -29,13 +36,6 @@ public class SdgController {
             model.addAttribute("odsLabels", new ArrayList<String>());
             model.addAttribute("datasetsCounts", new ArrayList<Integer>());
         }
-        return "ods/ods-od-overview";
-    }
-
-    @RequestMapping("/sdg/datasets")
-    public String datasetsRelatedToOds(Model model) {
-        List<SdgRelatedDataset> datasets = knowledgeBaseService.findAllCatalogsRelatedToOds();
-        model.addAttribute("datasets", datasets);
         return "ods/datasets-list";
     }
 }

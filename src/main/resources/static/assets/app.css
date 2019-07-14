@@ -227,6 +227,11 @@ a.disabled-link {
     text-decoration: none !important;
 }
 
+#chartdiv {
+    width:100%;
+    height: 500px;
+}
+
 @media (max-width: 768px) {
     /* The footer will change height, adjust the main container width to keep the footer at the bottom */
     .main-container {
