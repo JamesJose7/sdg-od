@@ -9,8 +9,8 @@
 
     <div class="row">
         <div class="col-12">
-            <h1>The Sustainable Development Goals as a graph</h1>
-            <p>TODO: explain what's happening here</p>
+            <h1>What's inside each Sustainable Development Goal</h1>
+            <p>The Sustainable Development Goals can be easily understood once we read each of their descriptions. However, computers are not able to grasp that knowledge as efficiently. There are many approaches to extract such information and transform it into something that can be processed by machines. This work used techniques from Natural Language Processing and the tool FRED to accomplish this task. FRED analyzed each goal, target, and indicators. Afterward, a concept taxonomy for each goal, target, and indicator was created using FRED's result. There is always a margin of error when using artificial intelligence processes such as Natural Language Processing. Further processing is needed to improve the models representing each goal. The following word cloud illustrates the concepts extracted from each goal. Click any button to view the concepts for each goal.</p>
             <div id="goalButtonsContainer" class="text-center">
                 <button th:each="i : ${#numbers.sequence(1, 17)}"
                         class="wordCloudBtn btn btn-primary" th:value="${i}" th:text="|Goal ${i}|">Goal 1</button>
@@ -25,8 +25,10 @@
 
     <div class="row">
         <div class="col-12">
-            <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, alias amet architecto aspernatur assumenda culpa deserunt dolore enim id itaque iusto labore necessitatibus recusandae rem, velit, voluptatem voluptatibus! Consequuntur, praesentium?</span><span>Aspernatur dignissimos ea esse illo iste iusto, natus voluptatem! Atque doloribus earum maxime nesciunt, quod temporibus. Alias aliquid atque cumque cupiditate deserunt doloribus, ea libero magnam nostrum odit, officiis quo.</span><span>Atque consequuntur distinctio iure minus nesciunt non nulla placeat qui quod rem reprehenderit, ullam velit veritatis voluptas, voluptatibus! Ab accusantium, atque consequatur corporis enim id iure laborum porro quas vitae.</span><span>Alias aliquam architecto, aspernatur commodi consequatur dicta dolores eaque explicabo facere facilis fugiat illum itaque iusto libero minima nesciunt pariatur perspiciatis placeat porro quibusdam quod ratione repellendus rerum sint ullam?</span><span>Commodi dicta dignissimos, dolores eius, id itaque nobis perspiciatis porro quibusdam recusandae rem repellat temporibus voluptatum. Accusantium at cumque dolor dolorem, ea eaque, fugit id, ipsa iure nobis quae tempora.</span></p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error laboriosam odit quae recusandae rerum tempore tenetur unde. Ducimus ea est illo, libero nam nihil quaerat. Asperiores consectetur facere tempora unde.</p>
+            <h2 class="mt-3">The Sustainable Development Goals as a graph</h2>
+            <p>Every concept shown before is part of a concept scheme built using the <a
+                    href="https://www.w3.org/TR/skos-reference/">SKOS vocabulary</a>. There is a concept scheme for each goal, target, and indicator. The following graph shows some concepts inside each goal's concept scheme and the relationships between theme. This graph was built querying our triplestore with
+                <a href="https://www.w3.org/TR/sparql11-query/">SPARQL</a>.</p>
             <div style="width: 100%; overflow: auto;">
                 <div id="result"></div>
             </div>
