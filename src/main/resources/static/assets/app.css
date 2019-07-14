@@ -210,6 +210,23 @@ a.disabled-link {
     height: 150px;
 }
 
+.fa {
+    padding: 13px;
+    /*font-size: 30px !important;*/
+    width: 42px;
+    text-align: center;
+    text-decoration: none !important;
+    margin: 5px 2px;
+    border-radius: 50%;
+    background: #222222;
+    color: white;
+}
+
+.fa:hover {
+    opacity: 0.7;
+    text-decoration: none !important;
+}
+
 @media (max-width: 768px) {
     /* The footer will change height, adjust the main container width to keep the footer at the bottom */
     .main-container {
