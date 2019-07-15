@@ -6,8 +6,18 @@
 <div th:replace="layout :: nav"></div>
 
 <div class="container">
-    <form class="mt-5" id="extractorForm">
 
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mt-4">Open Data to DCAT converter</h1>
+
+            <p>This converter exposes the process used in the transformation from CKAN repositories into data catalogs using
+                <a href="https://www.w3.org/TR/vocab-dcat/">DCAT</a>'s vocabulary. Select one or more public access data portals and the triples serialization format you prefer. Finally, click the extract button and a link to download the file will appear below the button. The application will take longer the more platforms selected.</p>
+        </div>
+
+    </div>
+
+    <form class="mt-2" id="extractorForm">
         <div class="table-responsive">
             <div class="col-lg-6" style="margin: 0 auto; padding: 0;">
                 <table class="table table-hover table-striped">
