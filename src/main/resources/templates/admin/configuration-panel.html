@@ -9,7 +9,7 @@
         <h1 class="mt-4">App configuration</h1>
         <div th:replace="layout :: flash"></div>
         <form th:action="${action}" method="post" th:object="${configuration}" class="mb-5 mt-3">
-            <h3 class="border-bottom">Virtuoso</h3>
+            <h3 class="border-bottom">Triplestore</h3>
             <div class="form-group">
                 <label for="dbEndpoint">SPARQL DB Endpoint</label>
                 <input type="text" th:field="*{sparqlDBEndpoint}" id="dbEndpoint" name="sparqlDBEndpoint" class="form-control">
