@@ -152,6 +152,10 @@ a.disabled-link {
     margin: 0 auto;
 }
 
+#sdg-grid img {
+    width: 100%;
+}
+
 /* About page */
 .author-card {
     padding: 1em 1em;

@@ -6,6 +6,7 @@ import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -18,10 +19,18 @@ public class SdgController {
     private KnowledgeBaseService knowledgeBaseService;
 
     @RequestMapping("/sdg/overview")
-    public String odsOverview(Model model) {
+    public String sdgOverview(Model model) {
         model.addAttribute("sparqlEndpoint", ConfigurationSingleton.getInstance()
                 .getConfigurationRegistry().getSparqlWebEndpoint());
         return "ods/ods-od-overview";
+    }
+
+    @RequestMapping("/sdg/{goal}")
+    public String sdgPage(Model model, @PathVariable("goal") int goal) {
+        if (goal > 17 || goal < 1)
+            return "redirect:/sdg/overview";
+
+        return "ods/sdg_page";
     }
 
     @RequestMapping("/sdg/datasets")

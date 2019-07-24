@@ -7,9 +7,42 @@
 
 <div class="container pt-5 pb-5 text-justify">
 
+    <div id="sdg-grid" class="mb-3">
+        <div class="row">
+            <div class="col-12 mb-2">
+                <h1 id="sdg-page-title">The Sustainable Development Goals</h1>
+            </div>
+        </div>
+        <div class="row">
+            <a th:href="@{/sdg/1}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_1.png}" alt="" ></a>
+            <a th:href="@{/sdg/2}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_2.png}" alt="" ></a>
+            <a th:href="@{/sdg/3}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_3.png}" alt="" ></a>
+            <a th:href="@{/sdg/4}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_4.png}" alt="" ></a>
+            <a th:href="@{/sdg/5}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_5.png}" alt="" ></a>
+            <a th:href="@{/sdg/6}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_6.png}" alt="" ></a>
+        </div>
+        <div class="row">
+            <a th:href="@{/sdg/7}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_7.png}" alt="" ></a>
+            <a th:href="@{/sdg/8}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_8.png}" alt="" ></a>
+            <a th:href="@{/sdg/9}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_9.png}" alt="" ></a>
+            <a th:href="@{/sdg/10}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_10.png}" alt="" ></a>
+            <a th:href="@{/sdg/11}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_11.png}" alt="" ></a>
+            <a th:href="@{/sdg/12}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_12.png}" alt="" ></a>
+        </div>
+        <div class="row">
+            <a th:href="@{/sdg/13}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_13.png}" alt="" ></a>
+            <a th:href="@{/sdg/14}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_14.png}" alt="" ></a>
+            <a th:href="@{/sdg/15}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_15.png}" alt="" ></a>
+            <a th:href="@{/sdg/16}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_16.png}" alt="" ></a>
+            <a th:href="@{/sdg/17}" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_icons/sdg_icon_17.png}" alt="" ></a>
+            <a href="#sdg-page-title" class="col-md-2 col-sm-4 col-6 mb-2"><img th:src="@{/assets/icons/sdg_wheel/sdg_wheel.png}" alt="" ></a>
+        </div>
+
+    </div>
+
     <div class="row">
         <div class="col-12">
-            <h1>What's inside each Sustainable Development Goal</h1>
+            <h2>What's inside each Sustainable Development Goal</h2>
             <p>The Sustainable Development Goals can be easily understood once we read each of their descriptions. However, computers are not able to grasp that knowledge as efficiently. There are many approaches to extract such information and transform it into something that can be processed by machines. This work used techniques from Natural Language Processing and the tool FRED to accomplish this task. FRED analyzed each goal, target, and indicators. Afterward, a concept taxonomy for each goal, target, and indicator was created using FRED's result. There is always a margin of error when using artificial intelligence processes such as Natural Language Processing. Further processing is needed to improve the models representing each goal. The following word cloud illustrates the concepts extracted from each goal. Click any button to view the concepts for each goal.</p>
             <div id="goalButtonsContainer" class="text-center">
                 <button th:each="i : ${#numbers.sequence(1, 17)}"
