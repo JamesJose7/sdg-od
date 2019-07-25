@@ -2,6 +2,7 @@ package com.jeeps.ckan_extractor.service;
 
 import com.jeeps.ckan_extractor.dao.KnowledgeBaseDao;
 import com.jeeps.ckan_extractor.model.SdgConceptScheme;
+import com.jeeps.ckan_extractor.model.SdgConceptTree;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import org.apache.jena.rdf.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     @Override
     public SdgConceptScheme getSdgConcepts(int sdg) {
         return knowledgeBaseDao.getSdgConcepts(sdg);
+    }
+
+    @Override
+    public SdgConceptTree getSdgConceptTree(int sdg) {
+        return knowledgeBaseDao.getSdgConceptTree(sdg);
     }
 
     @Override

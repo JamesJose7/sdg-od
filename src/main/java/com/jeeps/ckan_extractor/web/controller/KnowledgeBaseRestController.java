@@ -1,6 +1,7 @@
 package com.jeeps.ckan_extractor.web.controller;
 
 import com.jeeps.ckan_extractor.model.SdgConceptScheme;
+import com.jeeps.ckan_extractor.model.SdgConceptTree;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,10 @@ public class KnowledgeBaseRestController {
     @RequestMapping(value = "/api/sdg/concepts/{sdg_number}", method = RequestMethod.GET)
     public SdgConceptScheme getSdgConcepts(@PathVariable("sdg_number") int sdg) {
         return  knowledgeBaseService.getSdgConcepts(sdg);
+    }
+
+    @RequestMapping(value = "/api/sdg/concept-tree/{sdg_number}", method = RequestMethod.GET)
+    public SdgConceptTree getSdgConceptTree(@PathVariable("sdg_number") int sdg) {
+        return knowledgeBaseService.getSdgConceptTree(sdg);
     }
 }

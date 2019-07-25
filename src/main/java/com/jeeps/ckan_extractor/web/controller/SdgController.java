@@ -29,7 +29,7 @@ public class SdgController {
     public String sdgPage(Model model, @PathVariable("goal") int goal) {
         if (goal > 17 || goal < 1)
             return "redirect:/sdg/overview";
-
+        model.addAttribute("sdg", goal);
         return "ods/sdg_page";
     }
 

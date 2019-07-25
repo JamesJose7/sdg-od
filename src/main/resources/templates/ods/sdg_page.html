@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout :: head('Home')"></head>
+<style>
+    .chartdiv {
+        width: 100%;
+    }
+</style>
 <body>
 <div class="main-container">
     <div th:replace="layout :: nav"></div>
 
     <main class="container">
         <div class="row">
+            <a th:href="@{${T(com.jeeps.ckan_extractor.utils.SdgResourcesHelper).getSdgMoreInfoLink(sdg)}}" style="text-decoration: none;">
+                <h1 class="col-12 mb-3 mt-4" th:text="|Sustainable Development Goal ${sdg}|"></h1>
+            </a>
+            <p class="col-12 text-justify">Concepts extracted from each goal</p>
+            <div class="col-12">
+                <div class="chartdiv" id="goals" style="height: 400px"></div>
+            </div>
+        </div>
 
+        <div class="row">
+            <h2 class="col-12 mb-3 mt-1">Targets</h2>
+            <p class="col-12 text-justify">Concepts extracted from each target</p>
+            <div class="col-12">
+                <div class="chartdiv" id="targets" style="height: 550px;"></div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <h2 class="col-12 mb-3 mt-1">Indicators</h2>
+            <p class="col-12 text-justify">Concepts extracted from each indicator</p>
+            <div class="col-12">
+                <div class="chartdiv" id="indicators" style="height: 700px;"></div>
+            </div>
         </div>
 
     </main>
@@ -15,5 +42,604 @@
     <div th:replace="layout :: main-footer"></div>
 </div>
 <div th:replace="layout :: scripts"></div>
+<!-- Resources -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+    var sdgNumber = /*[[${sdg}]]*/ 1;
+
+    /*]]>*/
+
+    $( document ).ready(function() {
+
+        am4core.ready(function() {
+
+            // Themes begin
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            /* Goals chart */
+
+            var goalChart = am4core.create("goals", am4plugins_forceDirected.ForceDirectedTree);
+
+            var goalNetworkSeries = goalChart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+            goalNetworkSeries.dataFields.linkWith = "linkWith";
+            goalNetworkSeries.dataFields.name = "name";
+            goalNetworkSeries.dataFields.id = "name";
+            goalNetworkSeries.dataFields.value = "value";
+            goalNetworkSeries.dataFields.children = "children";
+
+            goalNetworkSeries.nodes.template.label.text = "{name}"
+            goalNetworkSeries.fontSize = 8;
+            goalNetworkSeries.linkWithStrength = 0;
+
+            var goalNodeTemplate = goalNetworkSeries.nodes.template;
+            goalNodeTemplate.tooltipText = "{name}";
+            goalNodeTemplate.fillOpacity = 1;
+            goalNodeTemplate.label.hideOversized = true;
+            goalNodeTemplate.label.truncate = true;
+
+            var goalLinkTemplate = goalNetworkSeries.links.template;
+            goalLinkTemplate.strokeWidth = 1;
+            var goalLinkHoverState = goalLinkTemplate.states.create("hover");
+            goalLinkHoverState.properties.strokeOpacity = 1;
+            goalLinkHoverState.properties.strokeWidth = 2;
+
+            goalNodeTemplate.events.on("over", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = true;
+                })
+            })
+
+            goalNodeTemplate.events.on("out", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = false;
+                })
+            })
+
+            /*goalNetworkSeries.data = [
+                {
+                    "name":"Phoebe",
+                    "value":102,
+                    "linkWith":[
+                        "Gunther"
+                    ],
+                    "children":[
+                        {
+                            "name":"David",
+                            "value":14
+                        },
+                        {
+                            "name":"Roger",
+                            "value":1
+                        },
+                        {
+                            "name":"Duncan",
+                            "value":1
+                        },
+                        {
+                            "name":"Rob Dohnen",
+                            "value":2
+                        },
+                        {
+                            "name":"Ryan",
+                            "value":5
+                        },
+                        {
+                            "name":"Malcom",
+                            "value":1
+                        },
+                        {
+                            "name":"Robert",
+                            "value":1
+                        },
+                        {
+                            "name":"Sergei",
+                            "value":1
+                        },
+                        {
+                            "name":"Vince",
+                            "value":2
+                        },
+                        {
+                            "name":"Jason",
+                            "value":1
+                        },
+                        {
+                            "name":"Rick",
+                            "value":2
+                        },
+                        {
+                            "name":"Gary",
+                            "value":7
+                        },
+                        {
+                            "name":"Jake",
+                            "value":2
+                        },
+                        {
+                            "name":"Eric",
+                            "value":3
+                        },
+                        {
+                            "name":"Mike",
+                            "value":18
+                        }
+                    ]
+                },
+                {
+                    "name":"Monica",
+                    "value":204,
+                    "linkWith":[
+                        "Rachel",
+                        "Chandler",
+                        "Ross",
+                        "Joey",
+                        "Phoebe"
+                    ],
+                    "children":[
+                        {
+                            "name":"Paul the wine guy",
+                            "value":1
+                        },
+                        {
+                            "name":"Mr Geller",
+                            "value":8
+                        },
+                        {
+                            "name":"Mrs Geller",
+                            "value":14
+                        },
+                        {
+                            "name":"Aunt Lilian",
+                            "value":2
+                        },
+                        {
+                            "name":"Nana",
+                            "value":1
+                        },
+                        {
+                            "name":"Young Ethan",
+                            "value":5
+                        },
+                        {
+                            "name":"Ben",
+                            "value":9
+                        },
+                        {
+                            "name":"Fun Bobby",
+                            "value":3
+                        },
+                        {
+                            "name":"Richard",
+                            "value":16
+                        },
+                        {
+                            "name":"Mrs Green",
+                            "value":4
+                        },
+                        {
+                            "name":"Paolo2",
+                            "value":1
+                        },
+                        {
+                            "name":"Pete",
+                            "value":10
+                        },
+                        {
+                            "name":"Chip",
+                            "value":1
+                        },
+                        {
+                            "name":"Timothy (Burke)",
+                            "value":1
+                        },
+                        {
+                            "name":"Emily",
+                            "value":17
+                        },
+                        {
+                            "name":"Dr. Roger",
+                            "value":3
+                        }
+                    ]
+                },
+                {
+                    "name":"Ross",
+                    "value":216,
+                    "linkWith":[
+                        "Joey",
+                        "Phoebe",
+                        "Mrs Geller",
+                        "Aunt Lilian",
+                        "Mrs Bing",
+                        "Ben",
+                        "Mrs Green",
+                        "Emily"
+                    ],
+                    "children":[
+                        {
+                            "name":"Carol",
+                            "value":10
+                        },
+                        {
+                            "name":"Celia",
+                            "value":2
+                        },
+                        {
+                            "name":"Julie",
+                            "value":6
+                        },
+                        {
+                            "name":"Chloe",
+                            "value":1
+                        },
+                        {
+                            "name":"Bonnie",
+                            "value":4
+                        },
+                        {
+                            "name":"Messy Girl (Cheryl)",
+                            "value":5
+                        },
+                        {
+                            "name":"Jill",
+                            "value":1
+                        },
+                        {
+                            "name":"Elizabeth",
+                            "value":8
+                        },
+                        {
+                            "name":"Aunt Millie",
+                            "value":2
+                        },
+                        {
+                            "name":"Mona",
+                            "value":11
+                        },
+                        {
+                            "name":"Emma",
+                            "value":7
+                        },
+                        {
+                            "name":"Charlie",
+                            "value":13
+                        }
+                    ]
+                },
+                {
+                    "name":"Chandler",
+                    "value":167,
+                    "linkWith":[
+                        "Joey",
+                        "Phoebe"
+                    ],
+                    "children":[
+                        {
+                            "name":"Aurora",
+                            "value":2
+                        },
+                        {
+                            "name":"Jill Goodacre",
+                            "value":1
+                        },
+                        {
+                            "name":"Janice",
+                            "value":12
+                        },
+                        {
+                            "name":"Mrs Bing",
+                            "value":6
+                        },
+                        {
+                            "name":"Nina",
+                            "value":1
+                        },
+                        {
+                            "name":"Susie",
+                            "value":5
+                        },
+                        {
+                            "name":"Mary Theresa",
+                            "value":1
+                        },
+                        {
+                            "name":"Ginger",
+                            "value":2
+                        },
+                        {
+                            "name":"Joanna",
+                            "value":5
+                        },
+                        {
+                            "name":"Kathy",
+                            "value":9
+                        },
+                        {
+                            "name":"Mr Bing",
+                            "value":1
+                        }
+                    ]
+                },
+                {
+                    "name":"Rachel",
+                    "value":158,
+                    "linkWith":[
+                        "Chandler",
+                        "Ross",
+                        "Joey",
+                        "Phoebe",
+                        "Mr Geller",
+                        "Mrs Geller"
+                    ],
+                    "children":[
+                        {
+                            "name":"Paolo",
+                            "value":5
+                        },
+                        {
+                            "name":"Barry",
+                            "value":1
+                        },
+                        {
+                            "name":"Dr Green",
+                            "value":3
+                        },
+                        {
+                            "name":"Mark3",
+                            "value":1
+                        },
+                        {
+                            "name":"Josh",
+                            "value":2
+                        },
+                        {
+                            "name":"Gunther",
+                            "value":2
+                        },
+                        {
+                            "name":"Joshua",
+                            "value":3
+                        },
+                        {
+                            "name":"Danny",
+                            "value":1
+                        },
+                        {
+                            "name":"Mr. Zelner",
+                            "value":1
+                        },
+                        {
+                            "name":"Paul Stevens",
+                            "value":3
+                        },
+                        {
+                            "name":"Tag",
+                            "value":4
+                        },
+                        {
+                            "name":"Melissa",
+                            "value":1
+                        },
+                        {
+                            "name":"Gavin",
+                            "value":2
+                        }
+                    ]
+                },
+                {
+                    "name":"Joey",
+                    "value":88,
+                    "linkWith":[
+                        "Phoebe",
+                        "Janice",
+                        "Mrs Green",
+                        "Kathy",
+                        "Emily",
+                        "Charlie"
+                    ],
+                    "children":[
+                        {
+                            "name":"Lorraine",
+                            "value":2
+                        },
+                        {
+                            "name":"Melanie",
+                            "value":2
+                        },
+                        {
+                            "name":"Erica",
+                            "value":2
+                        },
+                        {
+                            "name":"Kate",
+                            "value":4
+                        },
+                        {
+                            "name":"Lauren",
+                            "value":2
+                        },
+                        {
+                            "name":"Estelle",
+                            "value":1
+                        },
+                        {
+                            "name":"Katie",
+                            "value":2
+                        },
+                        {
+                            "name":"Janine",
+                            "value":9
+                        },
+                        {
+                            "name":"Erin",
+                            "value":1
+                        },
+                        {
+                            "name":"Cecilia",
+                            "value":3
+                        }
+                    ]
+                }
+            ];*/
+
+            /* Targets chart */
+            var targetsChart = am4core.create("targets", am4plugins_forceDirected.ForceDirectedTree);
+
+            var targetNetworkSeries = targetsChart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+            targetNetworkSeries.dataFields.linkWith = "linkWith";
+            targetNetworkSeries.dataFields.name = "name";
+            targetNetworkSeries.dataFields.id = "name";
+            targetNetworkSeries.dataFields.value = "value";
+            targetNetworkSeries.dataFields.children = "children";
+
+            targetNetworkSeries.nodes.template.label.text = "{name}"
+            targetNetworkSeries.fontSize = 8;
+            targetNetworkSeries.linkWithStrength = 0;
+
+            var targetNodeTemplate = targetNetworkSeries.nodes.template;
+            targetNodeTemplate.tooltipText = "{name}";
+            targetNodeTemplate.fillOpacity = 1;
+            targetNodeTemplate.label.hideOversized = true;
+            targetNodeTemplate.label.truncate = true;
+
+            var targetLinkTemplate = targetNetworkSeries.links.template;
+            targetLinkTemplate.strokeWidth = 1;
+            var targetLinkHoverState = targetLinkTemplate.states.create("hover");
+            targetLinkHoverState.properties.strokeOpacity = 1;
+            targetLinkHoverState.properties.strokeWidth = 2;
+
+            targetNodeTemplate.events.on("over", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = true;
+                })
+            })
+
+            targetNodeTemplate.events.on("out", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = false;
+                })
+            })
+
+            /* Indicators chart */
+            var indicatorsChart = am4core.create("indicators", am4plugins_forceDirected.ForceDirectedTree);
+
+            var indicatorsNetworkSeries = indicatorsChart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+            indicatorsNetworkSeries.dataFields.linkWith = "linkWith";
+            indicatorsNetworkSeries.dataFields.name = "name";
+            indicatorsNetworkSeries.dataFields.id = "name";
+            indicatorsNetworkSeries.dataFields.value = "value";
+            indicatorsNetworkSeries.dataFields.children = "children";
+
+            indicatorsNetworkSeries.nodes.template.label.text = "{name}"
+            indicatorsNetworkSeries.fontSize = 8;
+            indicatorsNetworkSeries.linkWithStrength = 0;
+
+            var indicatorNodeTemplate = indicatorsNetworkSeries.nodes.template;
+            indicatorNodeTemplate.tooltipText = "{name}";
+            indicatorNodeTemplate.fillOpacity = 1;
+            indicatorNodeTemplate.label.hideOversized = true;
+            indicatorNodeTemplate.label.truncate = true;
+
+            var indicatorLinkTemplate = indicatorsNetworkSeries.links.template;
+            indicatorLinkTemplate.strokeWidth = 1;
+            var indicatorLinkHoverState = indicatorLinkTemplate.states.create("hover");
+            indicatorLinkHoverState.properties.strokeOpacity = 1;
+            indicatorLinkHoverState.properties.strokeWidth = 2;
+
+            indicatorNodeTemplate.events.on("over", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = true;
+                })
+            })
+
+            indicatorNodeTemplate.events.on("out", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = false;
+                })
+            })
+
+            /* Populate charts */
+
+            $.getJSON( "/api/sdg/concept-tree/" + sdgNumber, function( data ) {
+                /* Goal */
+                var goalConcepts = [];
+                data["goalConcepts"].forEach(function (concept) {
+                    goalConcepts.push({"name": concept, "value": 15});
+                });
+                goalNetworkSeries.data = [
+                    {
+                        "name": "Goal " + data["goal"],
+                        "value": 30,
+                        "children": goalConcepts
+                    }
+                ];
+                /* Targets */
+                var targetKeys = [];
+                for(var k in data["targetsConcepts"]) targetKeys.push(k);
+
+                var targetsData = [];
+                var previousTarget = [];
+                var targetCounter = 10;
+                $.each(data["targetsConcepts"], function (target, concepts) {
+                    var targetConcepts = [];
+                    concepts.forEach(function (concept) {
+                        targetConcepts.push({"name": concept, "value": 5})
+                    });
+                    previousTarget.push(targetKeys[targetCounter % targetKeys.length]);
+                    previousTarget.push(targetKeys[(targetCounter - 5) % targetKeys.length]);
+                    targetsData.push({
+                        "name": target,
+                        "value": 13,
+                        "linkWith": previousTarget,
+                        "children": targetConcepts
+                    })
+                    targetCounter += 10;
+                    previousTarget = [];
+                });
+                targetNetworkSeries.data = targetsData;
+
+                /* Indicators */
+                var indicatorKeys = [];
+                for(var k in data["indicatorsConcepts"]) indicatorKeys.push(k);
+
+                var indicatorsData = [];
+                var previousIndicator = [];
+                var indicatorCounter = 10;
+                $.each(data["indicatorsConcepts"], function (indicator, concepts) {
+                    var indicatorConcepts = [];
+                    concepts.forEach(function (concept) {
+                        indicatorConcepts.push({"name": concept, "value": 5})
+                    });
+                    previousIndicator.push(indicatorKeys[indicatorCounter % indicatorKeys.length]);
+                    previousIndicator.push(indicatorKeys[(indicatorCounter - 5) % indicatorKeys.length]);
+                    indicatorsData.push({
+                        "name": indicator,
+                        "value": 13,
+                        "linkWith": previousIndicator,
+                        "children": indicatorConcepts
+                    })
+                    indicatorCounter += 10;
+                    previousIndicator = [];
+                });
+                indicatorsNetworkSeries.data = indicatorsData;
+            });
+
+        }); // end am4core.ready()
+    });
+</script>
 </body>
 </html>
