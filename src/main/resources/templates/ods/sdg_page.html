@@ -16,28 +16,35 @@
                 <h1 class="col-12 mb-3 mt-4" th:text="|Sustainable Development Goal ${sdg}|"></h1>
             </a>
             <p class="col-12 text-justify">Concepts extracted from each goal</p>
-            <div class="col-12">
-                <div class="chartdiv" id="goals" style="height: 400px"></div>
-            </div>
         </div>
+    </main>
+
+    <div class="mb-3">
+        <div class="chartdiv" id="goals" style="height: 550px"></div>
+    </div>
+
+    <main class="container">
 
         <div class="row">
             <h2 class="col-12 mb-3 mt-1">Targets</h2>
             <p class="col-12 text-justify">Concepts extracted from each target</p>
-            <div class="col-12">
-                <div class="chartdiv" id="targets" style="height: 550px;"></div>
-            </div>
         </div>
+    </main>
 
-        <div class="row mb-5">
+    <div class="mb-3">
+        <div class="chartdiv" id="targets" style="height: 650px;"></div>
+    </div>
+
+    <main class="container">
+        <div class="row">
             <h2 class="col-12 mb-3 mt-1">Indicators</h2>
             <p class="col-12 text-justify">Concepts extracted from each indicator</p>
-            <div class="col-12">
-                <div class="chartdiv" id="indicators" style="height: 700px;"></div>
-            </div>
         </div>
-
     </main>
+
+    <div class="mb-5">
+        <div class="chartdiv" id="indicators" style="height: 900px;"></div>
+    </div>
 
     <div th:replace="layout :: main-footer"></div>
 </div>
@@ -78,6 +85,7 @@
             goalNetworkSeries.nodes.template.label.text = "{name}"
             goalNetworkSeries.fontSize = 8;
             goalNetworkSeries.linkWithStrength = 0;
+            goalNetworkSeries.maxRadius = 62;
 
             var goalNodeTemplate = goalNetworkSeries.nodes.template;
             goalNodeTemplate.tooltipText = "{name}";
@@ -505,6 +513,9 @@
             targetNetworkSeries.nodes.template.label.text = "{name}"
             targetNetworkSeries.fontSize = 8;
             targetNetworkSeries.linkWithStrength = 0;
+            targetNetworkSeries.centerStrength = 1;
+            targetNetworkSeries.manyBodyStrength = -15;
+            targetNetworkSeries.maxRadius = 40;
 
             var targetNodeTemplate = targetNetworkSeries.nodes.template;
             targetNodeTemplate.tooltipText = "{name}";
@@ -545,6 +556,9 @@
             indicatorsNetworkSeries.nodes.template.label.text = "{name}"
             indicatorsNetworkSeries.fontSize = 8;
             indicatorsNetworkSeries.linkWithStrength = 0;
+            indicatorsNetworkSeries.centerStrength = 1;
+            indicatorsNetworkSeries.manyBodyStrength = -15;
+            indicatorsNetworkSeries.maxRadius = 40;
 
             var indicatorNodeTemplate = indicatorsNetworkSeries.nodes.template;
             indicatorNodeTemplate.tooltipText = "{name}";
@@ -604,7 +618,7 @@
                     targetsData.push({
                         "name": target,
                         "value": 13,
-                        "linkWith": previousTarget,
+                        /*"linkWith": previousTarget,*/
                         "children": targetConcepts
                     })
                     targetCounter += 10;
@@ -629,7 +643,7 @@
                     indicatorsData.push({
                         "name": indicator,
                         "value": 13,
-                        "linkWith": previousIndicator,
+                        /*"linkWith": previousIndicator,*/
                         "children": indicatorConcepts
                     })
                     indicatorCounter += 10;
