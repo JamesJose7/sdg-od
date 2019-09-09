@@ -5,7 +5,7 @@ The following sections describe the main features of the web application, how to
 ## Main Page
 This page briefly describes the app's objective and its architecture. 
 
-![Figure 37](https://imgur.com/WZiDrPb.png)
+> ![Figure 37](https://imgur.com/WZiDrPb.png)
 
 ## Results obtained in the SDGs transformation
 The following sections describe the two options available under the SDG tab in the navigation bar.
