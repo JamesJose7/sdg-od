@@ -5,6 +5,7 @@ import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,6 +18,9 @@ import java.util.List;
 
 @Controller
 public class CkanPackageController {
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @Autowired
     private CkanPackageService ckanPackageService;
     @Autowired
@@ -51,6 +55,7 @@ public class CkanPackageController {
         model.addAttribute("filter", filter);
         model.addAttribute("page", page);
         model.addAttribute("action", "/datasets");
+        model.addAttribute("contextPath", contextPath);
         return "ckanPackages/ckan-packages-list";
     }
 

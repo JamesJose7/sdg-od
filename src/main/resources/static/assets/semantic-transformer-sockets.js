@@ -8,7 +8,7 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/websocket');
+    var socket = new SockJS(contextPath + '/websocket');
     stompcCient = Stomp.over(socket);
     stompcCient.connect({}, function (frame) {
         setConnected(true);

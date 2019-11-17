@@ -13,6 +13,7 @@ import com.jeeps.ckan_extractor.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -27,6 +28,9 @@ import java.util.List;
 
 @Controller
 public class WebSocketsController {
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @Autowired
     private CkanPackageService ckanPackageService;
     @Autowired
@@ -86,7 +90,7 @@ public class WebSocketsController {
             e.printStackTrace();
         }
 
-        return new WebSocketResult("/files/" +
+        return new WebSocketResult(contextPath + "/files/" +
                 fileName + ckanUrlsStomp.getFormat().split("\\|")[1]);
     }
 

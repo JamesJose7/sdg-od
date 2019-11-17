@@ -85,6 +85,7 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     var sparqlEndpoint = /*[[${sparqlEndpoint}]]*/ 'default';
+    var contextPath = /*[[${contextPath}]]*/ 'default';
 
     /*]]>*/
 
@@ -143,7 +144,7 @@
             series.angles = [0,-90];
             series.fontWeight = "700"
 
-            $.getJSON( "/api/sdg/concepts/1", function( data ) {
+            $.getJSON( contextPath + "/api/sdg/concepts/1", function( data ) {
                 series.text = data["concepts"].join(" ");
             });
 
@@ -153,7 +154,7 @@
                 $(this).removeClass("btn-primary").addClass("btn-success");
 
                 series.text = "loading";
-                var endpoint = "/api/sdg/concepts/" + $(this).val();
+                var endpoint = contextPath + "/api/sdg/concepts/" + $(this).val();
                 $.getJSON( endpoint, function( data ) {
                     series.text = data["concepts"].join(" ");
                 });

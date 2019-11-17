@@ -4,6 +4,7 @@ import com.jeeps.ckan_extractor.model.ConfigurationSingleton;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,9 @@ import java.util.Map;
 
 @Controller
 public class SdgController {
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
 
@@ -22,6 +26,7 @@ public class SdgController {
     public String sdgOverview(Model model) {
         model.addAttribute("sparqlEndpoint", ConfigurationSingleton.getInstance()
                 .getConfigurationRegistry().getSparqlWebEndpoint());
+        model.addAttribute("contextPath", contextPath);
         return "ods/ods-od-overview";
     }
 

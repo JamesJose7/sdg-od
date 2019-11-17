@@ -2,6 +2,7 @@ package com.jeeps.ckan_extractor.web.controller;
 
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,9 @@ import static com.jeeps.ckan_extractor.core.CkanSemanticCreator.SERIALIZATION_FO
 
 @Controller
 public class ToolsController {
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @Autowired
     private CkanPackageService ckanPackageService;
 
@@ -37,6 +41,7 @@ public class ToolsController {
         Random random = new Random();
         String socketUri = "socket-" + random.nextInt(10000);
         model.addAttribute("socketUri", socketUri);
+        model.addAttribute("contextPath", contextPath);
         return "ckanPackages/converter";
     }
 }

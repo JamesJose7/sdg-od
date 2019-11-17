@@ -14,7 +14,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 bootWar {
-    archiveName="ods-od.war"
+    archiveName="sdg-od.war"
 }
 
 repositories {
