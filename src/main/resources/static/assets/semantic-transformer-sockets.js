@@ -12,7 +12,7 @@ function connect() {
     stompcCient = Stomp.over(socket);
     stompcCient.connect({}, function (frame) {
         setConnected(true);
-        console.log('Connected: ' + frame);
+        // console.log('Connected: ' + frame);
         stompcCient.subscribe(destination, function (greeting) {
             onServerResult(JSON.parse(greeting.body).content);
         })
