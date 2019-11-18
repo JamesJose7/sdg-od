@@ -4,6 +4,7 @@ import com.jeeps.ckan_extractor.model.*;
 import com.jeeps.ckan_extractor.service.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -31,6 +32,9 @@ public class StartupConfig {
     @Autowired
     private ConfigurationRegistryService configurationRegistryService;
 
+    @Value("${spring.profiles.active:}")
+    private String activeProfile;
+
     @EventListener(ContextRefreshedEvent.class)
     public void contextRefreshedEvent() {
         // Create roles
@@ -45,14 +49,24 @@ public class StartupConfig {
             roleService.save(adminRole);
         }
 
-        // TODO: Remove, this is just for testing
-        // Create admin user if it doesn't exist
-        User adminUser = userService.findByUsername("admin");
-        if (adminUser == null) {
-            adminUser = new User("admin",
-                    BCrypt.hashpw("admin", BCrypt.gensalt(10)),
+        // Create super user if it doesn't exist
+        User superUser = userService.findByUsername("SdgodAdmin");
+        if (superUser == null) {
+            superUser = new User("SdgodAdmin",
+                    "$2a$10$q5PRKkLeKjpr3Clx/hEp1u2Xl2cU9MMRa5YT8WTfB8eOv/Ncaysy2",
                     true, adminRole);
-            userService.save(adminUser);
+            userService.save(superUser);
+        }
+
+        if (activeProfile.contains("dev")) {
+            // Create admin user if it doesn't exist only on dev profile
+            User adminUser = userService.findByUsername("admin");
+            if (adminUser == null) {
+                adminUser = new User("admin",
+                        BCrypt.hashpw("admin", BCrypt.gensalt(10)),
+                        true, adminRole);
+                userService.save(adminUser);
+            }
         }
 
         // Delete temp files and create directory
