@@ -10,6 +10,7 @@ function setConnected(connected) {
 function connect() {
     var socket = new SockJS(contextPath + '/websocket');
     stompcCient = Stomp.over(socket);
+    stompcCient.debug = () => {};
     stompcCient.connect({}, function (frame) {
         setConnected(true);
         // console.log('Connected: ' + frame);
