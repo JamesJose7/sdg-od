@@ -4,6 +4,9 @@ import com.jeeps.ckan_extractor.model.CkanPackage;
 import com.jeeps.ckan_extractor.model.SdgRelatedDataset;
 import com.jeeps.ckan_extractor.service.CkanPackageService;
 import com.jeeps.ckan_extractor.service.KnowledgeBaseService;
+import com.jeeps.ckan_extractor.web.FlashMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -14,12 +17,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class CkanPackageController {
     @Value("${server.servlet.context-path}")
     private String contextPath;
+
+    private Logger logger = LoggerFactory.getLogger(CkanPackageController.class);
 
     @Autowired
     private CkanPackageService ckanPackageService;
@@ -69,7 +75,14 @@ public class CkanPackageController {
     public String showDatasetInfo(@PathVariable("package") Long packageId,
                                   Model model) {
         CkanPackage ckanPackage = ckanPackageService.findOne(packageId);
-        List<SdgRelatedDataset> sdgRelatedDatasets = knowledgeBaseService.getRelatedOdsByDatasetId(packageId);
+        List<SdgRelatedDataset> sdgRelatedDatasets = new ArrayList<>();
+        try {
+            sdgRelatedDatasets = knowledgeBaseService.getRelatedOdsByDatasetId(packageId);
+        } catch (Exception e) {
+            logger.error("Error while connecting to SPARQL Service in /datasets/" + packageId);
+            model.addAttribute("flash",
+                    new FlashMessage("SPARQL Service is down. Could not retrieve information about related SDGs", FlashMessage.Status.FAILURE));
+        }
         model.addAttribute("package", ckanPackage);
         model.addAttribute("sdgs", sdgRelatedDatasets);
         return "ckanPackages/ckan-package";
