@@ -9,7 +9,7 @@ The development of this application was part of a bachelor thesis. Its purpose i
 
 ## Live Demo
 
-http://eva4all.utpl.edu.ec/sdg-od/
+[http://eva4all.utpl.edu.ec/sdg-od/](http://eva4all.utpl.edu.ec/sdg-od/)
 
 This deployment is missing a hosted triplestore to serve as it's semantic backend. Thus, many of its features do not work as intended yet.
 
