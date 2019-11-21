@@ -60,7 +60,7 @@ public class CkanPackageController {
         model.addAttribute("filterType", filterType);
         model.addAttribute("filter", filter);
         model.addAttribute("page", page);
-        model.addAttribute("action", "/datasets");
+        model.addAttribute("action", contextPath + "/datasets");
         model.addAttribute("contextPath", contextPath);
         return "ckanPackages/ckan-packages-list";
     }
