@@ -39,7 +39,7 @@ public class FredService {
     }
 
     private void writeRdfToFile(String rdf) {
-        String name = String.format("%s\\%s.rdf", getPath(), fileName);
+        String name = String.format("%s/%s.rdf", getPath(), fileName);
         try {
             FileUtils.writeContentsToFile(name, rdf);
         } catch (IOException e) {

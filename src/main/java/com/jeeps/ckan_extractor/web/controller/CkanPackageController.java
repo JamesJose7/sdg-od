@@ -77,7 +77,10 @@ public class CkanPackageController {
         CkanPackage ckanPackage = ckanPackageService.findOne(packageId);
         List<SdgRelatedDataset> sdgRelatedDatasets = new ArrayList<>();
         try {
-            sdgRelatedDatasets = knowledgeBaseService.getRelatedOdsByDatasetId(packageId);
+            // TODO: IMPORTANT!! UNCOMMENT THIS ONCE THERE'S AN SPARQL ENDPOINT AVAILABLE
+//            sdgRelatedDatasets = knowledgeBaseService.getRelatedOdsByDatasetId(packageId);
+            model.addAttribute("flash",
+                    new FlashMessage("SPARQL Service is down. Could not retrieve information about related SDGs", FlashMessage.Status.FAILURE));
         } catch (Exception e) {
             logger.error("Error while connecting to SPARQL Service in /datasets/" + packageId);
             model.addAttribute("flash",

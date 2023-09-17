@@ -1,15 +1,17 @@
 package com.jeeps.ckan_extractor.core;
 
 import com.jeeps.ckan_extractor.model.CkanPackage;
-import org.apache.jena.rdf.model.*;
+import com.jeeps.ckan_extractor.utils.FileUtils;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFWriter;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.*;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -187,12 +189,8 @@ public class CkanSemanticCreator {
     public void writeRdfFile(String path, String fileName, String serializeFormat) throws IOException {
         String format = serializeFormat.split("\\|")[0];
         String extension = serializeFormat.split("\\|")[1];
-        // File dump
-        File temp = new File(path);
-        if (!(temp.exists()))
-            Files.createDirectories(temp.toPath()); // Create temp directory if id doesn't exist
-        File fos = new File(path + fileName + extension);
-        os = new FileOutputStream(fos);
+        // FOS
+        os = FileUtils.createFOS(fileName + extension, path);
         // Write model to file
         RDFWriter writer = mModel.getWriter(format);
         writer.write(mModel, os,  "");

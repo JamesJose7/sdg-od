@@ -1,5 +1,6 @@
 package com.jeeps.ckan_extractor.web.controller;
 
+import com.jeeps.ckan_extractor.utils.FileUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -20,17 +21,17 @@ public class UtilsController {
                         HttpServletResponse response) {
         try {
             // Add temp dir
-            fileName = "temp/" + fileName;
+            String fileLocation = FileUtils.GLOBAL_PATH + "temp/" + fileName;
             // get your file as InputStream
-            InputStream is = new FileInputStream(fileName);
+            InputStream is = new FileInputStream(fileLocation);
 
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             response.setContentType("application/xml");
             FileCopyUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
-            deleteTempFile(fileName);
+            deleteTempFile(fileLocation);
         } catch (IOException ex) {
-//            Log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
+//            Log.info("Error writing file to output stream. Filename was '{}'", fileLocation, ex);
             throw new RuntimeException("IOError writing file to output stream");
         }
         System.out.println("Finished");
@@ -41,9 +42,9 @@ public class UtilsController {
                         HttpServletResponse response) {
         try {
             // Add temp dir
-            fileName = "rdf/" + fileName;
+            String fileLocation = FileUtils.GLOBAL_PATH + "rdf/" + fileName;
             // get your file as InputStream
-            InputStream is = new FileInputStream(fileName);
+            InputStream is = new FileInputStream(fileLocation);
 
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             response.setContentType("application/xml");

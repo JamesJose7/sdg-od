@@ -102,5 +102,12 @@ public class StartupConfig {
         ckanPackageService.deleteAllByOriginUrl("https://data.humdata.org/");
         ckanPackageService.deleteAllByOriginUrl("http://data.europa.eu/euodp/data/");
         ckanPackageService.deleteAllByOriginUrl("https://opendata.swiss/");*/
+
+
+        // GLOBAL FILE PATH
+        if (activeProfile.contains("prod"))
+            com.jeeps.ckan_extractor.utils.FileUtils.GLOBAL_PATH = System.getProperty("catalina.base") + "/webapps/assets/";
+        else
+            com.jeeps.ckan_extractor.utils.FileUtils.GLOBAL_PATH = "";
     }
 }
